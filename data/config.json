@@ -1,0 +1,21 @@
+{
+  "season": "2026/27",
+  "timezone": "Europe/London",
+  "official_snapshot_time": "23:30",
+  "leagues": [
+    {
+      "id": 37546,
+      "slug": "sexy-pickford",
+      "name": "Sexy Pickford",
+      "fpl_url": "https://fantasy.premierleague.com/en/leagues/37546/standings/c",
+      "livefpl_url": "https://plan.livefpl.net/leagues/37546"
+    },
+    {
+      "id": 118082,
+      "slug": "the-battle-continues",
+      "name": "The Battle Continues",
+      "fpl_url": "https://fantasy.premierleague.com/en/leagues/118082/standings/c",
+      "livefpl_url": "https://www.livefpl.net/leagues/118082"
+    }
+  ]
+}

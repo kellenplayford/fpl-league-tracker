@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#070713">
+  <title>FPL League Tracker 2026/27</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <div>
+        <h1>FPL League Tracker</h1>
+        <div class="sub">2026/27 season · daily 23:30 UK snapshots</div>
+      </div>
+      <div class="badge" id="updated">Loading…</div>
+    </header>
+
+    <div id="tabs" class="tabs"></div>
+    <div id="metrics" class="grid"></div>
+
+    <section>
+      <h2 class="section-title">Current standings</h2>
+      <div id="standings"></div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Calendar days at No. 1</h2>
+      <div id="daysTop"></div>
+    </section>
+
+    <section>
+      <h2 class="section-title">Daily leader history</h2>
+      <div id="dailyHistory"></div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

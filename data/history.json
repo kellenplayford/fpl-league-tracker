@@ -1,0 +1,27 @@
+{
+  "season": "2026/27",
+  "official_snapshot_time": "23:30 Europe/London",
+  "days": [
+    {
+      "date": "2026-08-21",
+      "source": "user-confirmed",
+      "notes": "Day 1 leader confirmed by Kellen before Day 2 matches began. Full 23:30 league standings were not archived.",
+      "leagues": {
+        "37546": {
+          "league_name": "Sexy Pickford",
+          "leader_entry_id": 361353,
+          "leader_manager": "Kellen Playford",
+          "leader_team": "Jogo Bonito",
+          "leader_points": 29
+        },
+        "118082": {
+          "league_name": "The Battle Continues",
+          "leader_entry_id": 361353,
+          "leader_manager": "Kellen Playford",
+          "leader_team": "Jogo Bonito",
+          "leader_points": 29
+        }
+      }
+    }
+  ]
+}

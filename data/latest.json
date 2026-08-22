@@ -1,0 +1,7 @@
+{
+  "status": "awaiting-first-collection",
+  "message": "Run the GitHub Action 'Collect FPL snapshot' to populate live standings.",
+  "generated_at": null,
+  "gameweek": 1,
+  "leagues": []
+}
