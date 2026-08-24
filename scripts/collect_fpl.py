@@ -54,8 +54,7 @@ def build_manager(row,gw,players,live):
         if item["is_captain"]: captain=name
         if item["is_vice_captain"]: vice=name
     value,bank=merged.get("value"),merged.get("bank")
-    return {
-      "entry_id":eid,"manager_name":row.get("player_name"),"team_name":row.get("entry_name"),
+    return {"entry_id":eid,"manager_name":row.get("player_name"),"team_name":row.get("entry_name"),
       "league_position":row.get("rank"),"previous_league_position":row.get("last_rank"),
       "gameweek_points":row.get("event_total"),"total_points":row.get("total"),
       "overall_rank":merged.get("overall_rank"),"gameweek_rank":merged.get("rank"),
@@ -100,8 +99,8 @@ def collect(mode):
 def save_official(now,snap):
     SNAPSHOTS.mkdir(parents=True,exist_ok=True)
     ds=now.date().isoformat(); path=SNAPSHOTS/f"{ds}.json"
-    if path.exists():
-        print(f"Official snapshot already exists for {ds}; no duplicate written."); return
+    # Deliberately replace any earlier same-day snapshot. This lets the scheduled
+    # 23:30 run supersede a manual official run made earlier in the day.
     snap["mode"]="official"; path.write_text(json.dumps(snap,indent=2))
     (DATA/"latest.json").write_text(json.dumps(snap,indent=2))
     hp=DATA/"history.json"; h=json.loads(hp.read_text())
@@ -117,15 +116,14 @@ def save_official(now,snap):
     mp=DATA/"manifest.json"; m=json.loads(mp.read_text()); name=f"data/snapshots/{ds}.json"
     m["official_snapshots"]=sorted(set(m.get("official_snapshots",[])+[name])); m["latest"]="data/latest.json"; m["updated_at"]=now.isoformat()
     mp.write_text(json.dumps(m,indent=2))
-    print(f"Official snapshot saved for {ds}.")
+    print(f"Official snapshot saved/replaced for {ds}.")
 
 def main():
     ap=argparse.ArgumentParser(); ap.add_argument("--mode",choices=["test","scheduled","official"],default="test"); args=ap.parse_args()
     now=datetime.now(TZ)
     if args.mode=="scheduled":
-        target=SNAPSHOTS/f"{now.date().isoformat()}.json"
-        if target.exists(): print("Today's official snapshot already exists."); return 0
-        if not (now.hour==23 and now.minute>=25): print(f"Outside UK snapshot window: {now.isoformat()}"); return 0
+        if not (now.hour==23 and now.minute>=25):
+            print(f"Outside UK snapshot window: {now.isoformat()}"); return 0
     now,snap=collect(args.mode)
     if args.mode=="test":
         TEST.mkdir(parents=True,exist_ok=True); (TEST/"latest-test.json").write_text(json.dumps(snap,indent=2))
