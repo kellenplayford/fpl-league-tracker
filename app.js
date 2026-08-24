@@ -1,92 +1,14 @@
-const LEAGUES = [
-  {id:"37546", name:"Sexy Pickford"},
-  {id:"118082", name:"The Battle Continues"}
-];
-let active = "37546";
-let latest = null;
-let history = null;
-
-const fmt = n => (n === null || n === undefined) ? "—" : Number(n).toLocaleString("en-GB");
-
-async function loadJson(path){
-  const r = await fetch(path + "?v=" + Date.now());
-  if(!r.ok) throw new Error(path);
-  return r.json();
-}
-
-function leagueData(){
-  return latest?.leagues?.find(l => String(l.league_id) === active);
-}
-
-function daysTopForLeague(){
-  const counts = {};
-  for(const day of (history?.days || [])){
-    const l = day.leagues?.[active];
-    if(!l) continue;
-    const key = String(l.leader_entry_id || l.leader_manager);
-    if(!counts[key]) counts[key] = {name:l.leader_manager, team:l.leader_team, days:0};
-    counts[key].days++;
-  }
-  return Object.values(counts).sort((a,b)=>b.days-a.days || a.name.localeCompare(b.name));
-}
-
-function renderTabs(){
-  document.querySelector("#tabs").innerHTML = LEAGUES.map(l =>
-    `<button class="tab ${l.id===active?"active":""}" data-id="${l.id}">${l.name}</button>`
-  ).join("");
-  document.querySelectorAll(".tab").forEach(b => b.onclick = () => {active=b.dataset.id; render();});
-}
-
-function render(){
-  renderTabs();
-  const l = leagueData();
-  const top = daysTopForLeague();
-  const leader = l?.standings?.[0];
-  const historyLeader = [...(history?.days||[])].reverse().find(d=>d.leagues?.[active])?.leagues?.[active];
-
-  document.querySelector("#metrics").innerHTML = `
-    <div class="card"><div class="label">Current leader</div><div class="metric">${leader?.manager_name || historyLeader?.leader_manager || "—"}</div><div class="small">${leader?.team_name || historyLeader?.leader_team || ""}</div></div>
-    <div class="card"><div class="label">Leader points</div><div class="metric">${fmt(leader?.total_points ?? historyLeader?.leader_points)}</div><div class="small">FPL total</div></div>
-    <div class="card"><div class="label">Most days No. 1</div><div class="metric">${top[0]?.days ?? 0}</div><div class="small">${top[0]?.name || "—"}</div></div>
-    <div class="card"><div class="label">Managers</div><div class="metric">${fmt(l?.manager_count)}</div><div class="small">${l ? "latest snapshot" : "awaiting collection"}</div></div>
-  `;
-
-  const rows = l?.standings || [];
-  document.querySelector("#standings").innerHTML = rows.length ? `
-    <div class="table-wrap"><table>
-      <thead><tr><th>Pos</th><th>Manager</th><th>Team</th><th>GW</th><th>Total</th><th>Overall rank</th><th>Captain</th><th>Value</th></tr></thead>
-      <tbody>${rows.map((m,i)=>`
-        <tr class="${i===0?"leader":""}">
-          <td class="pos">${fmt(m.league_position)}</td>
-          <td>${m.manager_name || "—"}</td>
-          <td>${m.team_name || "—"}</td>
-          <td>${fmt(m.gameweek_points)}</td>
-          <td><strong>${fmt(m.total_points)}</strong></td>
-          <td>${fmt(m.overall_rank)}</td>
-          <td>${m.captain || "—"}</td>
-          <td>${m.team_value ? "£"+Number(m.team_value).toFixed(1)+"m" : "—"}</td>
-        </tr>`).join("")}</tbody>
-    </table></div>` :
-    `<div class="note">The website is ready. Run the GitHub Action once in <strong>test</strong> mode to prove the FPL connection, then once in <strong>official</strong> mode if you want to populate today's live table immediately. The 23:30 scheduled snapshot will run automatically thereafter.</div>`;
-
-  document.querySelector("#daysTop").innerHTML = top.length ?
-    `<div class="top-list">${top.map((x,i)=>`<div class="top-row"><span><strong>${i+1}. ${x.name}</strong><span class="small"> · ${x.team || ""}</span></span><strong>${x.days} day${x.days===1?"":"s"}</strong></div>`).join("")}</div>` :
-    `<div class="note">No leader history yet.</div>`;
-
-  const days = (history?.days||[]).filter(d=>d.leagues?.[active]).slice().reverse();
-  document.querySelector("#dailyHistory").innerHTML = `
-    <div class="table-wrap"><table>
-      <thead><tr><th>Date</th><th>Leader</th><th>Team</th><th>Points</th><th>Overall rank</th><th>Source</th></tr></thead>
-      <tbody>${days.map(d=>{const x=d.leagues[active];return `<tr><td>${d.date}</td><td>${x.leader_manager}</td><td>${x.leader_team||"—"}</td><td>${fmt(x.leader_points)}</td><td>${fmt(x.leader_overall_rank)}</td><td>${d.source}</td></tr>`}).join("")}</tbody>
-    </table></div>`;
-
-  document.querySelector("#updated").textContent = latest?.generated_at
-    ? `Latest data: ${new Date(latest.generated_at).toLocaleString("en-GB")}`
-    : "Awaiting first automated collection";
-}
-
-(async function(){
-  try{latest = await loadJson("data/latest.json");}catch(e){latest={};}
-  try{history = await loadJson("data/history.json");}catch(e){history={days:[]};}
-  render();
-})();
+const LEAGUES=[{id:"37546",name:"Sexy Pickford"},{id:"118082",name:"The Battle Continues"}];
+let active="37546",latest=null,history=null;
+const fmt=n=>(n===null||n===undefined)?"—":Number(n).toLocaleString("en-GB");
+async function loadJson(p){const r=await fetch(p+"?v="+Date.now());if(!r.ok)throw new Error(p);return r.json();}
+function leagueData(){return latest?.leagues?.find(l=>String(l.league_id)===active);}
+function daysTop(){const c={};for(const d of(history?.days||[])){const l=d.leagues?.[active];if(!l)continue;const k=String(l.leader_entry_id||l.leader_manager);if(!c[k])c[k]={name:l.leader_manager,team:l.leader_team,days:0};c[k].days++;}return Object.values(c).sort((a,b)=>b.days-a.days||a.name.localeCompare(b.name));}
+function tabs(){document.querySelector("#tabs").innerHTML=LEAGUES.map(l=>`<button class="tab ${l.id===active?"active":""}" data-id="${l.id}">${l.name}</button>`).join("");document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{active=b.dataset.id;render();});}
+function render(){tabs();const l=leagueData(),top=daysTop(),leader=l?.standings?.[0],hist=[...(history?.days||[])].reverse().find(d=>d.leagues?.[active])?.leagues?.[active];
+document.querySelector("#metrics").innerHTML=`<div class="card"><div class="label">Current leader</div><div class="metric">${leader?.manager_name||hist?.leader_manager||"—"}</div><div class="small">${leader?.team_name||hist?.leader_team||""}</div></div><div class="card"><div class="label">Leader points</div><div class="metric">${fmt(leader?.total_points??hist?.leader_points)}</div><div class="small">FPL total</div></div><div class="card"><div class="label">Most days No. 1</div><div class="metric">${top[0]?.days??0}</div><div class="small">${top[0]?.name||"—"}</div></div><div class="card"><div class="label">Managers</div><div class="metric">${fmt(l?.manager_count)}</div><div class="small">${l?"in this league":"awaiting snapshot"}</div></div>`;
+const rows=l?.standings||[];document.querySelector("#standings").innerHTML=rows.length?`<div class="table-wrap"><table><thead><tr><th>Pos</th><th>Manager</th><th>Team</th><th>GW</th><th>Total</th><th>Overall rank</th></tr></thead><tbody>${rows.map((m,i)=>`<tr class="${i===0?"leader":""}"><td class="pos">${fmt(m.league_position)}</td><td>${m.manager_name||"—"}</td><td>${m.team_name||"—"}</td><td>${fmt(m.gameweek_points)}</td><td><strong>${fmt(m.total_points)}</strong></td><td>${fmt(m.overall_rank)}</td></tr>`).join("")}</tbody></table></div>`:`<div class="note">Full standings will appear after the next successful official snapshot.</div>`;
+const mx=top[0]?.days||1;document.querySelector("#daysTop").innerHTML=top.length?`<div class="top-list">${top.map((x,i)=>`<div class="top-row"><div class="top-person"><div><strong>${i+1}. ${x.name}</strong><span class="small"> · ${x.team||""}</span></div><div class="bar-track"><div class="bar-fill" style="width:${Math.max(6,(x.days/mx)*100)}%"></div></div></div><strong>${x.days} day${x.days===1?"":"s"}</strong></div>`).join("")}</div>`:`<div class="note">No leader history yet.</div>`;
+const ds=(history?.days||[]).filter(d=>d.leagues?.[active]).slice().reverse();document.querySelector("#dailyHistory").innerHTML=`<div class="table-wrap"><table><thead><tr><th>Date</th><th>Leader</th><th>Team</th><th>Points</th><th>Overall rank</th></tr></thead><tbody>${ds.map(d=>{const x=d.leagues[active];return`<tr><td>${d.date}</td><td>${x.leader_manager}</td><td>${x.leader_team||"—"}</td><td>${fmt(x.leader_points)}</td><td>${fmt(x.leader_overall_rank)}</td></tr>`}).join("")}</tbody></table></div>`;
+document.querySelector("#updated").textContent=latest?.generated_at?`Latest official snapshot: ${new Date(latest.generated_at).toLocaleString("en-GB")}`:"Awaiting first successful automatic snapshot";}
+(async()=>{try{latest=await loadJson("data/latest.json");}catch(e){latest={};}try{history=await loadJson("data/history.json");}catch(e){history={days:[]};}render();})();
