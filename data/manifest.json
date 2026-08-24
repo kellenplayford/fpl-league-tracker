@@ -1,4 +1,7 @@
 {
-  "official_snapshots": [],
-  "latest": "data/latest.json"
+  "official_snapshots": [
+    "data/snapshots/2026-08-24.json"
+  ],
+  "latest": "data/latest.json",
+  "updated_at": "2026-08-24T16:57:20.746016+01:00"
 }

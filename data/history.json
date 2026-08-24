@@ -22,6 +22,46 @@
           "leader_points": 29
         }
       }
+    },
+    {
+      "date": "2026-08-24",
+      "source": "automatic-23:30-snapshot",
+      "leagues": {
+        "37546": {
+          "league_name": "Sexy Pickford",
+          "leader_entry_id": 40951,
+          "leader_manager": "Chris Saunders",
+          "leader_team": "Haven\u2019t Got A Kalou",
+          "leader_points": 74,
+          "leader_overall_rank": 14162
+        },
+        "118082": {
+          "league_name": "The Battle Continues...",
+          "leader_entry_id": 361353,
+          "leader_manager": "Kellen Playford",
+          "leader_team": "Jogo Bonito",
+          "leader_points": 51,
+          "leader_overall_rank": 793389
+        }
+      }
     }
-  ]
+  ],
+  "days_top": {
+    "37546": {
+      "361353": {
+        "days_top": 1,
+        "longest_streak": 1
+      },
+      "40951": {
+        "days_top": 1,
+        "longest_streak": 1
+      }
+    },
+    "118082": {
+      "361353": {
+        "days_top": 2,
+        "longest_streak": 1
+      }
+    }
+  }
 }
