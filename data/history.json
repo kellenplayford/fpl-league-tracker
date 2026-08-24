@@ -5,7 +5,7 @@
     {
       "date": "2026-08-21",
       "source": "user-confirmed",
-      "notes": "Day 1 leader confirmed by Kellen before Day 2 matches began. Full 23:30 league standings were not archived.",
+      "notes": "Day 1 leader confirmed by Kellen. Full league standings were not archived; overall rank intentionally omitted.",
       "leagues": {
         "37546": {
           "league_name": "Sexy Pickford",
@@ -24,24 +24,46 @@
       }
     },
     {
-      "date": "2026-08-24",
-      "source": "automatic-23:30-snapshot",
+      "date": "2026-08-22",
+      "source": "user-screenshot",
+      "leagues": {
+        "37546": {
+          "league_name": "Sexy Pickford",
+          "leader_entry_id": 3331670,
+          "leader_manager": "Brogan O-Grady",
+          "leader_team": "schärloydbyschärloyd",
+          "leader_points": 58,
+          "leader_overall_rank": 14946
+        },
+        "118082": {
+          "league_name": "The Battle Continues",
+          "leader_entry_id": 597770,
+          "leader_manager": "Daniel Richmond",
+          "leader_team": "Sound of the Tzolis",
+          "leader_points": 44,
+          "leader_overall_rank": 262195
+        }
+      }
+    },
+    {
+      "date": "2026-08-23",
+      "source": "user-screenshot",
       "leagues": {
         "37546": {
           "league_name": "Sexy Pickford",
           "leader_entry_id": 40951,
           "leader_manager": "Chris Saunders",
-          "leader_team": "Haven\u2019t Got A Kalou",
+          "leader_team": "Haven’t Got A Kalou",
           "leader_points": 74,
-          "leader_overall_rank": 14162
+          "leader_overall_rank": 15818
         },
         "118082": {
-          "league_name": "The Battle Continues...",
-          "leader_entry_id": 361353,
-          "leader_manager": "Kellen Playford",
-          "leader_team": "Jogo Bonito",
-          "leader_points": 51,
-          "leader_overall_rank": 793389
+          "league_name": "The Battle Continues",
+          "leader_entry_id": 597770,
+          "leader_manager": "Daniel Richmond",
+          "leader_team": "Sound of the Tzolis",
+          "leader_points": 52,
+          "leader_overall_rank": 851778
         }
       }
     }
@@ -52,6 +74,10 @@
         "days_top": 1,
         "longest_streak": 1
       },
+      "3331670": {
+        "days_top": 1,
+        "longest_streak": 1
+      },
       "40951": {
         "days_top": 1,
         "longest_streak": 1
@@ -59,8 +85,12 @@
     },
     "118082": {
       "361353": {
-        "days_top": 2,
+        "days_top": 1,
         "longest_streak": 1
+      },
+      "597770": {
+        "days_top": 2,
+        "longest_streak": 2
       }
     }
   }
