@@ -9,9 +9,16 @@ on:
         default: test
         type: choice
         options: [test, official]
+
   schedule:
-    - cron: "25,30,40,50 22 * * *"
-    - cron: "25,30,40,50 23 * * *"
+    # TEMPORARY TEST: 15:25 UK (BST) on 25 August = 14:25 UTC.
+    # Remove this line after today's test succeeds.
+    - cron: "25 14 25 8 *"
+
+    # Normal overnight collection.
+    # 01:15 UTC = 02:15 UK during BST, 01:15 UK during GMT.
+    # The Python script always records scheduled runs as the PREVIOUS UK date.
+    - cron: "15 1 * * *"
 
 permissions:
   contents: write
@@ -20,12 +27,16 @@ jobs:
   collect:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
       - run: pip install -r requirements.txt
+
       - name: Collect data
         run: |
           if [ "${{ github.event_name }}" = "schedule" ]; then
@@ -34,6 +45,16 @@ jobs:
             MODE="${{ github.event.inputs.mode }}"
           fi
           python scripts/collect_fpl.py --mode "$MODE"
+
+      - name: Require data changes for scheduled/official run
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ] || [ "${{ github.event.inputs.mode }}" = "official" ]; then
+            if [ -z "$(git status --porcelain data)" ]; then
+              echo "ERROR: Snapshot run produced no data changes."
+              exit 1
+            fi
+          fi
+
       - name: Commit updated data
         run: |
           if [ -z "$(git status --porcelain)" ]; then
