@@ -11,7 +11,7 @@ DATA=ROOT/"data"; SNAPSHOTS=DATA/"snapshots"; TEST=DATA/"test"
 TZ=ZoneInfo("Europe/London"); BASE="https://fantasy.premierleague.com/api"
 LEAGUES=[{"id":37546,"name":"Sexy Pickford"},{"id":118082,"name":"The Battle Continues"}]
 S=requests.Session()
-S.headers.update({"User-Agent":"fpl-league-tracker/2.1","Accept":"application/json,text/plain,*/*"})
+S.headers.update({"User-Agent":"fpl-league-tracker/2.2","Accept":"application/json,text/plain,*/*"})
 
 def get_json(url,retries=4):
     last=None
@@ -101,7 +101,6 @@ def save_official(now,snap,source):
     SNAPSHOTS.mkdir(parents=True,exist_ok=True)
     ds=snap["snapshot_date"]; path=SNAPSHOTS/f"{ds}.json"
 
-    # Replace any existing snapshot for the logical snapshot date.
     snap["mode"]="official"; path.write_text(json.dumps(snap,indent=2))
     (DATA/"latest.json").write_text(json.dumps(snap,indent=2))
 
@@ -125,19 +124,22 @@ def save_official(now,snap,source):
 
 def main():
     ap=argparse.ArgumentParser()
-    ap.add_argument("--mode",choices=["test","scheduled","official"],default="test")
+    ap.add_argument("--mode",choices=["test","scheduled","official","backfill"],default="test")
     args=ap.parse_args()
 
     now=datetime.now(TZ)
 
-    if args.mode=="scheduled":
-        # Scheduled overnight runs belong to the PREVIOUS UK calendar day.
-        # This is deliberately independent of GitHub's actual start time.
+    if args.mode in ("scheduled","backfill"):
         snapshot_date=now.date()-timedelta(days=1)
-        source="automatic-overnight-snapshot"
     else:
         snapshot_date=now.date()
-        source="manual-official-snapshot"
+
+    # Scheduled fallback cron runs are deliberately idempotent:
+    # if an earlier overnight run already saved the date, later backup runs simply succeed.
+    target_path=SNAPSHOTS/f"{snapshot_date.isoformat()}.json"
+    if args.mode=="scheduled" and target_path.exists():
+        print(f"Snapshot already exists for {snapshot_date.isoformat()}; backup run not needed.")
+        return 0
 
     now,snap=collect(args.mode,snapshot_date)
 
@@ -146,6 +148,12 @@ def main():
         (TEST/"latest-test.json").write_text(json.dumps(snap,indent=2))
         print(f"Test collection succeeded for {snapshot_date.isoformat()}.")
         return 0
+
+    source = {
+        "scheduled": "automatic-overnight-snapshot",
+        "backfill": "manual-backfill-previous-day",
+        "official": "manual-official-snapshot",
+    }[args.mode]
 
     save_official(now,snap,source)
     return 0
