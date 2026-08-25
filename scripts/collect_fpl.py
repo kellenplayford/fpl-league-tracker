@@ -11,7 +11,7 @@ DATA=ROOT/"data"; SNAPSHOTS=DATA/"snapshots"; TEST=DATA/"test"
 TZ=ZoneInfo("Europe/London"); BASE="https://fantasy.premierleague.com/api"
 LEAGUES=[{"id":37546,"name":"Sexy Pickford"},{"id":118082,"name":"The Battle Continues"}]
 S=requests.Session()
-S.headers.update({"User-Agent":"fpl-league-tracker/2.0","Accept":"application/json,text/plain,*/*"})
+S.headers.update({"User-Agent":"fpl-league-tracker/2.1","Accept":"application/json,text/plain,*/*"})
 
 def get_json(url,retries=4):
     last=None
@@ -80,13 +80,14 @@ def days_top(history):
         out.setdefault(lid,{})[e]={"days_top":n,"longest_streak":streaks[(lid,e)]["longest"]}
     return out
 
-def collect(mode):
+def collect(mode, snapshot_date):
     now=datetime.now(TZ)
     b=get_json(f"{BASE}/bootstrap-static/"); gw=current_gw(b)
     players={int(p["id"]):p for p in b.get("elements",[])}
     livep=get_json(f"{BASE}/event/{gw}/live/")
     live={int(x["id"]):(x.get("stats") or {}).get("total_points") for x in livep.get("elements",[])}
-    snap={"status":"ok","mode":mode,"generated_at":now.isoformat(),"snapshot_date":now.date().isoformat(),"gameweek":gw,"leagues":[]}
+    snap={"status":"ok","mode":mode,"generated_at":now.isoformat(),
+          "snapshot_date":snapshot_date.isoformat(),"gameweek":gw,"leagues":[]}
     for league in LEAGUES:
         meta,rows=league_rows(league["id"]); managers=[]
         for row in rows:
@@ -96,39 +97,58 @@ def collect(mode):
                                 "manager_count":len(managers),"standings":managers})
     return now,snap
 
-def save_official(now,snap):
+def save_official(now,snap,source):
     SNAPSHOTS.mkdir(parents=True,exist_ok=True)
-    ds=now.date().isoformat(); path=SNAPSHOTS/f"{ds}.json"
-    # Deliberately replace any earlier same-day snapshot. This lets the scheduled
-    # 23:30 run supersede a manual official run made earlier in the day.
+    ds=snap["snapshot_date"]; path=SNAPSHOTS/f"{ds}.json"
+
+    # Replace any existing snapshot for the logical snapshot date.
     snap["mode"]="official"; path.write_text(json.dumps(snap,indent=2))
     (DATA/"latest.json").write_text(json.dumps(snap,indent=2))
+
     hp=DATA/"history.json"; h=json.loads(hp.read_text())
-    day={"date":ds,"source":"automatic-23:30-snapshot","leagues":{}}
+    day={"date":ds,"source":source,"leagues":{}}
     for lg in snap["leagues"]:
         if not lg["standings"]: continue
         lead=lg["standings"][0]
         day["leagues"][str(lg["league_id"])]={"league_name":lg["league_name"],"leader_entry_id":lead["entry_id"],
           "leader_manager":lead["manager_name"],"leader_team":lead["team_name"],"leader_points":lead["total_points"],
           "leader_overall_rank":lead["overall_rank"]}
+
     h["days"]=[d for d in h.get("days",[]) if d.get("date")!=ds]+[day]
     h["days"].sort(key=lambda x:x["date"]); h["days_top"]=days_top(h); hp.write_text(json.dumps(h,indent=2))
+
     mp=DATA/"manifest.json"; m=json.loads(mp.read_text()); name=f"data/snapshots/{ds}.json"
-    m["official_snapshots"]=sorted(set(m.get("official_snapshots",[])+[name])); m["latest"]="data/latest.json"; m["updated_at"]=now.isoformat()
+    m["official_snapshots"]=sorted(set(m.get("official_snapshots",[])+[name]))
+    m["latest"]="data/latest.json"; m["updated_at"]=now.isoformat()
     mp.write_text(json.dumps(m,indent=2))
     print(f"Official snapshot saved/replaced for {ds}.")
 
 def main():
-    ap=argparse.ArgumentParser(); ap.add_argument("--mode",choices=["test","scheduled","official"],default="test"); args=ap.parse_args()
+    ap=argparse.ArgumentParser()
+    ap.add_argument("--mode",choices=["test","scheduled","official"],default="test")
+    args=ap.parse_args()
+
     now=datetime.now(TZ)
+
     if args.mode=="scheduled":
-        if not (now.hour==23 and now.minute>=25):
-            print(f"Outside UK snapshot window: {now.isoformat()}"); return 0
-    now,snap=collect(args.mode)
+        # Scheduled overnight runs belong to the PREVIOUS UK calendar day.
+        # This is deliberately independent of GitHub's actual start time.
+        snapshot_date=now.date()-timedelta(days=1)
+        source="automatic-overnight-snapshot"
+    else:
+        snapshot_date=now.date()
+        source="manual-official-snapshot"
+
+    now,snap=collect(args.mode,snapshot_date)
+
     if args.mode=="test":
-        TEST.mkdir(parents=True,exist_ok=True); (TEST/"latest-test.json").write_text(json.dumps(snap,indent=2))
-        print("Test collection succeeded."); return 0
-    save_official(now,snap); return 0
+        TEST.mkdir(parents=True,exist_ok=True)
+        (TEST/"latest-test.json").write_text(json.dumps(snap,indent=2))
+        print(f"Test collection succeeded for {snapshot_date.isoformat()}.")
+        return 0
+
+    save_official(now,snap,source)
+    return 0
 
 if __name__=="__main__":
     try: raise SystemExit(main())
