@@ -88,6 +88,28 @@
           "leader_overall_rank": 1282717
         }
       }
+    },
+    {
+      "date": "2026-08-25",
+      "source": "automatic-overnight-snapshot",
+      "leagues": {
+        "37546": {
+          "league_name": "Sexy Pickford",
+          "leader_entry_id": 40951,
+          "leader_manager": "Chris Saunders",
+          "leader_team": "Haven\u2019t Got A Kalou",
+          "leader_points": 85,
+          "leader_overall_rank": 37833
+        },
+        "118082": {
+          "league_name": "The Battle Continues...",
+          "leader_entry_id": 597770,
+          "leader_manager": "Daniel Richmond",
+          "leader_team": "Sound of the Tzolis",
+          "leader_points": 63,
+          "leader_overall_rank": 1282717
+        }
+      }
     }
   ],
   "days_top": {
@@ -101,8 +123,8 @@
         "longest_streak": 1
       },
       "40951": {
-        "days_top": 2,
-        "longest_streak": 2
+        "days_top": 3,
+        "longest_streak": 3
       }
     },
     "118082": {
@@ -111,8 +133,8 @@
         "longest_streak": 1
       },
       "597770": {
-        "days_top": 3,
-        "longest_streak": 3
+        "days_top": 4,
+        "longest_streak": 4
       }
     }
   }
