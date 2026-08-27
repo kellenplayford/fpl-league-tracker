@@ -1,8 +1,9 @@
 {
   "official_snapshots": [
     "data/snapshots/2026-08-24.json",
-    "data/snapshots/2026-08-25.json"
+    "data/snapshots/2026-08-25.json",
+    "data/snapshots/2026-08-26.json"
   ],
   "latest": "data/latest.json",
-  "updated_at": "2026-08-26T04:40:28.083073+01:00"
+  "updated_at": "2026-08-27T08:24:25.506596+01:00"
 }
