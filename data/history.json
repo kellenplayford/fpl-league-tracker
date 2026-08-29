@@ -157,7 +157,7 @@
     },
     {
       "date": "2026-08-28",
-      "source": "automatic-overnight-snapshot",
+      "source": "manual-backfill-previous-day",
       "leagues": {
         "37546": {
           "league_name": "Sexy Pickford",

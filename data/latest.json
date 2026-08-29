@@ -1,7 +1,7 @@
 {
   "status": "ok",
   "mode": "official",
-  "generated_at": "2026-08-29T01:33:08.744434+01:00",
+  "generated_at": "2026-08-29T03:15:24.601010+01:00",
   "snapshot_date": "2026-08-28",
   "gameweek": 2,
   "leagues": [
@@ -4100,163 +4100,6 @@
           ]
         },
         {
-          "entry_id": 4780591,
-          "manager_name": "Joseph Latham",
-          "team_name": "Not Too Xabi",
-          "league_position": 6,
-          "previous_league_position": 3,
-          "gameweek_points": 13,
-          "total_points": 70,
-          "overall_rank": 4241724,
-          "gameweek_rank": 6809678,
-          "points_on_bench": 0,
-          "transfers": 1,
-          "transfer_cost": 0,
-          "team_value": 100.2,
-          "bank": 0.0,
-          "active_chip": null,
-          "captain": "B.Fernandes",
-          "vice_captain": "Calafiori",
-          "automatic_subs": [],
-          "squad": [
-            {
-              "element_id": 350,
-              "player": "A.Becker",
-              "position": 1,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
-            },
-            {
-              "element_id": 8,
-              "player": "Calafiori",
-              "position": 2,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": true,
-              "live_points": 0
-            },
-            {
-              "element_id": 504,
-              "player": "Vuskovic",
-              "position": 3,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
-            },
-            {
-              "element_id": 334,
-              "player": "Muharemovi\u0107",
-              "position": 4,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
-            },
-            {
-              "element_id": 426,
-              "player": "B.Fernandes",
-              "position": 5,
-              "multiplier": 2,
-              "is_captain": true,
-              "is_vice_captain": false,
-              "live_points": 0
-            },
-            {
-              "element_id": 557,
-              "player": "Tzolis",
-              "position": 6,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
-            },
-            {
-              "element_id": 368,
-              "player": "Szoboszlai",
-              "position": 7,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
-            },
-            {
-              "element_id": 427,
-              "player": "Mbeumo",
-              "position": 8,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
-            },
-            {
-              "element_id": 165,
-              "player": "Jo\u00e3o Pedro",
-              "position": 9,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
-            },
-            {
-              "element_id": 411,
-              "player": "Haaland",
-              "position": 10,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 13
-            },
-            {
-              "element_id": 552,
-              "player": "Brobbey",
-              "position": 11,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
-            },
-            {
-              "element_id": 111,
-              "player": "Steele",
-              "position": 12,
-              "multiplier": 0,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
-            },
-            {
-              "element_id": 259,
-              "player": "Diop",
-              "position": 13,
-              "multiplier": 0,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
-            },
-            {
-              "element_id": 212,
-              "player": "Hughes",
-              "position": 14,
-              "multiplier": 0,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
-            },
-            {
-              "element_id": 175,
-              "player": "van Ewijk",
-              "position": 15,
-              "multiplier": 0,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
-            }
-          ]
-        },
-        {
           "entry_id": 3413917,
           "manager_name": "Elijah Richmond",
           "team_name": "Hat-rick Haaland",
@@ -4405,6 +4248,163 @@
             {
               "element_id": 552,
               "player": "Brobbey",
+              "position": 15,
+              "multiplier": 0,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 0
+            }
+          ]
+        },
+        {
+          "entry_id": 4780591,
+          "manager_name": "Joseph Latham",
+          "team_name": "Not Too Xabi",
+          "league_position": 6,
+          "previous_league_position": 3,
+          "gameweek_points": 13,
+          "total_points": 70,
+          "overall_rank": 4241724,
+          "gameweek_rank": 6809678,
+          "points_on_bench": 0,
+          "transfers": 1,
+          "transfer_cost": 0,
+          "team_value": 100.2,
+          "bank": 0.0,
+          "active_chip": null,
+          "captain": "B.Fernandes",
+          "vice_captain": "Calafiori",
+          "automatic_subs": [],
+          "squad": [
+            {
+              "element_id": 350,
+              "player": "A.Becker",
+              "position": 1,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 0
+            },
+            {
+              "element_id": 8,
+              "player": "Calafiori",
+              "position": 2,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": true,
+              "live_points": 0
+            },
+            {
+              "element_id": 504,
+              "player": "Vuskovic",
+              "position": 3,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 0
+            },
+            {
+              "element_id": 334,
+              "player": "Muharemovi\u0107",
+              "position": 4,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 0
+            },
+            {
+              "element_id": 426,
+              "player": "B.Fernandes",
+              "position": 5,
+              "multiplier": 2,
+              "is_captain": true,
+              "is_vice_captain": false,
+              "live_points": 0
+            },
+            {
+              "element_id": 557,
+              "player": "Tzolis",
+              "position": 6,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 0
+            },
+            {
+              "element_id": 368,
+              "player": "Szoboszlai",
+              "position": 7,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 0
+            },
+            {
+              "element_id": 427,
+              "player": "Mbeumo",
+              "position": 8,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 0
+            },
+            {
+              "element_id": 165,
+              "player": "Jo\u00e3o Pedro",
+              "position": 9,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 0
+            },
+            {
+              "element_id": 411,
+              "player": "Haaland",
+              "position": 10,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 13
+            },
+            {
+              "element_id": 552,
+              "player": "Brobbey",
+              "position": 11,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 0
+            },
+            {
+              "element_id": 111,
+              "player": "Steele",
+              "position": 12,
+              "multiplier": 0,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 0
+            },
+            {
+              "element_id": 259,
+              "player": "Diop",
+              "position": 13,
+              "multiplier": 0,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 0
+            },
+            {
+              "element_id": 212,
+              "player": "Hughes",
+              "position": 14,
+              "multiplier": 0,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 0
+            },
+            {
+              "element_id": 175,
+              "player": "van Ewijk",
               "position": 15,
               "multiplier": 0,
               "is_captain": false,
