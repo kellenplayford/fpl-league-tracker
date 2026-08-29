@@ -1,19 +1,215 @@
-const LEAGUES=[{id:"37546",name:"Sexy Pickford"},{id:"118082",name:"The Battle Continues"}];
+const LEAGUES=[
+  {id:"37546",name:"Sexy Pickford"},
+  {id:"118082",name:"The Battle Continues"}
+];
+
 let active="37546",latest={},history={days:[]},snapshots=[];
+
 const fmt=n=>(n===null||n===undefined||n==="")?"—":Number(n).toLocaleString("en-GB");
 const esc=s=>String(s??"—").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
 const loadJson=async p=>{const r=await fetch(`${p}?v=${Date.now()}`);if(!r.ok)throw new Error(p);return r.json()};
 const leagueData=(snap=latest)=>snap?.leagues?.find(l=>String(l.league_id)===active);
-const movement=m=>{const cur=Number(m.league_position),prev=Number(m.previous_league_position);if(!prev||prev===cur)return{text:"—",cls:"same"};if(prev>cur)return{text:`▲ ${prev-cur}`,cls:"up"};return{text:`▼ ${cur-prev}`,cls:"down"}};
-function getDaysTop(){const names={};for(const d of history?.days||[]){const x=d.leagues?.[active];if(!x)continue;const id=String(x.leader_entry_id||x.leader_manager);if(!names[id])names[id]={id,name:x.leader_manager,team:x.leader_team,days:0};names[id].days++}const stored=history?.days_top?.[active]||{};return Object.values(names).map(x=>({...x,longest:stored[x.id]?.longest_streak||0})).sort((a,b)=>b.days-a.days||a.name.localeCompare(b.name))}
-function leagueSnapshots(){return snapshots.map(s=>leagueData(s)).filter(Boolean)}
-function records(){const rows=leagueSnapshots().flatMap(l=>l.standings||[]),days=getDaysTop();const high=rows.reduce((a,b)=>(Number(b.gameweek_points)||0)>(Number(a?.gameweek_points)||-1)?b:a,null);const bench=rows.reduce((a,b)=>(Number(b.points_on_bench)||0)>(Number(a?.points_on_bench)||-1)?b:a,null);const longest=days.slice().sort((a,b)=>b.longest-a.longest)[0];const chipRows=rows.filter(r=>r.active_chip);const tc=chipRows.filter(r=>r.active_chip==="3xc").reduce((a,b)=>(Number(b.gameweek_points)||0)>(Number(a?.gameweek_points)||-1)?b:a,null);const bb=chipRows.filter(r=>r.active_chip==="bboost").reduce((a,b)=>(Number(b.gameweek_points)||0)>(Number(a?.gameweek_points)||-1)?b:a,null);return[{label:"Highest recorded GW",value:high?`${fmt(high.gameweek_points)} pts`:"—",sub:high?.manager_name||"Waiting for data"},{label:"Longest reign",value:longest?`${longest.longest} day${longest.longest===1?"":"s"}`:"—",sub:longest?.name||"Waiting for data"},{label:"Most points benched",value:bench?`${fmt(bench.points_on_bench)} pts`:"—",sub:bench?.manager_name||"Waiting for data"},{label:"Best Bench Boost",value:bb?`${fmt(bb.gameweek_points)} pts`:"—",sub:bb?.manager_name||"No recorded use yet"},{label:"Best Triple Captain",value:tc?`${fmt(tc.gameweek_points)} pts`:"—",sub:tc?.manager_name||"No recorded use yet"}]}
-function tabs(){document.querySelector("#tabs").innerHTML=LEAGUES.map(l=>`<button class="tab ${l.id===active?"active":""}" data-id="${l.id}">${esc(l.name)}</button>`).join("");document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{active=b.dataset.id;render()})}
-function renderHero(){const l=leagueData(),leader=l?.standings?.[0],top=getDaysTop()[0];document.querySelector("#hero").innerHTML=`<div class="hero-card hero-leader"><div class="hero-label">League leader</div><div class="hero-value">${esc(leader?.manager_name||"—")}</div><div class="hero-sub">${esc(leader?.team_name||"")} · ${fmt(leader?.total_points)} points</div></div><div class="hero-card"><div class="hero-label">Gameweek</div><div class="hero-value">${fmt(latest?.gameweek)}</div><div class="hero-sub">Current FPL week</div></div><div class="hero-card"><div class="hero-label">Managers</div><div class="hero-value">${fmt(l?.manager_count)}</div><div class="hero-sub">In this league</div></div><div class="hero-card"><div class="hero-label">Most days top</div><div class="hero-value">${fmt(top?.days||0)}</div><div class="hero-sub">${esc(top?.name||"—")}</div></div>`}
-function detailHTML(m,mobile=false){const items=[["Overall rank",fmt(m.overall_rank)],["GW rank",fmt(m.gameweek_rank)],["Captain",esc(m.captain||"—")],["Chip",esc(m.active_chip||"—")],["Transfers",fmt(m.transfers)],["Hit",m.transfer_cost?`-${fmt(m.transfer_cost)}`:"0"],["Bench",`${fmt(m.points_on_bench)} pts`],["Team value",m.team_value!=null?`£${Number(m.team_value).toFixed(1)}m`:"—"],["Bank",m.bank!=null?`£${Number(m.bank).toFixed(1)}m`:"—"]];return`<div class="${mobile?"mobile-detail-grid":"detail-grid"}">${items.map(([a,b])=>`<div class="detail-item"><div class="mini-label">${a}</div><div class="detail-value">${b}</div></div>`).join("")}</div>`}
-function renderStandings(){const rows=leagueData()?.standings||[];if(!rows.length){document.querySelector("#standings").innerHTML='<div class="empty">No current standings available.</div>';return}const desktop=`<div class="desktop-table"><table><thead><tr><th>Pos</th><th>Manager</th><th>GW</th><th>Total</th><th>Move</th><th>Overall</th></tr></thead><tbody>${rows.map((m,i)=>{const mv=movement(m);return`<tr class="${i===0?"leader":""}" data-detail="${m.entry_id}"><td class="pos">${fmt(m.league_position)}</td><td><div class="manager-name">${esc(m.manager_name)}</div><div class="team-name">${esc(m.team_name)}</div></td><td>${fmt(m.gameweek_points)}</td><td class="points">${fmt(m.total_points)}</td><td class="movement ${mv.cls}">${mv.text}</td><td>${fmt(m.overall_rank)}</td></tr><tr class="detail-row" id="detail-${m.entry_id}"><td colspan="6">${detailHTML(m)}</td></tr>`}).join("")}</tbody></table></div>`;const mobile=`<div class="mobile-list">${rows.map((m,i)=>{const mv=movement(m);return`<article class="manager-card ${i===0?"leader":""}" data-card="${m.entry_id}"><div class="manager-summary"><div class="pos">${fmt(m.league_position)}</div><div><div class="manager-name">${esc(m.manager_name)}</div><div class="team-name">${esc(m.team_name)} · <span class="${mv.cls}">${mv.text}</span></div></div><div class="manager-points"><strong>${fmt(m.total_points)}</strong><span class="team-name">${fmt(m.gameweek_points)} GW</span></div></div><div class="manager-detail">${detailHTML(m,true)}</div></article>`}).join("")}</div>`;document.querySelector("#standings").innerHTML=desktop+mobile;document.querySelectorAll("[data-detail]").forEach(r=>r.onclick=()=>document.querySelector(`#detail-${r.dataset.detail}`)?.classList.toggle("open"));document.querySelectorAll("[data-card]").forEach(c=>c.onclick=()=>c.classList.toggle("open"))}
-function renderRecords(){document.querySelector("#records").innerHTML=records().map(r=>`<div class="record"><div class="record-label">${esc(r.label)}</div><div class="record-value">${esc(r.value)}</div><div class="record-sub">${esc(r.sub)}</div></div>`).join("")}
-function renderDays(){const list=getDaysTop(),max=list[0]?.days||1;document.querySelector("#daysTop").innerHTML=list.length?`<div class="days-card">${list.map((x,i)=>`<div class="day-row"><div class="day-main"><div><span class="day-person">${i+1}. ${esc(x.name)}</span><div class="team-name">${esc(x.team||"")}</div></div><div class="day-count">${x.days}</div></div><div class="bar"><span style="width:${Math.max(5,x.days/max*100)}%"></span></div></div>`).join("")}</div>`:'<div class="empty">No leader history yet.</div>'}
-function renderHistory(){const ds=(history?.days||[]).filter(d=>d.leagues?.[active]).slice().reverse();document.querySelector("#dailyHistory").innerHTML=ds.length?`<div class="history-card">${ds.map(d=>{const x=d.leagues[active];return`<div class="history-row"><div class="history-date">${new Date(d.date+"T12:00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short"})}</div><div><div class="history-name">${esc(x.leader_manager)}</div><div class="team-name">${esc(x.leader_team||"")}</div></div><div class="history-points">${fmt(x.leader_points)}</div></div>`}).join("")}</div>`:'<div class="empty">No history yet.</div>'}
-function render(){tabs();renderHero();renderStandings();renderRecords();renderDays();renderHistory();document.querySelector("#updated").textContent=latest?.generated_at?`Updated ${new Date(latest.generated_at).toLocaleString("en-GB",{dateStyle:"medium",timeStyle:"short"})}`:"Awaiting snapshot"}
-(async()=>{try{latest=await loadJson("data/latest.json")}catch(e){}try{history=await loadJson("data/history.json")}catch(e){}try{const manifest=await loadJson("data/manifest.json");snapshots=(await Promise.all((manifest.official_snapshots||[]).map(p=>loadJson(p).catch(()=>null)))).filter(Boolean)}catch(e){snapshots=latest?.leagues?[latest]:[]}render()})();
+const movement=m=>{
+  const cur=Number(m.league_position),prev=Number(m.previous_league_position);
+  if(!prev||prev===cur)return{text:"—",cls:"same"};
+  if(prev>cur)return{text:`▲ ${prev-cur}`,cls:"up"};
+  return{text:`▼ ${cur-prev}`,cls:"down"};
+};
+
+function getDaysTop(){
+  const names={};
+  for(const d of history?.days||[]){
+    const x=d.leagues?.[active]; if(!x)continue;
+    const id=String(x.leader_entry_id||x.leader_manager);
+    if(!names[id])names[id]={id,name:x.leader_manager,team:x.leader_team,days:0};
+    names[id].days++;
+  }
+  const stored=history?.days_top?.[active]||{};
+  return Object.values(names)
+    .map(x=>({...x,longest:stored[x.id]?.longest_streak||0}))
+    .sort((a,b)=>b.days-a.days||a.name.localeCompare(b.name));
+}
+
+function finalRowsByGameweek(){
+  const byKey=new Map();
+  for(const snap of snapshots){
+    const l=leagueData(snap);
+    const gw=Number(snap?.gameweek);
+    if(!l||!gw)continue;
+    const stamp=new Date(snap?.generated_at||snap?.snapshot_date||0).getTime();
+    for(const row of l.standings||[]){
+      const key=`${gw}:${row.entry_id}`;
+      const prev=byKey.get(key);
+      if(!prev||stamp>=prev.stamp)byKey.set(key,{...row,gameweek:gw,stamp});
+    }
+  }
+  return [...byKey.values()];
+}
+
+function captainRawPoints(row){
+  const cap=(row.squad||[]).find(p=>p.is_captain);
+  return cap ? Number(cap.live_points)||0 : null;
+}
+
+function records(){
+  const rows=finalRowsByGameweek(),days=getDaysTop();
+  const high=rows.reduce((a,b)=>(Number(b.gameweek_points)||0)>(Number(a?.gameweek_points)||-1)?b:a,null);
+  const bench=rows.reduce((a,b)=>(Number(b.points_on_bench)||0)>(Number(a?.points_on_bench)||-1)?b:a,null);
+  const longest=days.slice().sort((a,b)=>b.longest-a.longest)[0];
+
+  const tcRows=rows.filter(r=>r.active_chip==="3xc").map(r=>({...r,tc_extra:captainRawPoints(r)}));
+  const tc=tcRows.reduce((a,b)=>(Number(b.tc_extra)||0)>(Number(a?.tc_extra)||-1)?b:a,null);
+
+  const bbRows=rows.filter(r=>r.active_chip==="bboost");
+  const bb=bbRows.reduce((a,b)=>(Number(b.points_on_bench)||0)>(Number(a?.points_on_bench)||-1)?b:a,null);
+
+  return[
+    {label:"Highest recorded GW",value:high?`${fmt(high.gameweek_points)} pts`:"—",sub:high?.manager_name||"Waiting for data"},
+    {label:"Longest reign",value:longest?`${longest.longest} day${longest.longest===1?"":"s"}`:"—",sub:longest?.name||"Waiting for data"},
+    {label:"Most points benched",value:bench?`${fmt(bench.points_on_bench)} pts`:"—",sub:bench?.manager_name||"Waiting for data"},
+    {label:"Best Bench Boost",value:bb?`${fmt(bb.points_on_bench)} bench pts`:"—",sub:bb?.manager_name||"No recorded use yet"},
+    {label:"Best Triple Captain",value:tc&&tc.tc_extra!=null?`+${fmt(tc.tc_extra)} pts`:"—",sub:tc?.manager_name||"No recorded use yet"}
+  ];
+}
+
+function tabs(){
+  document.querySelector("#tabs").innerHTML=LEAGUES.map(l=>
+    `<button class="tab ${l.id===active?"active":""}" data-id="${l.id}">${esc(l.name)}</button>`
+  ).join("");
+  document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{active=b.dataset.id;render()});
+}
+
+function renderHero(){
+  const l=leagueData(),leader=l?.standings?.[0],top=getDaysTop()[0];
+  document.querySelector("#hero").innerHTML=`
+    <div class="hero-card hero-leader">
+      <div class="hero-label">League leader</div>
+      <div class="hero-value">${esc(leader?.manager_name||"—")}</div>
+      <div class="hero-sub">${esc(leader?.team_name||"")} · ${fmt(leader?.total_points)} points</div>
+    </div>
+    <div class="hero-card"><div class="hero-label">Gameweek</div><div class="hero-value">${fmt(latest?.gameweek)}</div><div class="hero-sub">Current FPL week</div></div>
+    <div class="hero-card"><div class="hero-label">Managers</div><div class="hero-value">${fmt(l?.manager_count)}</div><div class="hero-sub">In this league</div></div>
+    <div class="hero-card"><div class="hero-label">Most days top</div><div class="hero-value">${fmt(top?.days||0)}</div><div class="hero-sub">${esc(top?.name||"—")}</div></div>
+  `;
+}
+
+function detailHTML(m,mobile=false){
+  const items=[
+    ["Overall rank",fmt(m.overall_rank)],
+    ["GW rank",fmt(m.gameweek_rank)],
+    ["Captain",esc(m.captain||"—")],
+    ["Chip",esc(m.active_chip||"—")],
+    ["Transfers",fmt(m.transfers)],
+    ["Hit",m.transfer_cost?`-${fmt(m.transfer_cost)}`:"0"],
+    ["Bench",`${fmt(m.points_on_bench)} pts`],
+    ["Team value",m.team_value!=null?`£${Number(m.team_value).toFixed(1)}m`:"—"],
+    ["Bank",m.bank!=null?`£${Number(m.bank).toFixed(1)}m`:"—"]
+  ];
+  return `<div class="${mobile?"mobile-detail-grid":"detail-grid"}">${items.map(([a,b])=>
+    `<div class="detail-item"><div class="mini-label">${a}</div><div class="detail-value">${b}</div></div>`
+  ).join("")}</div>`;
+}
+
+function renderStandings(){
+  const rows=leagueData()?.standings||[];
+  if(!rows.length){
+    document.querySelector("#standings").innerHTML='<div class="empty">No current standings available.</div>';
+    return;
+  }
+
+  const desktop=`<div class="desktop-table"><table><thead><tr>
+    <th>Pos</th><th>Manager</th><th>GW</th><th>Total</th><th>Move</th><th>Overall</th>
+  </tr></thead><tbody>${rows.map((m,i)=>{
+    const mv=movement(m);
+    return `<tr class="${i===0?"leader":""}" data-detail="${m.entry_id}">
+      <td class="pos">${fmt(m.league_position)}</td>
+      <td><div class="manager-name">${esc(m.manager_name)}</div><div class="team-name">${esc(m.team_name)}</div></td>
+      <td>${fmt(m.gameweek_points)}</td>
+      <td class="points">${fmt(m.total_points)}</td>
+      <td class="movement ${mv.cls}">${mv.text}</td>
+      <td>${fmt(m.overall_rank)}</td>
+    </tr>
+    <tr class="detail-row" id="detail-${m.entry_id}"><td colspan="6">${detailHTML(m)}</td></tr>`;
+  }).join("")}</tbody></table></div>`;
+
+  const mobile=`<div class="mobile-list">${rows.map((m,i)=>{
+    const mv=movement(m);
+    return `<article class="manager-card ${i===0?"leader":""}" data-card="${m.entry_id}">
+      <div class="manager-summary">
+        <div class="pos">${fmt(m.league_position)}</div>
+        <div>
+          <div class="manager-name">${esc(m.manager_name)}</div>
+          <div class="team-name">${esc(m.team_name)} · <span class="${mv.cls}">${mv.text}</span></div>
+        </div>
+        <div class="manager-points"><strong>${fmt(m.total_points)}</strong><span class="team-name">${fmt(m.gameweek_points)} GW</span></div>
+        <div class="chev">⌄</div>
+      </div>
+      <div class="manager-detail">${detailHTML(m,true)}</div>
+    </article>`;
+  }).join("")}</div>`;
+
+  document.querySelector("#standings").innerHTML=desktop+mobile;
+  document.querySelectorAll("[data-detail]").forEach(r=>r.onclick=()=>{
+    document.querySelector(`#detail-${r.dataset.detail}`)?.classList.toggle("open");
+  });
+  document.querySelectorAll("[data-card]").forEach(c=>c.onclick=()=>c.classList.toggle("open"));
+}
+
+function renderRecords(){
+  document.querySelector("#records").innerHTML=records().map(r=>
+    `<div class="record"><div class="record-label">${esc(r.label)}</div><div class="record-value">${esc(r.value)}</div><div class="record-sub">${esc(r.sub)}</div></div>`
+  ).join("");
+}
+
+function renderDays(){
+  const list=getDaysTop(),max=list[0]?.days||1;
+  document.querySelector("#daysTop").innerHTML=list.length
+    ? `<div class="days-card">${list.map((x,i)=>
+      `<div class="day-row">
+        <div class="day-main">
+          <div><span class="day-person">${i+1}. ${esc(x.name)}</span><div class="team-name">${esc(x.team||"")}</div></div>
+          <div class="day-count">${x.days}</div>
+        </div>
+        <div class="bar"><span style="width:${Math.max(5,x.days/max*100)}%"></span></div>
+      </div>`
+    ).join("")}</div>`
+    : '<div class="empty">No leader history yet.</div>';
+}
+
+function renderHistory(){
+  const ds=(history?.days||[]).filter(d=>d.leagues?.[active]).slice().reverse();
+  document.querySelector("#dailyHistory").innerHTML=ds.length
+    ? `<div class="history-card">${ds.map(d=>{
+      const x=d.leagues[active];
+      return `<div class="history-row">
+        <div class="history-date">${new Date(d.date+"T12:00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short"})}</div>
+        <div><div class="history-name">${esc(x.leader_manager)}</div><div class="team-name">${esc(x.leader_team||"")}</div></div>
+        <div class="history-points">${fmt(x.leader_points)}</div>
+      </div>`;
+    }).join("")}</div>`
+    : '<div class="empty">No history yet.</div>';
+}
+
+function render(){
+  tabs();
+  renderHero();
+  renderStandings();
+  renderRecords();
+  renderDays();
+  renderHistory();
+  document.querySelector("#updated").textContent=latest?.generated_at
+    ? `Updated ${new Date(latest.generated_at).toLocaleString("en-GB",{dateStyle:"medium",timeStyle:"short"})}`
+    : "Awaiting snapshot";
+}
+
+(async()=>{
+  try{latest=await loadJson("data/latest.json")}catch(e){}
+  try{history=await loadJson("data/history.json")}catch(e){}
+  try{
+    const manifest=await loadJson("data/manifest.json");
+    snapshots=(await Promise.all((manifest.official_snapshots||[]).map(p=>loadJson(p).catch(()=>null)))).filter(Boolean);
+  }catch(e){
+    snapshots=latest?.leagues?[latest]:[];
+  }
+  render();
+})();
