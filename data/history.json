@@ -176,6 +176,28 @@
           "leader_overall_rank": 1904729
         }
       }
+    },
+    {
+      "date": "2026-08-29",
+      "source": "manual-backfill-previous-day",
+      "leagues": {
+        "37546": {
+          "league_name": "Sexy Pickford",
+          "leader_entry_id": 40951,
+          "leader_manager": "Chris Saunders",
+          "leader_team": "Haven\u2019t Got A Kalou",
+          "leader_points": 112,
+          "leader_overall_rank": 177883
+        },
+        "118082": {
+          "league_name": "The Battle Continues...",
+          "leader_entry_id": 2969751,
+          "leader_manager": "Victoria Austin",
+          "leader_team": "RicO'Shea",
+          "leader_points": 89,
+          "leader_overall_rank": 2262636
+        }
+      }
     }
   ],
   "days_top": {
@@ -189,8 +211,8 @@
         "longest_streak": 1
       },
       "40951": {
-        "days_top": 6,
-        "longest_streak": 6
+        "days_top": 7,
+        "longest_streak": 7
       }
     },
     "118082": {
@@ -203,8 +225,8 @@
         "longest_streak": 6
       },
       "2969751": {
-        "days_top": 1,
-        "longest_streak": 1
+        "days_top": 2,
+        "longest_streak": 2
       }
     }
   }
