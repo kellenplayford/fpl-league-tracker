@@ -74,6 +74,7 @@ function allRecords(){
   const bb=best(rows.filter(r=>r.active_chip==="bboost"),benchRaw);
   const tc=best(rows.filter(r=>r.active_chip==="3xc"),r=>capRaw(r)==null?null:capRaw(r)*3);
   const longest=days.slice().sort((a,b)=>b.longest-a.longest)[0];
+  const mostDays=days[0];
   const big=gws.reduce((a,g)=>g.margin!=null&&(!a||g.margin>a.margin)?g:a,null);
   const close=gws.reduce((a,g)=>g.margin!=null&&(!a||g.margin<a.margin)?g:a,null);
 
@@ -81,12 +82,13 @@ function allRecords(){
     {hero:true,label:"Highest GW score",holder:high?.row.manager_name,stat:high?`${fmt(high.value)} pts`:"—",context:high?`GW${high.row.gameweek}`:"No completed GW yet"},
     {hero:true,label:"Best overall rank",holder:or?.row.manager_name,stat:or?fmt(or.value):"—",context:or?`GW${or.row.gameweek}`:"No completed GW yet"},
     {hero:true,label:"Biggest GW winning margin",holder:big?.winners.map(x=>x.manager_name).join(" & "),stat:big?`${fmt(big.margin)} pts`:"—",context:big?`GW${big.gw}`:"No completed GW yet"},
-    {hero:true,label:"Best Bench Boost",holder:bb?.row.manager_name,stat:bb?`${fmt(bb.value)} bench pts`:"—",context:bb?`GW${bb.row.gameweek}`:"No completed use yet"},
+    {hero:true,label:"Most calendar days on top",holder:mostDays?.name,stat:mostDays?`${fmt(mostDays.days)} days`:"—",context:"Daily snapshots"},
     {label:"Closest GW winning margin",holder:close?.winners.map(x=>x.manager_name).join(" & "),stat:close?`${fmt(close.margin)} pt${close.margin===1?"":"s"}`:"—",context:close?`GW${close.gw}`:"No completed GW yet"},
     {label:"Longest time at No. 1",holder:longest?.name,stat:longest?`${longest.longest} calendar day${longest.longest===1?"":"s"}`:"—",context:"Calendar-day streak"},
     {label:"Biggest climb",holder:climb?.row.manager_name,stat:climb?`▲ ${fmt(climb.value)} places`:"—",context:climb?`GW${climb.row.gameweek}`:"No completed movement yet"},
     {label:"Biggest fall",holder:fall?.row.manager_name,stat:fall?`▼ ${fmt(fall.value)} places`:"—",context:fall?`GW${fall.row.gameweek}`:"No completed movement yet"},
     {label:"Most points benched",holder:bench?.row.manager_name,stat:bench?`${fmt(bench.value)} pts`:"—",context:bench?`GW${bench.row.gameweek}`:"No completed GW yet"},
+    {label:"Best Bench Boost",holder:bb?.row.manager_name,stat:bb?`${fmt(bb.value)} bench pts`:"—",context:bb?`GW${bb.row.gameweek}`:"No completed use yet"},
     {label:"Best Triple Captain",holder:tc?.row.manager_name,stat:tc?`${fmt(tc.value)} captain pts`:"—",context:tc?`GW${tc.row.gameweek}`:"No completed use yet"}
   ];
 }
@@ -160,12 +162,13 @@ function detail(m,mobile=false){
 }
 
 function tabs(){
-  document.querySelector("#tabs").innerHTML=LEAGUES.map(l=>`<button class="tab ${l.id===active?"active":""}" data-id="${l.id}">${esc(l.name)}</button>`).join("");
-  document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{active=b.dataset.id;render()});
+  const el=document.querySelector("#tabs");
+  el.innerHTML=LEAGUES.map(l=>`<button class="tab ${l.id===active?"active":""}" data-id="${l.id}">${esc(l.name)}</button>`).join("");
+  el.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{active=b.dataset.id;render()});
 }
 
 function hero(){
-  const l=leagueData(),lead=l?.standings?.[0],top=getDaysTop()[0],avg=leagueAvg(),fp=fixtureProgress;
+  const l=leagueData(),lead=l?.standings?.[0],avg=leagueAvg(),fp=fixtureProgress,managerCount=l?.standings?.length||0;
   document.querySelector("#hero").innerHTML=`
     <div class="hero-card hero-leader">
       <div class="hero-label">League leader</div><div class="hero-value">${esc(lead?.manager_name)}</div>
@@ -174,7 +177,7 @@ function hero(){
     <div class="hero-card">
       <div class="hero-label">Gameweek ${fmt(latest.gameweek)}</div>
       <div class="hero-value">${fp?`${fp.remaining} left`:"Live"}</div>
-      <div class="hero-sub">${fp?`${fp.played} of ${fp.total} matches finished`:"Fixture progress will update when available"}</div>
+      <div class="hero-sub">${fp?`${fp.played} of ${fp.total} matches finished${fp.live?` · ${fp.live} live`:""}`:"Fixture progress unavailable"}</div>
       ${fp?`<div class="progress"><span style="width:${fp.total?fp.played/fp.total*100:0}%"></span></div>`:""}
     </div>
     <div class="hero-card">
@@ -182,8 +185,8 @@ function hero(){
       <div class="hero-sub">Average points right now</div>
     </div>
     <div class="hero-card">
-      <div class="hero-label">Most calendar days on top</div><div class="hero-value">${fmt(top?.days||0)}</div>
-      <div class="hero-sub">${esc(top?.name||"—")}</div>
+      <div class="hero-label">Managers in league</div><div class="hero-value">${fmt(managerCount)}</div>
+      <div class="hero-sub">Current league size</div>
     </div>`;
 }
 
@@ -222,7 +225,7 @@ function standings(){
       <td>${fmt(m.gameweek_points)}</td><td class="points">${fmt(m.total_points)}</td><td class="${mv.cls}">${mv.text}</td><td>${fmt(m.overall_rank)}</td>
     </tr>
     <tr class="desktop-detail-row" id="d-${m.entry_id}">
-      <td colspan="6" class="desktop-detail-cell"><div class="desktop-detail">${detail(m)}</div></td>
+      <td colspan="6" class="desktop-detail-cell"><div class="desktop-detail" data-detail="${m.entry_id}"></div></td>
     </tr>`;
   }).join("")}</tbody></table></div>`;
 
@@ -232,24 +235,56 @@ function standings(){
       <div class="manager-summary"><div class="pos">${fmt(m.league_position)}</div>
       <div><div class="manager-name">${esc(m.manager_name)}${badge(m)}</div><div class="team-name">${esc(m.team_name)} · <span class="${mv.cls}">${mv.text}</span></div>${avgTag(m)}</div>
       <div class="manager-points"><strong>${fmt(m.total_points)}</strong><span class="team-name">${fmt(m.gameweek_points)} GW</span></div><div class="chev">⌄</div></div>
-      <div class="manager-detail">${detail(m,true)}</div>
+      <div class="manager-detail" data-mobile-detail="${m.entry_id}"></div>
     </article>`;
   }).join("")}</div>`;
 
   document.querySelector("#standings").innerHTML=desk+mob;
-  document.querySelectorAll("[data-d]").forEach(r=>r.onclick=()=>document.querySelector(`#d-${r.dataset.d}`).classList.toggle("open"));
-  document.querySelectorAll("[data-m]").forEach(c=>c.onclick=()=>c.classList.toggle("open"));
+
+  document.querySelectorAll("[data-d]").forEach(r=>r.onclick=()=>{
+    const id=r.dataset.d,row=document.querySelector(`#d-${id}`),box=row.querySelector("[data-detail]");
+    const opening=!row.classList.contains("open");
+    document.querySelectorAll(".desktop-detail-row.open").forEach(x=>{if(x!==row)x.classList.remove("open")});
+    row.classList.toggle("open");
+    if(opening&&!box.dataset.loaded){
+      const m=rows.find(x=>String(x.entry_id)===String(id));
+      box.innerHTML=detail(m);box.dataset.loaded="1";
+    }
+  });
+
+  document.querySelectorAll("[data-m]").forEach(c=>c.onclick=()=>{
+    const id=c.dataset.m,box=c.querySelector("[data-mobile-detail]"),opening=!c.classList.contains("open");
+    c.classList.toggle("open");
+    if(opening&&!box.dataset.loaded){
+      const m=rows.find(x=>String(x.entry_id)===String(id));
+      box.innerHTML=detail(m,true);box.dataset.loaded="1";
+    }
+  });
 }
 
 async function fixture(){
   const gw=+latest.gameweek;
   if(!gw)return;
-  try{
-    const r=await fetch(`https://fantasy.premierleague.com/api/fixtures/?event=${gw}`);
-    if(!r.ok)return;
-    const f=await r.json(),total=f.length,played=f.filter(x=>x.finished===true).length;
-    fixtureProgress={total,played,remaining:Math.max(0,total-played)};
-  }catch(e){}
+  const urls=[
+    `https://fpl-scheduler.kellenplayford.workers.dev/fixtures?event=${gw}`,
+    `https://fantasy.premierleague.com/api/fixtures/?event=${gw}`
+  ];
+  for(const url of urls){
+    try{
+      const controller=new AbortController();
+      const timer=setTimeout(()=>controller.abort(),2500);
+      const r=await fetch(url,{signal:controller.signal});
+      clearTimeout(timer);
+      if(!r.ok)continue;
+      const f=await r.json();
+      if(!Array.isArray(f))continue;
+      const total=f.length,played=f.filter(x=>x.finished===true).length;
+      const live=f.filter(x=>x.started===true&&x.finished!==true).length;
+      fixtureProgress={total,played,live,remaining:Math.max(0,total-played)};
+      hero();
+      return;
+    }catch(e){}
+  }
 }
 
 function render(){
@@ -259,13 +294,19 @@ function render(){
     :"Awaiting snapshot";
 }
 
-(async()=>{
-  try{latest=await loadJson("data/latest.json")}catch(e){}
-  try{history=await loadJson("data/history.json")}catch(e){}
+async function loadArchives(){
   try{
     const m=await loadJson("data/manifest.json");
     snapshots=(await Promise.all((m.official_snapshots||[]).map(p=>loadJson(p).catch(()=>null)))).filter(Boolean);
   }catch(e){snapshots=latest?.leagues?[latest]:[]}
-  await fixture();
   render();
+}
+
+(async()=>{
+  try{latest=await loadJson("data/latest.json")}catch(e){}
+  try{history=await loadJson("data/history.json")}catch(e){}
+  snapshots=latest?.leagues?[latest]:[];
+  render();
+  fixture();
+  loadArchives();
 })();
