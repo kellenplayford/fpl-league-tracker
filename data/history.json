@@ -198,6 +198,28 @@
           "leader_overall_rank": 2262636
         }
       }
+    },
+    {
+      "date": "2026-08-30",
+      "source": "manual-backfill-previous-day",
+      "leagues": {
+        "37546": {
+          "league_name": "Sexy Pickford",
+          "leader_entry_id": 710691,
+          "leader_manager": "Tim Part",
+          "leader_team": "Partizan Idiot",
+          "leader_points": 176,
+          "leader_overall_rank": 40072
+        },
+        "118082": {
+          "league_name": "The Battle Continues...",
+          "leader_entry_id": 597770,
+          "leader_manager": "Daniel Richmond",
+          "leader_team": "Sound of the Tzolis",
+          "leader_points": 170,
+          "leader_overall_rank": 152613
+        }
+      }
     }
   ],
   "days_top": {
@@ -213,6 +235,10 @@
       "40951": {
         "days_top": 7,
         "longest_streak": 7
+      },
+      "710691": {
+        "days_top": 1,
+        "longest_streak": 1
       }
     },
     "118082": {
@@ -221,7 +247,7 @@
         "longest_streak": 1
       },
       "597770": {
-        "days_top": 6,
+        "days_top": 7,
         "longest_streak": 6
       },
       "2969751": {
