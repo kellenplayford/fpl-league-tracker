@@ -26,6 +26,25 @@ function getDaysTop(){
   return Object.values(o).map(x=>({...x,longest:st[x.id]?.longest_streak||0})).sort((a,b)=>b.days-a.days);
 }
 
+function longestReign(){
+  const days=(history.days||[]).slice().sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+  let best=null,current=null,previousDate=null;
+  for(const d of days){
+    const x=d.leagues?.[active];
+    if(!x||!d.date)continue;
+    const id=String(x.leader_entry_id||x.leader_manager);
+    const dt=new Date(`${d.date}T12:00:00Z`);
+    const prev=previousDate?new Date(`${previousDate}T12:00:00Z`):null;
+    const consecutive=prev&&((dt-prev)/86400000===1);
+    if(current&&current.id===id&&consecutive)current.days++;
+    else current={id,name:x.leader_manager,team:x.leader_team,days:1,start:d.date,end:d.date};
+    current.end=d.date;
+    if(!best||current.days>best.days)best={...current};
+    previousDate=d.date;
+  }
+  return best;
+}
+
 function completedRows(){
   const cur=+latest.gameweek||999,m=new Map();
   for(const s of snapshots){
@@ -54,7 +73,8 @@ function gameweeks(){
 }
 
 const benchRaw=r=>(r.squad||[]).filter(p=>+p.position>=12).reduce((a,p)=>a+(+p.live_points||0),0);
-const capRaw=r=>{const p=(r.squad||[]).find(p=>p.is_captain);return p?+p.live_points||0:null};
+const captainPlayer=r=>(r.squad||[]).find(p=>(+p.multiplier||0)>1)||(r.squad||[]).find(p=>p.is_captain);
+const captainContribution=r=>{const p=captainPlayer(r);if(!p)return null;const mult=(+p.multiplier||0)>1?+p.multiplier:(r.active_chip==="3xc"?3:2);return(+p.live_points||0)*mult};
 
 function best(rows,get,mode="max"){
   return rows.reduce((a,r)=>{
@@ -67,29 +87,41 @@ function best(rows,get,mode="max"){
 function allRecords(){
   const rows=completedRows(),days=getDaysTop(),gws=gameweeks();
   const high=best(rows,r=>+r.gameweek_points||0);
-  const or=best(rows,r=>+r.overall_rank>0?+r.overall_rank:null,"min");
+  const bestGwRank=best(rows,r=>+r.gameweek_rank>0?+r.gameweek_rank:null,"min");
+  const bestOr=best(rows,r=>+r.overall_rank>0?+r.overall_rank:null,"min");
   const climb=best(rows,r=>movement(r).delta>0?movement(r).delta:null);
   const fall=best(rows,r=>movement(r).delta<0?Math.abs(movement(r).delta):null);
-  const bench=best(rows,r=>+r.points_on_bench||0);
+  const bench=best(rows.filter(r=>r.active_chip!=="bboost"),r=>+r.points_on_bench||0);
   const bb=best(rows.filter(r=>r.active_chip==="bboost"),benchRaw);
-  const tc=best(rows.filter(r=>r.active_chip==="3xc"),r=>capRaw(r)==null?null:capRaw(r)*3);
-  const longest=days.slice().sort((a,b)=>b.longest-a.longest)[0];
+  const tc=best(rows.filter(r=>r.active_chip==="3xc"),captainContribution);
+  const longest=longestReign();
   const mostDays=days[0];
   const big=gws.reduce((a,g)=>g.margin!=null&&(!a||g.margin>a.margin)?g:a,null);
   const close=gws.reduce((a,g)=>g.margin!=null&&(!a||g.margin<a.margin)?g:a,null);
 
+  const captainTotals=new Map();
+  for(const r of rows){
+    const v=captainContribution(r);
+    if(v==null)continue;
+    const k=String(r.entry_id),old=captainTotals.get(k)||{value:0,row:r};
+    old.value+=v;old.row=r;captainTotals.set(k,old);
+  }
+  const captainBest=[...captainTotals.values()].sort((a,b)=>b.value-a.value)[0]||null;
+
   return[
-    {hero:true,label:"Highest GW score",holder:high?.row.manager_name,stat:high?`${fmt(high.value)} pts`:"—",context:high?`GW${high.row.gameweek}`:"No completed GW yet"},
-    {hero:true,label:"Best overall rank",holder:or?.row.manager_name,stat:or?fmt(or.value):"—",context:or?`GW${or.row.gameweek}`:"No completed GW yet"},
-    {hero:true,label:"Biggest GW winning margin",holder:big?.winners.map(x=>x.manager_name).join(" & "),stat:big?`${fmt(big.margin)} pts`:"—",context:big?`GW${big.gw}`:"No completed GW yet"},
-    {hero:true,label:"Most calendar days on top",holder:mostDays?.name,stat:mostDays?`${fmt(mostDays.days)} days`:"—",context:"Daily snapshots"},
-    {label:"Closest GW winning margin",holder:close?.winners.map(x=>x.manager_name).join(" & "),stat:close?`${fmt(close.margin)} pt${close.margin===1?"":"s"}`:"—",context:close?`GW${close.gw}`:"No completed GW yet"},
-    {label:"Longest time at No. 1",holder:longest?.name,stat:longest?`${longest.longest} calendar day${longest.longest===1?"":"s"}`:"—",context:"Calendar-day streak"},
-    {label:"Biggest climb",holder:climb?.row.manager_name,stat:climb?`▲ ${fmt(climb.value)} places`:"—",context:climb?`GW${climb.row.gameweek}`:"No completed movement yet"},
-    {label:"Biggest fall",holder:fall?.row.manager_name,stat:fall?`▼ ${fmt(fall.value)} places`:"—",context:fall?`GW${fall.row.gameweek}`:"No completed movement yet"},
-    {label:"Most points benched",holder:bench?.row.manager_name,stat:bench?`${fmt(bench.value)} pts`:"—",context:bench?`GW${bench.row.gameweek}`:"No completed GW yet"},
+    {wide:true,label:"Highest GW score",holder:high?.row.manager_name,stat:high?`${fmt(high.value)} pts`:"—",context:high?`GW${high.row.gameweek}`:"No completed GW yet"},
+    {label:"Best GW rank",holder:bestGwRank?.row.manager_name,stat:bestGwRank?fmt(bestGwRank.value):"—",context:bestGwRank?`GW${bestGwRank.row.gameweek}`:"No completed GW yet"},
+    {label:"Best overall rank",holder:bestOr?.row.manager_name,stat:bestOr?fmt(bestOr.value):"—",context:bestOr?`GW${bestOr.row.gameweek}`:"No completed GW yet"},
+    {label:"Biggest GW margin",holder:big?.winners.map(x=>x.manager_name).join(" & "),stat:big?`${fmt(big.margin)} pts`:"—",context:big?`GW${big.gw}`:"No completed GW yet"},
+    {label:"Smallest GW margin",holder:close?.winners.map(x=>x.manager_name).join(" & "),stat:close?`${fmt(close.margin)} pt${close.margin===1?"":"s"}`:"—",context:close?`GW${close.gw}`:"No completed GW yet"},
+    {label:"Most calendar days at No. 1",holder:mostDays?.name,stat:mostDays?`${fmt(mostDays.days)} days`:"—",context:"Total days leading"},
+    {label:"Longest consecutive reign at No. 1",holder:longest?.name,stat:longest?`${fmt(longest.days)} day${longest.days===1?"":"s"}`:"—",context:longest?`${longest.start} to ${longest.end}`:"No leader history yet"},
+    {label:"Best Triple Captain",holder:tc?.row.manager_name,stat:tc?`${fmt(tc.value)} captain pts`:"—",context:tc?`GW${tc.row.gameweek}`:"No completed use yet"},
     {label:"Best Bench Boost",holder:bb?.row.manager_name,stat:bb?`${fmt(bb.value)} bench pts`:"—",context:bb?`GW${bb.row.gameweek}`:"No completed use yet"},
-    {label:"Best Triple Captain",holder:tc?.row.manager_name,stat:tc?`${fmt(tc.value)} captain pts`:"—",context:tc?`GW${tc.row.gameweek}`:"No completed use yet"}
+    {label:"Biggest GW climb",holder:climb?.row.manager_name,stat:climb?`▲ ${fmt(climb.value)} places`:"—",context:climb?`GW${climb.row.gameweek}`:"No completed movement yet"},
+    {label:"Biggest GW fall",holder:fall?.row.manager_name,stat:fall?`▼ ${fmt(fall.value)} places`:"—",context:fall?`GW${fall.row.gameweek}`:"No completed movement yet"},
+    {label:"Most captain points",holder:captainBest?.row.manager_name,stat:captainBest?`${fmt(captainBest.value)} pts`:"—",context:captainBest?"Season total":"No completed GW yet"},
+    {label:"Most points left on bench",holder:bench?.row.manager_name,stat:bench?`${fmt(bench.value)} pts`:"—",context:bench?`GW${bench.row.gameweek}`:"No completed GW yet"}
   ];
 }
 
@@ -119,18 +151,21 @@ function managerSeason(m){
   const gwWins=gameweeks().filter(g=>g.winners.some(w=>String(w.entry_id)===String(m.entry_id))).length;
   const bestGw=best(rows,r=>+r.gameweek_points||0);
   const bestOr=best(rows,r=>+r.overall_rank>0?+r.overall_rank:null,"min");
+  const bestGwRank=best(rows,r=>+r.gameweek_rank>0?+r.gameweek_rank:null,"min");
   const days=getDaysTop().find(x=>String(x.id)===String(m.entry_id));
-  return{gwWins,bestGw:bestGw?.value,bestOr:bestOr?.value,days:days?.days||0};
+  return{gwWins,bestGw:bestGw?.value,bestOr:bestOr?.value,bestGwRank:bestGwRank?.value,days:days?.days||0};
 }
 
 function squadHTML(m){
   const p=(m.squad||[]).slice().sort((a,b)=>+a.position-+b.position);
   return p.length?`<div class="squad">${p.map(x=>{
+    const mult=+x.multiplier||0;
     const meta=[x.is_captain?"C":x.is_vice_captain?"VC":"",+x.position>=12?"Bench":""].filter(Boolean).join(" · ");
-    return`<div class="player ${+x.position>=12?"bench":""} ${x.is_captain?"captain":""}">
+    const captainLine=mult>1?`<div class="captain-return">Captain return: ${fmt(x.live_points)} × ${mult} = ${fmt((+x.live_points||0)*mult)} pts</div>`:"";
+    return`<div class="player ${+x.position>=12?"bench":""} ${mult>1?"captain":""}">
       <div class="player-name">${esc(x.player)}</div>
       <div class="player-meta">${esc(meta||"Starting XI")}</div>
-      <div class="player-points">${fmt(x.live_points)} pts</div>
+      <div class="player-points">${fmt(x.live_points)} pts</div>${captainLine}
     </div>`;
   }).join("")}</div>`:`<div class="empty">Squad unavailable.</div>`;
 }
@@ -149,6 +184,7 @@ function detail(m,mobile=false){
       <div class="profile-stat"><strong>${fmt(s.gwWins)}</strong><span>GW wins</span></div>
       <div class="profile-stat"><strong>${fmt(s.days)}</strong><span>Days top</span></div>
       <div class="profile-stat"><strong>${fmt(s.bestGw)}</strong><span>Best GW</span></div>
+      <div class="profile-stat"><strong>${fmt(s.bestGwRank)}</strong><span>Best GW rank</span></div>
       <div class="profile-stat"><strong>${fmt(s.bestOr)}</strong><span>Best OR</span></div>
     </div>
   </div>
@@ -168,11 +204,11 @@ function tabs(){
 }
 
 function hero(){
-  const l=leagueData(),lead=l?.standings?.[0],avg=leagueAvg(),fp=fixtureProgress,managerCount=l?.standings?.length||0;
+  const l=leagueData(),lead=l?.standings?.[0],avg=leagueAvg(),fp=fixtureProgress,managerCount=l?.standings?.length||l?.manager_count||0;
   document.querySelector("#hero").innerHTML=`
     <div class="hero-card hero-leader">
       <div class="hero-label">League leader</div><div class="hero-value">${esc(lead?.manager_name)}</div>
-      <div class="hero-sub">${esc(lead?.team_name)} · ${fmt(lead?.total_points)} points</div>
+      <div class="hero-sub">${esc(lead?.team_name)} · ${fmt(lead?.total_points)} points · 1st of ${fmt(managerCount)} managers</div>
     </div>
     <div class="hero-card">
       <div class="hero-label">Gameweek ${fmt(latest.gameweek)}</div>
@@ -183,18 +219,14 @@ function hero(){
     <div class="hero-card">
       <div class="hero-label">League GW average</div><div class="hero-value">${avg==null?"—":Math.round(avg)}</div>
       <div class="hero-sub">Average points right now</div>
-    </div>
-    <div class="hero-card">
-      <div class="hero-label">Managers in league</div><div class="hero-value">${fmt(managerCount)}</div>
-      <div class="hero-sub">Current league size</div>
     </div>`;
 }
 
 function renderRecords(){
   const r=allRecords();
-  const card=x=>`<div class="record"><div class="record-label">${esc(x.label)}</div><div class="record-holder">${esc(x.holder||"No record yet")}</div><div class="record-stat">${esc(x.stat)}</div><div class="record-context">${esc(x.context)}</div></div>`;
-  document.querySelector("#headlineRecords").innerHTML=r.filter(x=>x.hero).map(card).join("");
-  document.querySelector("#otherRecords").innerHTML=r.filter(x=>!x.hero).map(card).join("");
+  const card=x=>`<div class="record ${x.wide?"record-wide":""}"><div class="record-label">${esc(x.label)}</div><div class="record-holder">${esc(x.holder||"No record yet")}</div><div class="record-stat">${esc(x.stat)}</div><div class="record-context">${esc(x.context)}</div></div>`;
+  document.querySelector("#headlineRecords").innerHTML=r.filter(x=>x.wide).map(card).join("");
+  document.querySelector("#otherRecords").innerHTML=r.filter(x=>!x.wide).map(card).join("");
 }
 
 function renderGW(){
@@ -206,7 +238,7 @@ function renderGW(){
 }
 
 function renderDays(){
-  const l=getDaysTop(),max=l[0]?.days||1;
+  const l=getDaysTop().slice(0,5),max=l[0]?.days||1;
   document.querySelector("#daysTop").innerHTML=l.length?`<div class="days-card">${l.map((x,i)=>`
     <div class="day-row"><div class="day-main">
     <div><span class="day-person">${i+1}. ${esc(x.name)}</span><div class="team-name">${esc(x.team||"")}</div></div>
