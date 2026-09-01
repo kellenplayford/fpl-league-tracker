@@ -87,19 +87,46 @@ function best(rows,get,mode="max"){
   },null);
 }
 
+function tiedBest(rows,get,mode="max"){
+  const vals=rows.map(row=>({row,value:get(row)})).filter(x=>x.value!=null);
+  if(!vals.length)return null;
+  const target=vals.reduce((a,x)=>mode==="max"?Math.max(a,x.value):Math.min(a,x.value),vals[0].value);
+  return{value:target,rows:vals.filter(x=>x.value===target).map(x=>x.row)};
+}
+
+const firstName=n=>String(n||"").trim().split(/\s+/)[0]||"—";
+const tiedNames=rows=>[...new Set((rows||[]).map(r=>firstName(r.manager_name)))].join(" & ");
+const tiedContext=(rows,label)=>{
+  const gws=[...new Set((rows||[]).map(r=>+r.gameweek).filter(Boolean))];
+  if(gws.length===1)return `GW${gws[0]}`;
+  return label||"Joint record";
+};
+
+function tiedMapLeader(map){
+  const vals=[...map.values()];
+  if(!vals.length)return null;
+  const max=Math.max(...vals.map(x=>x.value));
+  return{value:max,rows:vals.filter(x=>x.value===max).map(x=>x.row)};
+}
+
 function allRecords(){
   const rows=completedRows(),days=getDaysTop(),gws=gameweeks();
-  const high=best(rows,r=>+r.gameweek_points||0);
-  const bestGwRank=best(rows,r=>+r.gameweek_rank>0?+r.gameweek_rank:null,"min");
-  const bestOr=best(rows,r=>+r.overall_rank>0?+r.overall_rank:null,"min");
-  const climb=best(rows,r=>movement(r).delta>0?movement(r).delta:null);
-  const fall=best(rows,r=>movement(r).delta<0?Math.abs(movement(r).delta):null);
-  const longest=longestReign();
-  const mostDays=days[0];
-  const big=gws.reduce((a,g)=>g.margin!=null&&(!a||g.margin>a.margin)?g:a,null);
-  const close=gws.reduce((a,g)=>g.margin!=null&&(!a||g.margin<a.margin)?g:a,null);
 
-  const firstName=n=>String(n||"").trim().split(/\s+/)[0]||"—";
+  const high=tiedBest(rows,r=>+r.gameweek_points||0);
+  const bestGwRank=tiedBest(rows,r=>+r.gameweek_rank>0?+r.gameweek_rank:null,"min");
+  const bestOr=tiedBest(rows,r=>+r.overall_rank>0?+r.overall_rank:null,"min");
+  const climb=tiedBest(rows,r=>movement(r).delta>0?movement(r).delta:null);
+  const fall=tiedBest(rows,r=>movement(r).delta<0?Math.abs(movement(r).delta):null);
+
+  const longestDays=Math.max(0,...days.map(x=>x.longest||0));
+  const longestLeaders=days.filter(x=>(x.longest||0)===longestDays&&longestDays>0);
+  const mostDaysValue=Math.max(0,...days.map(x=>x.days||0));
+  const mostDaysLeaders=days.filter(x=>(x.days||0)===mostDaysValue&&mostDaysValue>0);
+
+  const bigMargin=Math.max(-Infinity,...gws.filter(g=>g.margin!=null).map(g=>g.margin));
+  const smallMargin=Math.min(Infinity,...gws.filter(g=>g.margin!=null).map(g=>g.margin));
+  const bigGws=gws.filter(g=>g.margin!=null&&g.margin===bigMargin);
+  const smallGws=gws.filter(g=>g.margin!=null&&g.margin===smallMargin);
 
   const winTotals=new Map();
   for(const g of gws){
@@ -109,14 +136,13 @@ function allRecords(){
       old.value++;old.row=w;winTotals.set(id,old);
     }
   }
-  const maxWins=Math.max(0,...[...winTotals.values()].map(x=>x.value));
-  const winLeaders=[...winTotals.values()].filter(x=>x.value===maxWins);
-  const winNames=winLeaders.map(x=>firstName(x.row.manager_name)).join(" & ");
+  const winLeader=tiedMapLeader(winTotals);
 
-  const singleTC=best(rows.filter(r=>r.active_chip==="3xc"),captainContribution);
-  const singleBB=best(rows.filter(r=>r.active_chip==="bboost"),benchRaw);
-  const singleFH=best(rows.filter(r=>r.active_chip==="freehit"),r=>(+r.gameweek_points||0)-(+r.transfer_cost||0));
-  const singleCaptain=best(rows,captainContribution);
+  const singleTC=tiedBest(rows.filter(r=>r.active_chip==="3xc"),captainContribution);
+  const singleBB=tiedBest(rows.filter(r=>r.active_chip==="bboost"),benchRaw);
+  const singleFH=tiedBest(rows.filter(r=>r.active_chip==="freehit"),r=>(+r.gameweek_points||0)-(+r.transfer_cost||0));
+  const singleCaptain=tiedBest(rows,captainContribution);
+  const gwBench=tiedBest(rows.filter(r=>r.active_chip!=="bboost"),r=>+r.points_on_bench||0);
 
   const tcTotals=new Map(),bbTotals=new Map(),fhTotals=new Map(),captainTotals=new Map();
   const benchTotals=new Map(),transferTotals=new Map(),hitTotals=new Map();
@@ -165,54 +191,50 @@ function allRecords(){
     oldHit.value+=hit;oldHit.row=r;hitTotals.set(id,oldHit);
   }
 
-  const topMap=m=>[...m.values()].sort((a,b)=>b.value-a.value)[0]||null;
-  const combinedTC=topMap(tcTotals);
-  const combinedBB=topMap(bbTotals);
-  const combinedFH=topMap(fhTotals);
-  const captainBest=topMap(captainTotals);
-  const seasonBench=topMap(benchTotals);
-  const transferBest=topMap(transferTotals);
-  const hitBest=topMap(hitTotals);
+  const combinedTC=tiedMapLeader(tcTotals);
+  const combinedBB=tiedMapLeader(bbTotals);
+  const combinedFH=tiedMapLeader(fhTotals);
+  const captainBest=tiedMapLeader(captainTotals);
+  const seasonBench=tiedMapLeader(benchTotals);
+  const transferBest=tiedMapLeader(transferTotals);
+  const hitBest=tiedMapLeader(hitTotals);
 
-  const gwBench=best(rows.filter(r=>r.active_chip!=="bboost"),r=>+r.points_on_bench||0);
-
-  const hitHolder=hitBest&&hitBest.value>0?hitBest.row.manager_name:null;
-  const hitStat=hitBest&&hitBest.value>0?`-${fmt(hitBest.value)} pts`:"—";
-  const hitContext=hitBest&&hitBest.value>0?"Season total":"No transfer hits yet";
+  const marginHolder=gs=>[...new Set(gs.flatMap(g=>g.winners.map(w=>firstName(w.manager_name))))].join(" & ");
+  const marginContext=gs=>gs.length===1?`GW${gs[0].gw}`:"Joint record";
 
   return[
-    {label:"Best GW score",holder:high?.row.manager_name,stat:high?`${fmt(high.value)} pts`:"—",context:high?`GW${high.row.gameweek}`:"No completed GW yet"},
-    {label:"Most GW wins",holder:maxWins?winNames:null,stat:maxWins?`${fmt(maxWins)} win${maxWins===1?"":"s"}`:"—",context:maxWins?(winLeaders.length>1?"Joint leaders":"Season total"):"No completed GW yet"},
+    {label:"Best GW score",holder:high?tiedNames(high.rows):null,stat:high?`${fmt(high.value)} pts`:"—",context:high?tiedContext(high.rows):"No completed GW yet"},
+    {label:"Most GW wins",holder:winLeader?tiedNames(winLeader.rows):null,stat:winLeader?`${fmt(winLeader.value)} win${winLeader.value===1?"":"s"}`:"—",context:winLeader&&winLeader.rows.length>1?"Joint leaders":winLeader?"Season total":"No completed GW yet"},
 
-    {label:"Best GW rank",holder:bestGwRank?.row.manager_name,stat:bestGwRank?fmt(bestGwRank.value):"—",context:bestGwRank?`GW${bestGwRank.row.gameweek}`:"No completed GW yet"},
-    {label:"Best overall rank",holder:bestOr?.row.manager_name,stat:bestOr?fmt(bestOr.value):"—",context:bestOr?`GW${bestOr.row.gameweek}`:"No completed GW yet"},
+    {label:"Best GW rank",holder:bestGwRank?tiedNames(bestGwRank.rows):null,stat:bestGwRank?fmt(bestGwRank.value):"—",context:bestGwRank?tiedContext(bestGwRank.rows):"No completed GW yet"},
+    {label:"Best overall rank",holder:bestOr?tiedNames(bestOr.rows):null,stat:bestOr?fmt(bestOr.value):"—",context:bestOr?tiedContext(bestOr.rows):"No completed GW yet"},
 
-    {label:"Biggest GW margin",holder:big?.winners.map(x=>x.manager_name).join(" & "),stat:big?`${fmt(big.margin)} pts`:"—",context:big?`GW${big.gw}`:"No completed GW yet"},
-    {label:"Smallest GW margin",holder:close?.winners.map(x=>x.manager_name).join(" & "),stat:close?`${fmt(close.margin)} pt${close.margin===1?"":"s"}`:"—",context:close?`GW${close.gw}`:"No completed GW yet"},
+    {label:"Biggest GW margin",holder:bigGws.length?marginHolder(bigGws):null,stat:bigGws.length?`${fmt(bigMargin)} pts`:"—",context:bigGws.length?marginContext(bigGws):"No completed GW yet"},
+    {label:"Smallest GW margin",holder:smallGws.length?marginHolder(smallGws):null,stat:smallGws.length?`${fmt(smallMargin)} pt${smallMargin===1?"":"s"}`:"—",context:smallGws.length?marginContext(smallGws):"No completed GW yet"},
 
-    {label:"Best Single Triple Captain",holder:singleTC?.row.manager_name,stat:singleTC?`${fmt(singleTC.value)} captain pts`:"—",context:singleTC?`GW${singleTC.row.gameweek}`:"No completed use yet"},
-    {label:"Best Combined TC Score",holder:combinedTC?.row.manager_name,stat:combinedTC?`${fmt(combinedTC.value)} captain pts`:"—",context:combinedTC?"Season chip total":"No completed use yet"},
+    {label:"Best Single Triple Captain",holder:singleTC?tiedNames(singleTC.rows):null,stat:singleTC?`${fmt(singleTC.value)} captain pts`:"—",context:singleTC?tiedContext(singleTC.rows):"No completed use yet"},
+    {label:"Best Combined TC Score",holder:combinedTC?tiedNames(combinedTC.rows):null,stat:combinedTC?`${fmt(combinedTC.value)} captain pts`:"—",context:combinedTC&&combinedTC.rows.length>1?"Joint leaders":combinedTC?"Season chip total":"No completed use yet"},
 
-    {label:"Best Single Bench Boost",holder:singleBB?.row.manager_name,stat:singleBB?`${fmt(singleBB.value)} bench pts`:"—",context:singleBB?`GW${singleBB.row.gameweek}`:"No completed use yet"},
-    {label:"Best Combined Bench Boost",holder:combinedBB?.row.manager_name,stat:combinedBB?`${fmt(combinedBB.value)} bench pts`:"—",context:combinedBB?"Season chip total":"No completed use yet"},
+    {label:"Best Single Bench Boost",holder:singleBB?tiedNames(singleBB.rows):null,stat:singleBB?`${fmt(singleBB.value)} bench pts`:"—",context:singleBB?tiedContext(singleBB.rows):"No completed use yet"},
+    {label:"Best Combined Bench Boost",holder:combinedBB?tiedNames(combinedBB.rows):null,stat:combinedBB?`${fmt(combinedBB.value)} bench pts`:"—",context:combinedBB&&combinedBB.rows.length>1?"Joint leaders":combinedBB?"Season chip total":"No completed use yet"},
 
-    {label:"Best Single Free Hit",holder:singleFH?.row.manager_name,stat:singleFH?`${fmt(singleFH.value)} pts`:"—",context:singleFH?`GW${singleFH.row.gameweek}`:"No completed use yet"},
-    {label:"Best Combined Free Hit Score",holder:combinedFH?.row.manager_name,stat:combinedFH?`${fmt(combinedFH.value)} pts`:"—",context:combinedFH?"Season chip total":"No completed use yet"},
+    {label:"Best Single Free Hit",holder:singleFH?tiedNames(singleFH.rows):null,stat:singleFH?`${fmt(singleFH.value)} pts`:"—",context:singleFH?tiedContext(singleFH.rows):"No completed use yet"},
+    {label:"Best Combined Free Hit Score",holder:combinedFH?tiedNames(combinedFH.rows):null,stat:combinedFH?`${fmt(combinedFH.value)} pts`:"—",context:combinedFH&&combinedFH.rows.length>1?"Joint leaders":combinedFH?"Season chip total":"No completed use yet"},
 
-    {label:"Best Single Captain Score",holder:singleCaptain?.row.manager_name,stat:singleCaptain?`${fmt(singleCaptain.value)} pts`:"—",context:singleCaptain?`GW${singleCaptain.row.gameweek}`:"No completed GW yet"},
-    {label:"Most Combined Captain Points",holder:captainBest?.row.manager_name,stat:captainBest?`${fmt(captainBest.value)} pts`:"—",context:captainBest?"Season total":"No completed GW yet"},
+    {label:"Best Single Captain Score",holder:singleCaptain?tiedNames(singleCaptain.rows):null,stat:singleCaptain?`${fmt(singleCaptain.value)} pts`:"—",context:singleCaptain?tiedContext(singleCaptain.rows):"No completed GW yet"},
+    {label:"Most Combined Captain Points",holder:captainBest?tiedNames(captainBest.rows):null,stat:captainBest?`${fmt(captainBest.value)} pts`:"—",context:captainBest&&captainBest.rows.length>1?"Joint leaders":captainBest?"Season total":"No completed GW yet"},
 
-    {label:"Most GW Points Left on Bench",holder:gwBench?.row.manager_name,stat:gwBench?`${fmt(gwBench.value)} pts`:"—",context:gwBench?`GW${gwBench.row.gameweek}`:"No completed GW yet"},
-    {label:"Most Season Points Left on Bench",holder:seasonBench?.row.manager_name,stat:seasonBench?`${fmt(seasonBench.value)} pts`:"—",context:seasonBench?"Season total":"No completed GW yet"},
+    {label:"Most GW Points Left on Bench",holder:gwBench?tiedNames(gwBench.rows):null,stat:gwBench?`${fmt(gwBench.value)} pts`:"—",context:gwBench?tiedContext(gwBench.rows):"No completed GW yet"},
+    {label:"Most Season Points Left on Bench",holder:seasonBench?tiedNames(seasonBench.rows):null,stat:seasonBench?`${fmt(seasonBench.value)} pts`:"—",context:seasonBench&&seasonBench.rows.length>1?"Joint leaders":seasonBench?"Season total":"No completed GW yet"},
 
-    {label:"Most Transfers",holder:transferBest?.row.manager_name,stat:transferBest?`${fmt(transferBest.value)} transfers`:"—",context:transferBest?"Season total":"No completed GW yet"},
-    {label:"Most Transfer Hits",holder:hitHolder,stat:hitStat,context:hitContext},
+    {label:"Most Transfers",holder:transferBest?tiedNames(transferBest.rows):null,stat:transferBest?`${fmt(transferBest.value)} transfers`:"—",context:transferBest&&transferBest.rows.length>1?"Joint leaders":transferBest?"Season total":"No completed GW yet"},
+    {label:"Most Transfer Hits",holder:hitBest&&hitBest.value>0?tiedNames(hitBest.rows):null,stat:hitBest&&hitBest.value>0?`-${fmt(hitBest.value)} pts`:"—",context:hitBest&&hitBest.value>0?(hitBest.rows.length>1?"Joint leaders":"Season total"):"No transfer hits yet"},
 
-    {label:"Most Days at No. 1",holder:mostDays?.name,stat:mostDays?`${fmt(mostDays.days)} days`:"—",context:"Total days leading"},
-    {label:"Longest No. 1 Streak",holder:longest?.name,stat:longest?`${fmt(longest.days)} day${longest.days===1?"":"s"}`:"—",context:longest?`${longest.start} to ${longest.end}`:"No leader history yet"},
+    {label:"Most Days at No. 1",holder:mostDaysLeaders.length?mostDaysLeaders.map(x=>firstName(x.name)).join(" & "):null,stat:mostDaysLeaders.length?`${fmt(mostDaysValue)} days`:"—",context:mostDaysLeaders.length>1?"Joint leaders":"Total days leading"},
+    {label:"Longest No. 1 Streak",holder:longestLeaders.length?longestLeaders.map(x=>firstName(x.name)).join(" & "):null,stat:longestLeaders.length?`${fmt(longestDays)} day${longestDays===1?"":"s"}`:"—",context:longestLeaders.length>1?"Joint record":"Longest streak"},
 
-    {label:"Biggest GW Climb",holder:climb?.row.manager_name,stat:climb?`▲ ${fmt(climb.value)} places`:"—",context:climb?`GW${climb.row.gameweek} · league places`:"No completed movement yet"},
-    {label:"Biggest GW Fall",holder:fall?.row.manager_name,stat:fall?`▼ ${fmt(fall.value)} places`:"—",context:fall?`GW${fall.row.gameweek} · league places`:"No completed movement yet"}
+    {label:"Biggest GW Climb",holder:climb?tiedNames(climb.rows):null,stat:climb?`▲ ${fmt(climb.value)} places`:"—",context:climb?tiedContext(climb.rows,"Joint record"):"No completed movement yet"},
+    {label:"Biggest GW Fall",holder:fall?tiedNames(fall.rows):null,stat:fall?`▼ ${fmt(fall.value)} places`:"—",context:fall?tiedContext(fall.rows,"Joint record"):"No completed movement yet"}
   ];
 }
 
