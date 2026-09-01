@@ -205,6 +205,16 @@ function tabs(){
 
 function hero(){
   const l=leagueData(),lead=l?.standings?.[0],avg=leagueAvg(),fp=fixtureProgress,managerCount=l?.standings?.length||l?.manager_count||0;
+  const gwValue=fp?`${fp.ended} / ${fp.total}`:"— / —";
+  const gwSub=fp
+    ? fp.status==="Complete"
+      ? "Complete · FPL has finalised all matches"
+      : fp.status==="Finalising"
+        ? `Finalising · ${fp.finalised} of ${fp.total} finalised`
+        : fp.status==="Not started"
+          ? "Not started"
+          : `${fp.status}${fp.live?` · ${fp.live} live`:""}${fp.remaining?` · ${fp.remaining} to play`:""}`
+    : "Fixture progress unavailable";
   document.querySelector("#hero").innerHTML=`
     <div class="hero-card hero-leader">
       <div class="hero-label">League leader</div><div class="hero-value">${esc(lead?.manager_name)}</div>
@@ -212,9 +222,9 @@ function hero(){
     </div>
     <div class="hero-card">
       <div class="hero-label">Gameweek ${fmt(latest.gameweek)}</div>
-      <div class="hero-value">${fp?`${fp.remaining} left`:"Live"}</div>
-      <div class="hero-sub">${fp?`${fp.played} of ${fp.total} matches finished${fp.live?` · ${fp.live} live`:""}`:"Fixture progress unavailable"}</div>
-      ${fp?`<div class="progress"><span style="width:${fp.total?fp.played/fp.total*100:0}%"></span></div>`:""}
+      <div class="hero-value">${gwValue}</div>
+      <div class="hero-sub">${gwSub}</div>
+      ${fp?`<div class="progress"><span style="width:${fp.total?fp.ended/fp.total*100:0}%"></span></div>`:""}
     </div>
     <div class="hero-card">
       <div class="hero-label">League GW average</div><div class="hero-value">${avg==null?"—":Math.round(avg)}</div>
@@ -308,11 +318,24 @@ async function fixture(){
       const r=await fetch(url,{signal:controller.signal});
       clearTimeout(timer);
       if(!r.ok)continue;
-      const f=await r.json();
-      if(!Array.isArray(f))continue;
-      const total=f.length,played=f.filter(x=>x.finished===true).length;
-      const live=f.filter(x=>x.started===true&&x.finished!==true).length;
-      fixtureProgress={total,played,live,remaining:Math.max(0,total-played)};
+      const payload=await r.json();
+      const f=Array.isArray(payload)?payload:(Array.isArray(payload?.fixtures)?payload.fixtures:null);
+      if(!f)continue;
+
+      const total=f.length;
+      const finalised=f.filter(x=>x.finished===true).length;
+      const provisional=f.filter(x=>x.finished_provisional===true&&x.finished!==true).length;
+      const ended=f.filter(x=>x.finished===true||x.finished_provisional===true).length;
+      const live=f.filter(x=>x.started===true&&x.finished!==true&&x.finished_provisional!==true).length;
+      const started=f.filter(x=>x.started===true).length;
+      const remaining=Math.max(0,total-ended);
+
+      let status="Live";
+      if(total&&finalised===total)status="Complete";
+      else if(total&&ended===total)status="Finalising";
+      else if(started===0&&ended===0)status="Not started";
+
+      fixtureProgress={total,finalised,provisional,ended,live,remaining,status};
       hero();
       return;
     }catch(e){}
