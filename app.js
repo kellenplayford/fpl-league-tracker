@@ -47,9 +47,12 @@ function longestReign(){
 
 function completedRows(){
   const cur=+latest.gameweek||999,m=new Map();
+  const includeCurrent=fixtureProgress?.status==="Complete";
   for(const s of snapshots){
     const l=leagueData(s),gw=+s.gameweek;
-    if(!l||!gw||gw>=cur)continue;
+    if(!l||!gw)continue;
+    if(gw>cur)continue;
+    if(gw===cur&&!includeCurrent)continue;
     const stamp=new Date(s.generated_at||s.snapshot_date||0).getTime();
     for(const r of l.standings||[]){
       const k=`${gw}:${r.entry_id}`,old=m.get(k);
@@ -337,6 +340,11 @@ async function fixture(){
 
       fixtureProgress={total,finalised,provisional,ended,live,remaining,status};
       hero();
+      if(status==="Complete"){
+        renderRecords();
+        renderGW();
+        standings();
+      }
       return;
     }catch(e){}
   }
