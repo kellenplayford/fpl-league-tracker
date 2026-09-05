@@ -1,5 +1,5 @@
 const LEAGUES=[{id:"37546",name:"Sexy Pickford"},{id:"118082",name:"The Battle Continues"}];
-let active="37546",latest={},history={days:[]},snapshots=[],fixtureProgress=null;
+let active="37546",latest={},history={days:[]},snapshots=[],fixtureProgress=null,liveFixtures=[],playerTeams=new Map();
 
 const fmt=n=>(n===null||n===undefined||n==="")?"—":Number(n).toLocaleString("en-GB");
 const esc=s=>String(s??"—").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
@@ -269,18 +269,32 @@ function managerSeason(m){
   return{gwWins,bestGw:bestGw?.value,bestOr:bestOr?.value,bestGwRank:bestGwRank?.value,days:days?.days||0};
 }
 
+function playerFixtureState(elementId){
+  const team=playerTeams.get(String(elementId));
+  if(!team||!liveFixtures.length)return"";
+  const games=liveFixtures.filter(f=>+f.team_h===+team||+f.team_a===+team);
+  if(!games.length)return"";
+  if(games.some(f=>f.started===true&&f.finished!==true&&f.finished_provisional!==true))return"live";
+  return games.every(f=>f.finished===true)?"played":"";
+}
+
 function squadHTML(m){
   const p=(m.squad||[]).slice().sort((a,b)=>+a.position-+b.position);
-  return p.length?`<div class="squad">${p.map(x=>{
-    const mult=+x.multiplier||0;
-    const meta=[x.is_captain?"C":x.is_vice_captain?"VC":"",+x.position>=12?"Bench":""].filter(Boolean).join(" · ");
+  if(!p.length)return`<div class="empty">Squad unavailable.</div>`;
+  const card=x=>{
+    const mult=+x.multiplier||0,bench=+x.position>=12,state=playerFixtureState(x.element_id);
+    const meta=[x.is_captain?"C":x.is_vice_captain?"VC":"",bench?"Bench":""].filter(Boolean).join(" · ");
     const captainLine=mult>1?`<div class="captain-return">Captain return: ${fmt(x.live_points)} × ${mult} = ${fmt((+x.live_points||0)*mult)} pts</div>`:"";
-    return`<div class="player ${+x.position>=12?"bench":""} ${mult>1?"captain":""}">
-      <div class="player-name">${esc(x.player)}</div>
+    const dot=state?`<span class="fixture-dot ${state}" title="${state==="played"?"Fixture complete":"Playing now"}" aria-label="${state==="played"?"Fixture complete":"Playing now"}"></span>`:"";
+    return`<div class="player ${bench?"bench":""} ${mult>1?"captain":""}">
+      <div class="player-name">${esc(x.player)}${dot}</div>
       <div class="player-meta">${esc(meta||"Starting XI")}</div>
       <div class="player-points">${fmt(x.live_points)} pts</div>${captainLine}
     </div>`;
-  }).join("")}</div>`:`<div class="empty">Squad unavailable.</div>`;
+  };
+  const starters=p.filter(x=>+x.position<12),bench=p.filter(x=>+x.position>=12);
+  return`<div class="squad squad-starters">${starters.map(card).join("")}</div>
+    ${bench.length?`<div class="bench-divider">Bench</div><div class="squad squad-bench">${bench.map(card).join("")}</div>`:""}`;
 }
 
 function detail(m,mobile=false){
@@ -464,9 +478,25 @@ function summariseFixtures(f,gw){
   return{gameweek:gw,total,finalised,provisional,ended,live,remaining,started,status};
 }
 
+async function fetchPlayerTeams(){
+  try{
+    const controller=new AbortController();
+    const timer=setTimeout(()=>controller.abort(),3000);
+    const r=await fetch("https://fantasy.premierleague.com/api/bootstrap-static/",{signal:controller.signal});
+    clearTimeout(timer);
+    if(!r.ok)return false;
+    const data=await r.json();
+    if(!Array.isArray(data?.elements))return false;
+    playerTeams=new Map(data.elements.map(x=>[String(x.id),+x.team]));
+    return true;
+  }catch(e){return false}
+}
+
 async function fixture(){
   const snapshotGw=+latest.gameweek;
   if(!snapshotGw)return;
+
+  await fetchPlayerTeams();
 
   // Probe the next GW first. This lets the live status card move into a new
   // gameweek immediately when its first fixture starts, without waiting for
@@ -477,7 +507,9 @@ async function fixture(){
     const next=summariseFixtures(nextFixtures,nextGw);
     if(next.started>0||next.ended>0){
       fixtureProgress=next;
+      liveFixtures=nextFixtures;
       hero();
+      standings();
       return;
     }
   }
@@ -486,7 +518,9 @@ async function fixture(){
   if(!currentFixtures)return;
 
   fixtureProgress=summariseFixtures(currentFixtures,snapshotGw);
+  liveFixtures=currentFixtures;
   hero();
+  standings();
 
   if(fixtureProgress.status==="Complete"){
     renderRecords();
