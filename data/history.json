@@ -308,6 +308,28 @@
           "leader_overall_rank": 187357
         }
       }
+    },
+    {
+      "date": "2026-09-04",
+      "source": "manual-backfill-previous-day",
+      "leagues": {
+        "37546": {
+          "league_name": "Sexy Pickford",
+          "leader_entry_id": 182007,
+          "leader_manager": "David Saunders",
+          "leader_team": "Reece\u2019s Set Pieces",
+          "leader_points": 211,
+          "leader_overall_rank": 13044
+        },
+        "118082": {
+          "league_name": "The Battle Continues...",
+          "leader_entry_id": 597770,
+          "leader_manager": "Daniel Richmond",
+          "leader_team": "Sound of the Tzolis",
+          "leader_points": 181,
+          "leader_overall_rank": 361011
+        }
+      }
     }
   ],
   "days_top": {
@@ -327,6 +349,10 @@
       "710691": {
         "days_top": 1,
         "longest_streak": 1
+      },
+      "182007": {
+        "days_top": 1,
+        "longest_streak": 1
       }
     },
     "118082": {
@@ -335,7 +361,7 @@
         "longest_streak": 1
       },
       "597770": {
-        "days_top": 11,
+        "days_top": 12,
         "longest_streak": 6
       },
       "2969751": {
