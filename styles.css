@@ -211,3 +211,51 @@ footer{text-align:center;color:#726d88;font-size:12px;padding-top:44px}
 .bench-divider{margin:14px 0 8px;padding-top:12px;border-top:1px solid var(--line);color:var(--muted);font-size:9px;font-weight:950;letter-spacing:.11em;text-transform:uppercase}
 .squad-bench .player{background:#141126;opacity:.66}
 @media(max-width:680px){.squad-starters .player:last-child{grid-column:1/2}.squad-bench{grid-template-columns:repeat(2,1fr)}}
+
+
+/* v3.3.8 visual simplification */
+.update-pill{display:none!important}
+.hero-daily,.hero-live,.hero-finalising{
+  border-color:rgba(37,208,216,.28);
+  background:linear-gradient(180deg,rgba(18,37,47,.52),rgba(18,16,37,.96));
+  box-shadow:var(--shadow)
+}
+.hero-leader.hero-daily{
+  background:linear-gradient(135deg,rgba(139,92,246,.20),rgba(37,208,216,.13)),var(--panel)
+}
+.record-daily{border-color:var(--line);background:linear-gradient(180deg,rgba(24,21,47,.92),rgba(18,16,37,.96))}
+.lower-stats{display:grid;grid-template-columns:1fr;gap:34px}
+.brag-summary{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-bottom:9px}
+.brag-stat{
+  padding:17px;border-radius:17px;border:1px solid rgba(37,208,216,.25);
+  background:linear-gradient(180deg,rgba(18,42,49,.52),rgba(18,16,37,.96));
+  box-shadow:var(--shadow)
+}
+
+/* Desktop Hall of Fame: denser cards, larger useful type */
+@media(min-width:981px){
+  .other-records{grid-template-columns:repeat(4,1fr)}
+  .record-holder{font-size:23px}
+  .record-stat{font-size:16px}
+  .record-context{font-size:12px}
+  .squad-starters{grid-template-columns:repeat(4,1fr)}
+  .squad-starters .player:nth-child(9){grid-column:1/2}
+  .squad-starters .player:nth-child(10){grid-column:2/3}
+  .squad-starters .player:nth-child(11){grid-column:3/4}
+  .squad-bench{grid-template-columns:repeat(4,1fr)}
+}
+
+/* Tablet: preserve a sensible XI grid */
+@media(min-width:681px) and (max-width:980px){
+  .squad-starters{grid-template-columns:repeat(4,1fr)}
+  .squad-bench{grid-template-columns:repeat(4,1fr)}
+}
+
+/* Mobile remains two-column */
+@media(max-width:680px){
+  .brag-summary{grid-template-columns:repeat(2,1fr);gap:7px}
+  .brag-stat{padding:13px}
+  .brag-stat .record-holder{font-size:18px}
+  .squad-starters,.squad-bench{grid-template-columns:repeat(2,1fr)}
+  .squad-starters .player:last-child{grid-column:1/2}
+}

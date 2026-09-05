@@ -46,7 +46,7 @@ function longestReign(){
 }
 
 function completedRows(){
-  const cur=+latest.gameweek||999,m=new Map();
+  const cur=+(fixtureProgress?.gameweek||latest.gameweek)||999,m=new Map();
   const includeCurrent=fixtureProgress?.status==="Complete";
   for(const s of snapshots){
     const l=leagueData(s),gw=+s.gameweek;
@@ -343,25 +343,19 @@ function hero(){
           ? "Not started"
           : `${fp.status}${fp.live?` · ${fp.live} live`:""}${fp.remaining?` · ${fp.remaining} to play`:""}`
     : "Fixture progress unavailable";
-  const gameweekClass=fp?.status==="Live"?"hero-live":fp?.status==="Finalising"?"hero-live hero-finalising":"";
-  const gameweekPill=fp?.status==="Live"
-    ? `<span class="update-pill live">Live</span>`
-    : fp?.status==="Finalising"
-      ? `<span class="update-pill live">Finalising</span>`
-      : "";
   document.querySelector("#hero").innerHTML=`
     <div class="hero-card hero-leader hero-daily">
-      <div class="hero-label">League leader <span class="update-pill daily">Daily</span></div><div class="hero-value">${esc(lead?.manager_name)}</div>
+      <div class="hero-label">League leader</div><div class="hero-value">${esc(lead?.manager_name)}</div>
       <div class="hero-sub">${esc(lead?.team_name)} · ${fmt(lead?.total_points)} points · 1st of ${fmt(managerCount)} managers</div>
     </div>
-    <div class="hero-card hero-gameweek ${gameweekClass}">
-      <div class="hero-label">Gameweek ${fmt(displayGw)} ${gameweekPill}</div>
+    <div class="hero-card hero-gameweek hero-daily">
+      <div class="hero-label">Gameweek ${fmt(displayGw)}</div>
       <div class="hero-value">${gwValue}</div>
       <div class="hero-sub">${gwSub}</div>
       ${fp?`<div class="progress"><span style="width:${fp.total?fp.ended/fp.total*100:0}%"></span></div>`:""}
     </div>
     <div class="hero-card hero-daily">
-      <div class="hero-label">League GW average <span class="update-pill daily">Daily</span></div><div class="hero-value">${avg==null?"—":Math.round(avg)}</div>
+      <div class="hero-label">League GW average</div><div class="hero-value">${avg==null?"—":Math.round(avg)}</div>
       <div class="hero-sub">Latest overnight snapshot</div>
     </div>`;
 }
@@ -372,8 +366,9 @@ function renderRecords(){
     const cadence=x.cadence==="daily"?` <span class="update-pill daily">Daily</span>`:"";
     return`<div class="record ${x.wide?"record-wide":""} ${x.cadence==="daily"?"record-daily":""}"><div class="record-label">${esc(x.label)}${cadence}</div><div class="record-holder">${esc(x.holder||"No record yet")}</div><div class="record-stat">${esc(x.stat)}</div><div class="record-context">${esc(x.context)}</div></div>`;
   };
-  document.querySelector("#headlineRecords").innerHTML=r.filter(x=>x.wide).map(card).join("");
-  document.querySelector("#otherRecords").innerHTML=r.filter(x=>!x.wide).map(card).join("");
+  const hof=r.filter(x=>x.label!=="Most Days at No. 1"&&x.label!=="Longest No. 1 Streak");
+  document.querySelector("#headlineRecords").innerHTML=hof.filter(x=>x.wide).map(card).join("");
+  document.querySelector("#otherRecords").innerHTML=hof.filter(x=>!x.wide).map(card).join("");
 }
 
 function renderGW(){
@@ -386,10 +381,22 @@ function renderGW(){
 
 function renderDays(){
   const l=getDaysTop().slice(0,5),max=l[0]?.days||1;
-  document.querySelector("#daysTop").innerHTML=l.length?`<div class="days-card daily-card">${l.map((x,i)=>`
+  const all=getDaysTop();
+  const most=Math.max(0,...all.map(x=>x.days||0));
+  const mostLeaders=all.filter(x=>(x.days||0)===most&&most>0);
+  const longest=Math.max(0,...all.map(x=>x.longest||0));
+  const streakLeaders=all.filter(x=>(x.longest||0)===longest&&longest>0);
+  const first=n=>String(n||"").trim().split(/\s+/)[0]||"—";
+  const names=xs=>[...new Set(xs.map(x=>first(x.name)))].join(" & ");
+  const summary=`<div class="brag-summary">
+    <div class="brag-stat"><div class="record-label">Most Days at No. 1</div><div class="record-holder">${mostLeaders.length?esc(names(mostLeaders)):"No record yet"}</div><div class="record-stat">${most?`${fmt(most)} days`:"—"}</div><div class="record-context">Total days leading</div></div>
+    <div class="brag-stat"><div class="record-label">Longest No. 1 Streak</div><div class="record-holder">${streakLeaders.length?esc(names(streakLeaders)):"No record yet"}</div><div class="record-stat">${longest?`${fmt(longest)} days`:"—"}</div><div class="record-context">Longest streak</div></div>
+  </div>`;
+  const board=l.length?`<div class="days-card daily-card">${l.map((x,i)=>`
     <div class="day-row"><div class="day-main">
     <div><span class="day-person">${i+1}. ${esc(x.name)}</span><div class="team-name">${esc(x.team||"")}</div></div>
     <div class="day-count">${x.days}</div></div><div class="bar"><span style="width:${Math.max(5,x.days/max*100)}%"></span></div></div>`).join("")}</div>`:`<div class="empty">No leader history yet.</div>`;
+  document.querySelector("#daysTop").innerHTML=summary+board;
 }
 
 function standings(){
@@ -482,7 +489,7 @@ async function fetchPlayerTeams(){
   try{
     const controller=new AbortController();
     const timer=setTimeout(()=>controller.abort(),3000);
-    const r=await fetch("https://fantasy.premierleague.com/api/bootstrap-static/",{signal:controller.signal});
+    const r=await fetch("https://fpl-scheduler.kellenplayford.workers.dev/bootstrap",{signal:controller.signal});
     clearTimeout(timer);
     if(!r.ok)return false;
     const data=await r.json();
