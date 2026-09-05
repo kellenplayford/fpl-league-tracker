@@ -259,3 +259,14 @@ footer{text-align:center;color:#726d88;font-size:12px;padding-top:44px}
   .squad-starters,.squad-bench{grid-template-columns:repeat(2,1fr)}
   .squad-starters .player:last-child{grid-column:1/2}
 }
+
+
+/* v3.3.9 live league-card context */
+.remaining-count{
+  display:block;
+  margin-top:3px;
+  font-size:10px;
+  line-height:1.2;
+  color:var(--muted);
+  white-space:nowrap;
+}

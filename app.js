@@ -275,7 +275,28 @@ function playerFixtureState(elementId){
   const games=liveFixtures.filter(f=>+f.team_h===+team||+f.team_a===+team);
   if(!games.length)return"";
   if(games.some(f=>f.started===true&&f.finished!==true&&f.finished_provisional!==true))return"live";
-  return games.every(f=>f.finished===true)?"played":"";
+  return games.every(f=>f.finished===true||f.finished_provisional===true)?"played":"";
+}
+
+function playerHasFootballLeft(elementId){
+  const team=playerTeams.get(String(elementId));
+  if(!team||!liveFixtures.length)return null;
+  const games=liveFixtures.filter(f=>+f.team_h===+team||+f.team_a===+team);
+  if(!games.length)return false;
+  return games.some(f=>f.finished!==true&&f.finished_provisional!==true);
+}
+
+function remainingPlayers(m){
+  if(!playerTeams.size||!liveFixtures.length)return null;
+  const squad=(m.squad||[]).filter(p=>m.active_chip==="bboost"||+p.position<12);
+  if(!squad.length)return null;
+  return squad.reduce((n,p)=>n+(playerHasFootballLeft(p.element_id)===true?1:0),0);
+}
+
+function remainingLabel(m){
+  const n=remainingPlayers(m);
+  if(n==null)return"";
+  return n===0?"All played":`${n} player${n===1?"":"s"} remaining`;
 }
 
 function squadHTML(m){
@@ -420,7 +441,7 @@ function standings(){
     return`<article class="manager-card ${i===0?"leader":""}" data-m="${m.entry_id}">
       <div class="manager-summary"><div class="pos">${fmt(m.league_position)}</div>
       <div><div class="manager-name">${esc(m.manager_name)}${badge(m)}</div><div class="team-name">${esc(m.team_name)} · <span class="${mv.cls}">${mv.text}</span></div>${avgTag(m)}</div>
-      <div class="manager-points"><strong>${fmt(m.total_points)}</strong><span class="team-name">${fmt(m.gameweek_points)} GW</span></div><div class="chev">⌄</div></div>
+      <div class="manager-points"><strong>${fmt(m.total_points)}</strong><span class="team-name">${fmt(m.gameweek_points)} GW</span>${remainingLabel(m)?`<span class="remaining-count">${esc(remainingLabel(m))}</span>`:""}</div><div class="chev">⌄</div></div>
       <div class="manager-detail" data-mobile-detail="${m.entry_id}"></div>
     </article>`;
   }).join("")}</div>`;
