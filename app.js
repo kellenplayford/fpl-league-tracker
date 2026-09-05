@@ -230,8 +230,8 @@ function allRecords(){
     {label:"Most Transfers",holder:transferBest?tiedNames(transferBest.rows):null,stat:transferBest?`${fmt(transferBest.value)} transfers`:"—",context:transferBest&&transferBest.rows.length>1?"Joint leaders":transferBest?"Season total":"No completed GW yet"},
     {label:"Most Transfer Hits",holder:hitBest&&hitBest.value>0?tiedNames(hitBest.rows):null,stat:hitBest&&hitBest.value>0?`-${fmt(hitBest.value)} pts`:"—",context:hitBest&&hitBest.value>0?(hitBest.rows.length>1?"Joint leaders":"Season total"):"No transfer hits yet"},
 
-    {label:"Most Days at No. 1",holder:mostDaysLeaders.length?mostDaysLeaders.map(x=>firstName(x.name)).join(" & "):null,stat:mostDaysLeaders.length?`${fmt(mostDaysValue)} days`:"—",context:mostDaysLeaders.length>1?"Joint leaders":"Total days leading"},
-    {label:"Longest No. 1 Streak",holder:longestLeaders.length?longestLeaders.map(x=>firstName(x.name)).join(" & "):null,stat:longestLeaders.length?`${fmt(longestDays)} day${longestDays===1?"":"s"}`:"—",context:longestLeaders.length>1?"Joint record":"Longest streak"},
+    {label:"Most Days at No. 1",cadence:"daily",holder:mostDaysLeaders.length?mostDaysLeaders.map(x=>firstName(x.name)).join(" & "):null,stat:mostDaysLeaders.length?`${fmt(mostDaysValue)} days`:"—",context:mostDaysLeaders.length>1?"Joint leaders":"Total days leading"},
+    {label:"Longest No. 1 Streak",cadence:"daily",holder:longestLeaders.length?longestLeaders.map(x=>firstName(x.name)).join(" & "):null,stat:longestLeaders.length?`${fmt(longestDays)} day${longestDays===1?"":"s"}`:"—",context:longestLeaders.length>1?"Joint record":"Longest streak"},
 
     {label:"Biggest GW Climb",holder:climb?tiedNames(climb.rows):null,stat:climb?`▲ ${fmt(climb.value)} places`:"—",context:climb?tiedContext(climb.rows,"Joint record"):"No completed movement yet"},
     {label:"Biggest GW Fall",holder:fall?tiedNames(fall.rows):null,stat:fall?`▼ ${fmt(fall.value)} places`:"—",context:fall?tiedContext(fall.rows,"Joint record"):"No completed movement yet"}
@@ -318,6 +318,7 @@ function tabs(){
 
 function hero(){
   const l=leagueData(),lead=l?.standings?.[0],avg=leagueAvg(),fp=fixtureProgress,managerCount=l?.standings?.length||l?.manager_count||0;
+  const displayGw=fp?.gameweek||latest.gameweek;
   const gwValue=fp?`${fp.ended} / ${fp.total}`:"— / —";
   const gwSub=fp
     ? fp.status==="Complete"
@@ -328,26 +329,35 @@ function hero(){
           ? "Not started"
           : `${fp.status}${fp.live?` · ${fp.live} live`:""}${fp.remaining?` · ${fp.remaining} to play`:""}`
     : "Fixture progress unavailable";
+  const gameweekClass=fp?.status==="Live"?"hero-live":fp?.status==="Finalising"?"hero-live hero-finalising":"";
+  const gameweekPill=fp?.status==="Live"
+    ? `<span class="update-pill live">Live</span>`
+    : fp?.status==="Finalising"
+      ? `<span class="update-pill live">Finalising</span>`
+      : "";
   document.querySelector("#hero").innerHTML=`
-    <div class="hero-card hero-leader">
-      <div class="hero-label">League leader</div><div class="hero-value">${esc(lead?.manager_name)}</div>
+    <div class="hero-card hero-leader hero-daily">
+      <div class="hero-label">League leader <span class="update-pill daily">Daily</span></div><div class="hero-value">${esc(lead?.manager_name)}</div>
       <div class="hero-sub">${esc(lead?.team_name)} · ${fmt(lead?.total_points)} points · 1st of ${fmt(managerCount)} managers</div>
     </div>
-    <div class="hero-card">
-      <div class="hero-label">Gameweek ${fmt(latest.gameweek)}</div>
+    <div class="hero-card hero-gameweek ${gameweekClass}">
+      <div class="hero-label">Gameweek ${fmt(displayGw)} ${gameweekPill}</div>
       <div class="hero-value">${gwValue}</div>
       <div class="hero-sub">${gwSub}</div>
       ${fp?`<div class="progress"><span style="width:${fp.total?fp.ended/fp.total*100:0}%"></span></div>`:""}
     </div>
-    <div class="hero-card">
-      <div class="hero-label">League GW average</div><div class="hero-value">${avg==null?"—":Math.round(avg)}</div>
-      <div class="hero-sub">Average points right now</div>
+    <div class="hero-card hero-daily">
+      <div class="hero-label">League GW average <span class="update-pill daily">Daily</span></div><div class="hero-value">${avg==null?"—":Math.round(avg)}</div>
+      <div class="hero-sub">Latest overnight snapshot</div>
     </div>`;
 }
 
 function renderRecords(){
   const r=allRecords();
-  const card=x=>`<div class="record ${x.wide?"record-wide":""}"><div class="record-label">${esc(x.label)}</div><div class="record-holder">${esc(x.holder||"No record yet")}</div><div class="record-stat">${esc(x.stat)}</div><div class="record-context">${esc(x.context)}</div></div>`;
+  const card=x=>{
+    const cadence=x.cadence==="daily"?` <span class="update-pill daily">Daily</span>`:"";
+    return`<div class="record ${x.wide?"record-wide":""} ${x.cadence==="daily"?"record-daily":""}"><div class="record-label">${esc(x.label)}${cadence}</div><div class="record-holder">${esc(x.holder||"No record yet")}</div><div class="record-stat">${esc(x.stat)}</div><div class="record-context">${esc(x.context)}</div></div>`;
+  };
   document.querySelector("#headlineRecords").innerHTML=r.filter(x=>x.wide).map(card).join("");
   document.querySelector("#otherRecords").innerHTML=r.filter(x=>!x.wide).map(card).join("");
 }
@@ -362,7 +372,7 @@ function renderGW(){
 
 function renderDays(){
   const l=getDaysTop().slice(0,5),max=l[0]?.days||1;
-  document.querySelector("#daysTop").innerHTML=l.length?`<div class="days-card">${l.map((x,i)=>`
+  document.querySelector("#daysTop").innerHTML=l.length?`<div class="days-card daily-card">${l.map((x,i)=>`
     <div class="day-row"><div class="day-main">
     <div><span class="day-person">${i+1}. ${esc(x.name)}</span><div class="team-name">${esc(x.team||"")}</div></div>
     <div class="day-count">${x.days}</div></div><div class="bar"><span style="width:${Math.max(5,x.days/max*100)}%"></span></div></div>`).join("")}</div>`:`<div class="empty">No leader history yet.</div>`;
@@ -417,9 +427,7 @@ function standings(){
   });
 }
 
-async function fixture(){
-  const gw=+latest.gameweek;
-  if(!gw)return;
+async function fetchFixtures(gw){
   const urls=[
     `https://fpl-scheduler.kellenplayford.workers.dev/fixtures?event=${gw}`,
     `https://fantasy.premierleague.com/api/fixtures/?event=${gw}`
@@ -433,30 +441,57 @@ async function fixture(){
       if(!r.ok)continue;
       const payload=await r.json();
       const f=Array.isArray(payload)?payload:(Array.isArray(payload?.fixtures)?payload.fixtures:null);
-      if(!f)continue;
-
-      const total=f.length;
-      const finalised=f.filter(x=>x.finished===true).length;
-      const provisional=f.filter(x=>x.finished_provisional===true&&x.finished!==true).length;
-      const ended=f.filter(x=>x.finished===true||x.finished_provisional===true).length;
-      const live=f.filter(x=>x.started===true&&x.finished!==true&&x.finished_provisional!==true).length;
-      const started=f.filter(x=>x.started===true).length;
-      const remaining=Math.max(0,total-ended);
-
-      let status="Live";
-      if(total&&finalised===total)status="Complete";
-      else if(total&&ended===total)status="Finalising";
-      else if(started===0&&ended===0)status="Not started";
-
-      fixtureProgress={total,finalised,provisional,ended,live,remaining,status};
-      hero();
-      if(status==="Complete"){
-        renderRecords();
-        renderGW();
-        standings();
-      }
-      return;
+      if(f?.length)return f;
     }catch(e){}
+  }
+  return null;
+}
+
+function summariseFixtures(f,gw){
+  const total=f.length;
+  const finalised=f.filter(x=>x.finished===true).length;
+  const provisional=f.filter(x=>x.finished_provisional===true&&x.finished!==true).length;
+  const ended=f.filter(x=>x.finished===true||x.finished_provisional===true).length;
+  const live=f.filter(x=>x.started===true&&x.finished!==true&&x.finished_provisional!==true).length;
+  const started=f.filter(x=>x.started===true).length;
+  const remaining=Math.max(0,total-ended);
+
+  let status="Live";
+  if(total&&finalised===total)status="Complete";
+  else if(total&&ended===total)status="Finalising";
+  else if(started===0&&ended===0)status="Not started";
+
+  return{gameweek:gw,total,finalised,provisional,ended,live,remaining,started,status};
+}
+
+async function fixture(){
+  const snapshotGw=+latest.gameweek;
+  if(!snapshotGw)return;
+
+  // Probe the next GW first. This lets the live status card move into a new
+  // gameweek immediately when its first fixture starts, without waiting for
+  // the next overnight manager snapshot.
+  const nextGw=snapshotGw+1;
+  const nextFixtures=await fetchFixtures(nextGw);
+  if(nextFixtures){
+    const next=summariseFixtures(nextFixtures,nextGw);
+    if(next.started>0||next.ended>0){
+      fixtureProgress=next;
+      hero();
+      return;
+    }
+  }
+
+  const currentFixtures=await fetchFixtures(snapshotGw);
+  if(!currentFixtures)return;
+
+  fixtureProgress=summariseFixtures(currentFixtures,snapshotGw);
+  hero();
+
+  if(fixtureProgress.status==="Complete"){
+    renderRecords();
+    renderGW();
+    standings();
   }
 }
 
