@@ -13,36 +13,32 @@ const movement=m=>{
   return p>c?{text:`▲ ${p-c}`,cls:"up",delta:p-c}:{text:`▼ ${c-p}`,cls:"down",delta:p-c};
 };
 
+function historyLeaders(info){
+  if(Array.isArray(info?.leaders)&&info.leaders.length)return info.leaders.map(x=>({id:String(x.entry_id||x.manager),name:x.manager,team:x.team}));
+  if(info?.leader_entry_id!=null||info?.leader_manager)return[{id:String(info.leader_entry_id||info.leader_manager),name:info.leader_manager,team:info.leader_team}];
+  return[];
+}
+
 function getDaysTop(){
   const o={};
   for(const d of history.days||[]){
     const x=d.leagues?.[active];
     if(!x)continue;
-    const id=String(x.leader_entry_id||x.leader_manager);
-    o[id]??={id,name:x.leader_manager,team:x.leader_team,days:0};
-    o[id].days++;
+    for(const lead of historyLeaders(x)){
+      o[lead.id]??={id:lead.id,name:lead.name,team:lead.team,days:0};
+      o[lead.id].days++;
+    }
   }
   const st=history?.days_top?.[active]||{};
-  return Object.values(o).map(x=>({...x,longest:st[x.id]?.longest_streak||0})).sort((a,b)=>b.days-a.days);
+  return Object.values(o).map(x=>({...x,longest:st[x.id]?.longest_streak||0})).sort((a,b)=>b.days-a.days||String(a.name).localeCompare(String(b.name)));
 }
 
 function longestReign(){
-  const days=(history.days||[]).slice().sort((a,b)=>String(a.date).localeCompare(String(b.date)));
-  let best=null,current=null,previousDate=null;
-  for(const d of days){
-    const x=d.leagues?.[active];
-    if(!x||!d.date)continue;
-    const id=String(x.leader_entry_id||x.leader_manager);
-    const dt=new Date(`${d.date}T12:00:00Z`);
-    const prev=previousDate?new Date(`${previousDate}T12:00:00Z`):null;
-    const consecutive=prev&&((dt-prev)/86400000===1);
-    if(current&&current.id===id&&consecutive)current.days++;
-    else current={id,name:x.leader_manager,team:x.leader_team,days:1,start:d.date,end:d.date};
-    current.end=d.date;
-    if(!best||current.days>best.days)best={...current};
-    previousDate=d.date;
-  }
-  return best;
+  const st=history?.days_top?.[active]||{},leaders=getDaysTop();
+  if(!leaders.length)return null;
+  const max=Math.max(...leaders.map(x=>st[x.id]?.longest_streak||0));
+  const tied=leaders.filter(x=>(st[x.id]?.longest_streak||0)===max);
+  return tied.length?{...tied[0],days:max,tied}:null;
 }
 
 function completedRows(){
