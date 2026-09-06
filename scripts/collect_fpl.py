@@ -65,19 +65,26 @@ def build_manager(row,gw,players,live):
       "active_chip":picks.get("active_chip"),"captain":captain,"vice_captain":vice,
       "automatic_subs":picks.get("automatic_subs",[]),"squad":squad}
 
+def day_leaders(info):
+    leaders=info.get("leaders")
+    if isinstance(leaders,list) and leaders: return leaders
+    if info.get("leader_entry_id") is not None or info.get("leader_manager"):
+        return [{"entry_id":info.get("leader_entry_id"),"manager":info.get("leader_manager"),"team":info.get("leader_team"),"points":info.get("leader_points"),"overall_rank":info.get("leader_overall_rank")}]
+    return []
+
 def days_top(history):
     totals={}; streaks={}
     for day in sorted(history.get("days",[]),key=lambda x:x["date"]):
+        curr=date.fromisoformat(day["date"])
         for lid,info in day.get("leagues",{}).items():
-            e=str(info.get("leader_entry_id") or info.get("leader_manager")); key=(lid,e)
-            totals[key]=totals.get(key,0)+1
-            s=streaks.setdefault(key,{"current":0,"longest":0,"last":None})
-            curr=date.fromisoformat(day["date"])
-            s["current"]=s["current"]+1 if s["last"] and curr-date.fromisoformat(s["last"])==timedelta(days=1) else 1
-            s["longest"]=max(s["longest"],s["current"]); s["last"]=day["date"]
+            for leader in day_leaders(info):
+                e=str(leader.get("entry_id") or leader.get("manager")); key=(lid,e)
+                totals[key]=totals.get(key,0)+1
+                s=streaks.setdefault(key,{"current":0,"longest":0,"last":None})
+                s["current"]=s["current"]+1 if s["last"] and curr-date.fromisoformat(s["last"])==timedelta(days=1) else 1
+                s["longest"]=max(s["longest"],s["current"]); s["last"]=day["date"]
     out={}
-    for (lid,e),n in totals.items():
-        out.setdefault(lid,{})[e]={"days_top":n,"longest_streak":streaks[(lid,e)]["longest"]}
+    for (lid,e),n in totals.items(): out.setdefault(lid,{})[e]={"days_top":n,"longest_streak":streaks[(lid,e)]["longest"]}
     return out
 
 def collect(mode, snapshot_date):
@@ -86,77 +93,44 @@ def collect(mode, snapshot_date):
     players={int(p["id"]):p for p in b.get("elements",[])}
     livep=get_json(f"{BASE}/event/{gw}/live/")
     live={int(x["id"]):(x.get("stats") or {}).get("total_points") for x in livep.get("elements",[])}
-    snap={"status":"ok","mode":mode,"generated_at":now.isoformat(),
-          "snapshot_date":snapshot_date.isoformat(),"gameweek":gw,"leagues":[]}
+    snap={"status":"ok","mode":mode,"generated_at":now.isoformat(),"snapshot_date":snapshot_date.isoformat(),"gameweek":gw,"leagues":[]}
     for league in LEAGUES:
         meta,rows=league_rows(league["id"]); managers=[]
         for row in rows:
             managers.append(build_manager(row,gw,players,live)); time.sleep(.05)
         managers.sort(key=lambda x:(x.get("league_position") or 999999,-(x.get("total_points") or 0)))
-        snap["leagues"].append({"league_id":league["id"],"league_name":meta.get("name") or league["name"],
-                                "manager_count":len(managers),"standings":managers})
+        snap["leagues"].append({"league_id":league["id"],"league_name":meta.get("name") or league["name"],"manager_count":len(managers),"standings":managers})
     return now,snap
 
 def save_official(now,snap,source):
     SNAPSHOTS.mkdir(parents=True,exist_ok=True)
     ds=snap["snapshot_date"]; path=SNAPSHOTS/f"{ds}.json"
-
-    snap["mode"]="official"; path.write_text(json.dumps(snap,indent=2))
-    (DATA/"latest.json").write_text(json.dumps(snap,indent=2))
-
-    hp=DATA/"history.json"; h=json.loads(hp.read_text())
-    day={"date":ds,"source":source,"leagues":{}}
+    snap["mode"]="official"; path.write_text(json.dumps(snap,indent=2)); (DATA/"latest.json").write_text(json.dumps(snap,indent=2))
+    hp=DATA/"history.json"; h=json.loads(hp.read_text()); day={"date":ds,"source":source,"leagues":{}}
     for lg in snap["leagues"]:
-        if not lg["standings"]: continue
-        lead=lg["standings"][0]
-        day["leagues"][str(lg["league_id"])]={"league_name":lg["league_name"],"leader_entry_id":lead["entry_id"],
-          "leader_manager":lead["manager_name"],"leader_team":lead["team_name"],"leader_points":lead["total_points"],
-          "leader_overall_rank":lead["overall_rank"]}
-
+        standings=lg["standings"]
+        if not standings: continue
+        top_points=max((m.get("total_points") or 0) for m in standings)
+        tied=[m for m in standings if (m.get("total_points") or 0)==top_points]
+        leaders=[{"entry_id":m["entry_id"],"manager":m["manager_name"],"team":m["team_name"],"points":m["total_points"],"overall_rank":m["overall_rank"]} for m in tied]
+        lead=tied[0]
+        day["leagues"][str(lg["league_id"])]= {"league_name":lg["league_name"],"leader_entry_id":lead["entry_id"],"leader_manager":lead["manager_name"],"leader_team":lead["team_name"],"leader_points":lead["total_points"],"leader_overall_rank":lead["overall_rank"],"leader_count":len(leaders),"leaders":leaders}
     h["days"]=[d for d in h.get("days",[]) if d.get("date")!=ds]+[day]
     h["days"].sort(key=lambda x:x["date"]); h["days_top"]=days_top(h); hp.write_text(json.dumps(h,indent=2))
-
     mp=DATA/"manifest.json"; m=json.loads(mp.read_text()); name=f"data/snapshots/{ds}.json"
-    m["official_snapshots"]=sorted(set(m.get("official_snapshots",[])+[name]))
-    m["latest"]="data/latest.json"; m["updated_at"]=now.isoformat()
-    mp.write_text(json.dumps(m,indent=2))
+    m["official_snapshots"]=sorted(set(m.get("official_snapshots",[])+[name])); m["latest"]="data/latest.json"; m["updated_at"]=now.isoformat(); mp.write_text(json.dumps(m,indent=2))
     print(f"Official snapshot saved/replaced for {ds}.")
 
 def main():
-    ap=argparse.ArgumentParser()
-    ap.add_argument("--mode",choices=["test","scheduled","official","backfill"],default="test")
-    args=ap.parse_args()
-
-    now=datetime.now(TZ)
-
-    if args.mode in ("scheduled","backfill"):
-        snapshot_date=now.date()-timedelta(days=1)
-    else:
-        snapshot_date=now.date()
-
-    # Scheduled fallback cron runs are deliberately idempotent:
-    # if an earlier overnight run already saved the date, later backup runs simply succeed.
+    ap=argparse.ArgumentParser(); ap.add_argument("--mode",choices=["test","scheduled","official","backfill"],default="test"); args=ap.parse_args(); now=datetime.now(TZ)
+    snapshot_date=now.date()-timedelta(days=1) if args.mode in ("scheduled","backfill") else now.date()
     target_path=SNAPSHOTS/f"{snapshot_date.isoformat()}.json"
-    if args.mode=="scheduled" and target_path.exists():
-        print(f"Snapshot already exists for {snapshot_date.isoformat()}; backup run not needed.")
-        return 0
-
+    if args.mode=="scheduled" and target_path.exists(): print(f"Snapshot already exists for {snapshot_date.isoformat()}; backup run not needed."); return 0
     now,snap=collect(args.mode,snapshot_date)
-
     if args.mode=="test":
-        TEST.mkdir(parents=True,exist_ok=True)
-        (TEST/"latest-test.json").write_text(json.dumps(snap,indent=2))
-        print(f"Test collection succeeded for {snapshot_date.isoformat()}.")
-        return 0
-
-    source = {
-        "scheduled": "automatic-overnight-snapshot",
-        "backfill": "manual-backfill-previous-day",
-        "official": "manual-official-snapshot",
-    }[args.mode]
-
-    save_official(now,snap,source)
-    return 0
+        TEST.mkdir(parents=True,exist_ok=True); (TEST/"latest-test.json").write_text(json.dumps(snap,indent=2)); print(f"Test collection succeeded for {snapshot_date.isoformat()}."); return 0
+    source={"scheduled":"automatic-overnight-snapshot","backfill":"manual-backfill-previous-day","official":"manual-official-snapshot"}[args.mode]
+    save_official(now,snap,source); return 0
 
 if __name__=="__main__":
     try: raise SystemExit(main())
