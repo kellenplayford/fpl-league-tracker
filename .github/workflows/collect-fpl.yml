@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "test = verify only; official = save today; backfill = save previous UK day"
+        description: "test = verify only; official = save today; backfill = save previous UK day; repair = rebuild historical leader ties"
         required: true
         default: test
         type: choice
-        options: [test, official, backfill]
+        options: [test, official, backfill, repair]
 
 
 permissions:
@@ -35,12 +35,17 @@ jobs:
           else
             MODE="${{ github.event.inputs.mode }}"
           fi
-          python scripts/collect_fpl.py --mode "$MODE"
+
+          if [ "$MODE" = "repair" ]; then
+            python scripts/repair_history.py
+          else
+            python scripts/collect_fpl.py --mode "$MODE"
+          fi
 
       - name: Commit updated data
         run: |
           if [ -z "$(git status --porcelain)" ]; then
-            echo "No data changes to commit. This is expected for backup scheduled runs when the snapshot already exists."
+            echo "No data changes to commit."
             exit 0
           fi
           git config user.name "fpl-tracker-bot"
