@@ -71,13 +71,23 @@ function gameweeks(){
     const score=net(s[0]);
     const winners=s.filter(r=>net(r)===score);
     const second=s.find(r=>net(r)<score);
-    return{gw:+gw,winners,score,margin:second?score-net(second):null};
+    return{gw:+gw,winners,score,margin:second?score-net(second):null,top5:s.slice(0,5).map((r,i)=>({...r,weekly_rank:i+1,weekly_score:net(r)}))};
   }).sort((a,b)=>a.gw-b.gw);
 }
 
 const benchRaw=r=>(r.squad||[]).filter(p=>+p.position>=12).reduce((a,p)=>a+(+p.live_points||0),0);
 const captainPlayer=r=>(r.squad||[]).find(p=>(+p.multiplier||0)>1)||(r.squad||[]).find(p=>p.is_captain);
 const captainContribution=r=>{const p=captainPlayer(r);if(!p)return null;const mult=(+p.multiplier||0)>1?+p.multiplier:(r.active_chip==="3xc"?3:2);return(+p.live_points||0)*mult};
+const captainName=r=>captainPlayer(r)?.player||r?.captain||"—";
+const captainRecordContext=rec=>{
+  if(!rec?.rows?.length)return"No completed GW yet";
+  if(rec.rows.length>1){
+    const details=[...new Set(rec.rows.map(r=>`GW${r.gameweek} · ${captainName(r)}`))];
+    return details.length===1?details[0]:"Joint record";
+  }
+  const r=rec.rows[0];
+  return`GW${r.gameweek} · ${captainName(r)}`;
+};
 
 function best(rows,get,mode="max"){
   return rows.reduce((a,r)=>{
@@ -199,6 +209,14 @@ function allRecords(){
   const transferBest=tiedMapLeader(transferTotals);
   const hitBest=tiedMapLeader(hitTotals);
 
+  const combinedTCContext=()=>{
+    if(!combinedTC)return"No completed use yet";
+    if(combinedTC.rows.length!==1)return"Joint leaders";
+    const id=String(combinedTC.rows[0].entry_id);
+    const uses=rows.filter(r=>String(r.entry_id)===id&&r.active_chip==="3xc").sort((a,b)=>a.gameweek-b.gameweek);
+    return uses.length?uses.map(r=>`GW${r.gameweek} ${captainName(r)}`).join(" · "):"Season chip total";
+  };
+
   const marginHolder=gs=>[...new Set(gs.flatMap(g=>g.winners.map(w=>firstName(w.manager_name))))].join(" & ");
   const marginContext=gs=>gs.length===1?`GW${gs[0].gw}`:"Joint record";
 
@@ -212,8 +230,8 @@ function allRecords(){
     {label:"Biggest GW margin",holder:bigGws.length?marginHolder(bigGws):null,stat:bigGws.length?`${fmt(bigMargin)} pts`:"—",context:bigGws.length?marginContext(bigGws):"No completed GW yet"},
     {label:"Smallest GW margin",holder:smallGws.length?marginHolder(smallGws):null,stat:smallGws.length?`${fmt(smallMargin)} pt${smallMargin===1?"":"s"}`:"—",context:smallGws.length?marginContext(smallGws):"No completed GW yet"},
 
-    {label:"Best Single Triple Captain",holder:singleTC?tiedNames(singleTC.rows):null,stat:singleTC?`${fmt(singleTC.value)} captain pts`:"—",context:singleTC?tiedContext(singleTC.rows):"No completed use yet"},
-    {label:"Best Combined TC Score",holder:combinedTC?tiedNames(combinedTC.rows):null,stat:combinedTC?`${fmt(combinedTC.value)} captain pts`:"—",context:combinedTC&&combinedTC.rows.length>1?"Joint leaders":combinedTC?"Season chip total":"No completed use yet"},
+    {label:"Best Single Triple Captain",holder:singleTC?tiedNames(singleTC.rows):null,stat:singleTC?`${fmt(singleTC.value)} captain pts`:"—",context:singleTC?captainRecordContext(singleTC):"No completed use yet"},
+    {label:"Best Combined TC Score",holder:combinedTC?tiedNames(combinedTC.rows):null,stat:combinedTC?`${fmt(combinedTC.value)} captain pts`:"—",context:combinedTCContext()},
 
     {label:"Best Single Bench Boost",holder:singleBB?tiedNames(singleBB.rows):null,stat:singleBB?`${fmt(singleBB.value)} bench pts`:"—",context:singleBB?tiedContext(singleBB.rows):"No completed use yet"},
     {label:"Best Combined Bench Boost",holder:combinedBB?tiedNames(combinedBB.rows):null,stat:combinedBB?`${fmt(combinedBB.value)} bench pts`:"—",context:combinedBB&&combinedBB.rows.length>1?"Joint leaders":combinedBB?"Season chip total":"No completed use yet"},
@@ -221,7 +239,7 @@ function allRecords(){
     {label:"Best Single Free Hit",holder:singleFH?tiedNames(singleFH.rows):null,stat:singleFH?`${fmt(singleFH.value)} pts`:"—",context:singleFH?tiedContext(singleFH.rows):"No completed use yet"},
     {label:"Best Combined Free Hit Score",holder:combinedFH?tiedNames(combinedFH.rows):null,stat:combinedFH?`${fmt(combinedFH.value)} pts`:"—",context:combinedFH&&combinedFH.rows.length>1?"Joint leaders":combinedFH?"Season chip total":"No completed use yet"},
 
-    {label:"Best Single Captain Score",holder:singleCaptain?tiedNames(singleCaptain.rows):null,stat:singleCaptain?`${fmt(singleCaptain.value)} pts`:"—",context:singleCaptain?tiedContext(singleCaptain.rows):"No completed GW yet"},
+    {label:"Best Single Captain Score",holder:singleCaptain?tiedNames(singleCaptain.rows):null,stat:singleCaptain?`${fmt(singleCaptain.value)} pts`:"—",context:singleCaptain?captainRecordContext(singleCaptain):"No completed GW yet"},
     {label:"Most Combined Captain Points",holder:captainBest?tiedNames(captainBest.rows):null,stat:captainBest?`${fmt(captainBest.value)} pts`:"—",context:captainBest&&captainBest.rows.length>1?"Joint leaders":captainBest?"Season total":"No completed GW yet"},
 
     {label:"Most GW Points Left on Bench",holder:gwBench?tiedNames(gwBench.rows):null,stat:gwBench?`${fmt(gwBench.value)} pts`:"—",context:gwBench?tiedContext(gwBench.rows):"No completed GW yet"},
@@ -394,10 +412,35 @@ function renderRecords(){
 
 function renderGW(){
   const g=gameweeks().slice().reverse();
-  document.querySelector("#gwWinners").innerHTML=g.length?`<div class="gw-card">${g.map(x=>`
-    <div class="gw-row"><div class="gw-num">GW${x.gw}</div>
-    <div><div class="gw-name">${esc(x.winners.map(w=>w.manager_name).join(" & "))}</div><div class="gw-margin">${x.margin==null?"":`${x.margin}-point winning margin`}</div></div>
-    <div class="gw-score">${fmt(x.score)} pts</div></div>`).join("")}</div>`:`<div class="empty">No completed gameweeks yet.</div>`;
+  const root=document.querySelector("#gwWinners");
+  root.innerHTML=g.length?`<div class="gw-card">${g.map(x=>`
+    <div class="gw-block" data-gw-block="${x.gw}">
+      <button class="gw-row gw-toggle" type="button" data-gw="${x.gw}" aria-expanded="false">
+        <div class="gw-num">GW${x.gw}</div>
+        <div><div class="gw-name">${esc(x.winners.map(w=>w.manager_name).join(" & "))}</div><div class="gw-margin">${x.margin==null?"":`${x.margin}-point winning margin`}</div></div>
+        <div class="gw-score-wrap"><div class="gw-score">${fmt(x.score)} pts</div><div class="gw-chev">⌄</div></div>
+      </button>
+      <div class="gw-detail" id="gw-detail-${x.gw}">
+        <div class="gw-top5-head"><span>Top 5</span><span>GW score</span></div>
+        ${x.top5.map(r=>`<div class="gw-top5-row ${r.weekly_rank===1?"winner":""}">
+          <div class="gw-top5-rank">${r.weekly_rank}</div>
+          <div><div class="gw-top5-name">${esc(r.manager_name)}</div><div class="team-name">${esc(r.team_name||"")}</div></div>
+          <div class="gw-top5-score">${fmt(r.weekly_score)} pts</div>
+        </div>`).join("")}
+      </div>
+    </div>`).join("")}</div>`:`<div class="empty">No completed gameweeks yet.</div>`;
+
+  root.querySelectorAll(".gw-toggle").forEach(btn=>btn.onclick=()=>{
+    const block=btn.closest(".gw-block"),opening=!block.classList.contains("open");
+    root.querySelectorAll(".gw-block.open").forEach(x=>{
+      if(x!==block){
+        x.classList.remove("open");
+        x.querySelector(".gw-toggle")?.setAttribute("aria-expanded","false");
+      }
+    });
+    block.classList.toggle("open");
+    btn.setAttribute("aria-expanded",opening?"true":"false");
+  });
 }
 
 function renderDays(){
