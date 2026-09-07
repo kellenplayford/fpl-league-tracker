@@ -11,7 +11,7 @@ DATA=ROOT/"data"; SNAPSHOTS=DATA/"snapshots"; TEST=DATA/"test"
 TZ=ZoneInfo("Europe/London"); BASE="https://fantasy.premierleague.com/api"
 LEAGUES=[{"id":37546,"name":"Sexy Pickford"},{"id":118082,"name":"The Battle Continues"}]
 S=requests.Session()
-S.headers.update({"User-Agent":"fpl-league-tracker/2.2","Accept":"application/json,text/plain,*/*"})
+S.headers.update({"User-Agent":"fpl-league-tracker/2.3","Accept":"application/json,text/plain,*/*"})
 
 def get_json(url,retries=4):
     last=None
@@ -72,19 +72,32 @@ def day_leaders(info):
         return [{"entry_id":info.get("leader_entry_id"),"manager":info.get("leader_manager"),"team":info.get("leader_team"),"points":info.get("leader_points"),"overall_rank":info.get("leader_overall_rank")}]
     return []
 
+def canonical_entry_ids(history):
+    by_name={}
+    for day in history.get("days",[]):
+        for info in day.get("leagues",{}).values():
+            for leader in day_leaders(info):
+                if leader.get("entry_id") is not None and leader.get("manager"):
+                    by_name.setdefault(leader["manager"], str(leader["entry_id"]))
+    return by_name
+
 def days_top(history):
     totals={}; streaks={}
+    name_ids=canonical_entry_ids(history)
     for day in sorted(history.get("days",[]),key=lambda x:x["date"]):
         curr=date.fromisoformat(day["date"])
         for lid,info in day.get("leagues",{}).items():
             for leader in day_leaders(info):
-                e=str(leader.get("entry_id") or leader.get("manager")); key=(lid,e)
+                raw=leader.get("entry_id")
+                e=str(raw) if raw is not None else name_ids.get(leader.get("manager"), leader.get("manager"))
+                key=(lid,e)
                 totals[key]=totals.get(key,0)+1
                 s=streaks.setdefault(key,{"current":0,"longest":0,"last":None})
                 s["current"]=s["current"]+1 if s["last"] and curr-date.fromisoformat(s["last"])==timedelta(days=1) else 1
                 s["longest"]=max(s["longest"],s["current"]); s["last"]=day["date"]
     out={}
-    for (lid,e),n in totals.items(): out.setdefault(lid,{})[e]={"days_top":n,"longest_streak":streaks[(lid,e)]["longest"]}
+    for (lid,e),n in totals.items():
+        out.setdefault(lid,{})[e]={"days_top":n,"longest_streak":streaks[(lid,e)]["longest"]}
     return out
 
 def collect(mode, snapshot_date):
@@ -105,8 +118,18 @@ def collect(mode, snapshot_date):
 def save_official(now,snap,source):
     SNAPSHOTS.mkdir(parents=True,exist_ok=True)
     ds=snap["snapshot_date"]; path=SNAPSHOTS/f"{ds}.json"
-    snap["mode"]="official"; path.write_text(json.dumps(snap,indent=2)); (DATA/"latest.json").write_text(json.dumps(snap,indent=2))
-    hp=DATA/"history.json"; h=json.loads(hp.read_text()); day={"date":ds,"source":source,"leagues":{}}
+    snap["mode"]="official"
+    if source=="automatic-morning-finalisation":
+        snap["finalised_at"]=now.isoformat()
+        snap["finalisation"]="post-10:30 official FPL refresh"
+    path.write_text(json.dumps(snap,indent=2))
+    (DATA/"latest.json").write_text(json.dumps(snap,indent=2))
+
+    hp=DATA/"history.json"; h=json.loads(hp.read_text())
+    old_day=next((d for d in h.get("days",[]) if d.get("date")==ds),{})
+    day={"date":ds,"source":source,"leagues":{}}
+    if old_day.get("notes"): day["notes"]=old_day["notes"]
+
     for lg in snap["leagues"]:
         standings=lg["standings"]
         if not standings: continue
@@ -115,21 +138,27 @@ def save_official(now,snap,source):
         leaders=[{"entry_id":m["entry_id"],"manager":m["manager_name"],"team":m["team_name"],"points":m["total_points"],"overall_rank":m["overall_rank"]} for m in tied]
         lead=tied[0]
         day["leagues"][str(lg["league_id"])]= {"league_name":lg["league_name"],"leader_entry_id":lead["entry_id"],"leader_manager":lead["manager_name"],"leader_team":lead["team_name"],"leader_points":lead["total_points"],"leader_overall_rank":lead["overall_rank"],"leader_count":len(leaders),"leaders":leaders}
+
     h["days"]=[d for d in h.get("days",[]) if d.get("date")!=ds]+[day]
-    h["days"].sort(key=lambda x:x["date"]); h["days_top"]=days_top(h); hp.write_text(json.dumps(h,indent=2))
+    h["days"].sort(key=lambda x:x["date"]); h["days_top"]=days_top(h)
+    hp.write_text(json.dumps(h,indent=2)+"\n")
+
     mp=DATA/"manifest.json"; m=json.loads(mp.read_text()); name=f"data/snapshots/{ds}.json"
     m["official_snapshots"]=sorted(set(m.get("official_snapshots",[])+[name])); m["latest"]="data/latest.json"; m["updated_at"]=now.isoformat(); mp.write_text(json.dumps(m,indent=2))
-    print(f"Official snapshot saved/replaced for {ds}.")
+    print(f"Official snapshot saved/replaced for {ds} ({source}).")
 
 def main():
-    ap=argparse.ArgumentParser(); ap.add_argument("--mode",choices=["test","scheduled","official","backfill"],default="test"); args=ap.parse_args(); now=datetime.now(TZ)
-    snapshot_date=now.date()-timedelta(days=1) if args.mode in ("scheduled","backfill") else now.date()
+    ap=argparse.ArgumentParser()
+    ap.add_argument("--mode",choices=["test","scheduled","official","backfill","finalise"],default="test")
+    args=ap.parse_args(); now=datetime.now(TZ)
+    snapshot_date=now.date()-timedelta(days=1) if args.mode in ("scheduled","backfill","finalise") else now.date()
     target_path=SNAPSHOTS/f"{snapshot_date.isoformat()}.json"
-    if args.mode=="scheduled" and target_path.exists(): print(f"Snapshot already exists for {snapshot_date.isoformat()}; backup run not needed."); return 0
+    if args.mode=="scheduled" and target_path.exists():
+        print(f"Snapshot already exists for {snapshot_date.isoformat()}; backup run not needed."); return 0
     now,snap=collect(args.mode,snapshot_date)
     if args.mode=="test":
         TEST.mkdir(parents=True,exist_ok=True); (TEST/"latest-test.json").write_text(json.dumps(snap,indent=2)); print(f"Test collection succeeded for {snapshot_date.isoformat()}."); return 0
-    source={"scheduled":"automatic-overnight-snapshot","backfill":"manual-backfill-previous-day","official":"manual-official-snapshot"}[args.mode]
+    source={"scheduled":"automatic-overnight-snapshot","backfill":"automatic-overnight-snapshot","finalise":"automatic-morning-finalisation","official":"manual-official-snapshot"}[args.mode]
     save_official(now,snap,source); return 0
 
 if __name__=="__main__":
