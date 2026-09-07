@@ -686,7 +686,7 @@
     },
     {
       "date": "2026-09-06",
-      "source": "manual-backfill-previous-day",
+      "source": "automatic-morning-finalisation",
       "leagues": {
         "37546": {
           "league_name": "Sexy Pickford",
@@ -694,7 +694,7 @@
           "leader_manager": "Tim Part",
           "leader_team": "Partizan Idiot",
           "leader_points": 254,
-          "leader_overall_rank": 28035,
+          "leader_overall_rank": 12250,
           "leader_count": 1,
           "leaders": [
             {
@@ -702,7 +702,7 @@
               "manager": "Tim Part",
               "team": "Partizan Idiot",
               "points": 254,
-              "overall_rank": 28035
+              "overall_rank": 12250
             }
           ]
         },
@@ -712,15 +712,22 @@
           "leader_manager": "Daniel Richmond",
           "leader_team": "Sound of the Tzolis",
           "leader_points": 245,
-          "leader_overall_rank": 117439,
-          "leader_count": 1,
+          "leader_overall_rank": 48196,
+          "leader_count": 2,
           "leaders": [
             {
               "entry_id": 597770,
               "manager": "Daniel Richmond",
               "team": "Sound of the Tzolis",
               "points": 245,
-              "overall_rank": 117439
+              "overall_rank": 48196
+            },
+            {
+              "entry_id": 361353,
+              "manager": "Kellen Playford",
+              "team": "Jogo Bonito",
+              "points": 245,
+              "overall_rank": 48196
             }
           ]
         }
@@ -729,7 +736,7 @@
   ],
   "days_top": {
     "37546": {
-      "Kellen Playford": {
+      "361353": {
         "days_top": 1,
         "longest_streak": 1
       },
@@ -737,13 +744,9 @@
         "days_top": 1,
         "longest_streak": 1
       },
-      "Chris Saunders": {
-        "days_top": 1,
-        "longest_streak": 1
-      },
       "40951": {
-        "days_top": 10,
-        "longest_streak": 6
+        "days_top": 11,
+        "longest_streak": 7
       },
       "710691": {
         "days_top": 3,
@@ -755,16 +758,12 @@
       }
     },
     "118082": {
-      "Kellen Playford": {
-        "days_top": 1,
+      "361353": {
+        "days_top": 2,
         "longest_streak": 1
       },
-      "Daniel Richmond": {
-        "days_top": 2,
-        "longest_streak": 2
-      },
       "597770": {
-        "days_top": 12,
+        "days_top": 14,
         "longest_streak": 8
       },
       "2969751": {
