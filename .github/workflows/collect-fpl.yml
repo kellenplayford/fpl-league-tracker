@@ -4,12 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: "test = verify only; official = save today; backfill = save previous UK day; repair = rebuild historical leader ties"
+        description: "test, official, backfill, finalise, repair, or audit"
         required: true
         default: test
         type: choice
-        options: [test, official, backfill, repair]
-
+        options: [test, official, backfill, finalise, repair, audit]
 
 permissions:
   contents: write
@@ -30,14 +29,12 @@ jobs:
 
       - name: Collect data
         run: |
-          if [ "${{ github.event_name }}" = "schedule" ]; then
-            MODE="scheduled"
-          else
-            MODE="${{ github.event.inputs.mode }}"
-          fi
+          MODE="${{ github.event.inputs.mode }}"
 
           if [ "$MODE" = "repair" ]; then
             python scripts/repair_history.py
+          elif [ "$MODE" = "audit" ]; then
+            python scripts/audit_history_finalisation.py
           else
             python scripts/collect_fpl.py --mode "$MODE"
           fi
