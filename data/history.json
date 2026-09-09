@@ -784,7 +784,7 @@
     },
     {
       "date": "2026-09-08",
-      "source": "automatic-overnight-snapshot",
+      "source": "automatic-morning-finalisation",
       "leagues": {
         "37546": {
           "league_name": "Sexy Pickford",
@@ -806,24 +806,24 @@
         },
         "118082": {
           "league_name": "The Battle Continues...",
-          "leader_entry_id": 597770,
-          "leader_manager": "Daniel Richmond",
-          "leader_team": "Sound of the Tzolis",
+          "leader_entry_id": 361353,
+          "leader_manager": "Kellen Playford",
+          "leader_team": "Jogo Bonito",
           "leader_points": 245,
           "leader_overall_rank": 48196,
           "leader_count": 2,
           "leaders": [
             {
-              "entry_id": 597770,
-              "manager": "Daniel Richmond",
-              "team": "Sound of the Tzolis",
+              "entry_id": 361353,
+              "manager": "Kellen Playford",
+              "team": "Jogo Bonito",
               "points": 245,
               "overall_rank": 48196
             },
             {
-              "entry_id": 361353,
-              "manager": "Kellen Playford",
-              "team": "Jogo Bonito",
+              "entry_id": 597770,
+              "manager": "Daniel Richmond",
+              "team": "Sound of the Tzolis",
               "points": 245,
               "overall_rank": 48196
             }
