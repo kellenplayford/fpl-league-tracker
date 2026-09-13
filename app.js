@@ -100,7 +100,11 @@ function tiedBest(rows,get,mode="max"){
   return{value:target,rows:vals.filter(x=>x.value===target).map(x=>x.row)};
 }
 
-const firstName=n=>String(n||"").trim().split(/\s+/)[0]||"—";
+const firstName=n=>{
+  const parts=String(n||"").trim().split(/\s+/).filter(Boolean);
+  if(!parts.length)return"—";
+  return parts.length===1?parts[0]:`${parts[0]} ${parts[parts.length-1][0]}.`;
+};
 const tiedNames=rows=>[...new Set((rows||[]).map(r=>firstName(r.manager_name)))].join(" & ");
 const tiedContext=(rows,label)=>{
   const gws=[...new Set((rows||[]).map(r=>+r.gameweek).filter(Boolean))];
@@ -366,7 +370,15 @@ function tabs(){
 }
 
 function hero(){
-  const l=leagueData(),lead=l?.standings?.[0],avg=leagueAvg(),fp=fixtureProgress,managerCount=l?.standings?.length||l?.manager_count||0;
+  const l=leagueData(),standings=l?.standings||[],lead=standings[0],avg=leagueAvg(),fp=fixtureProgress,managerCount=standings.length||l?.manager_count||0;
+  const topPoints=lead?.total_points;
+  const leaders=topPoints==null?[]:standings.filter(m=>+m.total_points===+topPoints);
+  const leaderNames=leaders.length?leaders.map(m=>firstName(m.manager_name)).join(" & "):"—";
+  const leaderSub=!lead
+    ? "Awaiting snapshot"
+    : leaders.length>1
+      ? `${fmt(topPoints)} points · Joint 1st of ${fmt(managerCount)} managers`
+      : `${lead.team_name} · ${fmt(topPoints)} points · 1st of ${fmt(managerCount)} managers`;
   const displayGw=fp?.gameweek||latest.gameweek;
   const gwValue=fp?`${fp.ended} / ${fp.total}`:"— / —";
   const gwSub=fp
@@ -380,8 +392,8 @@ function hero(){
     : "Fixture progress unavailable";
   document.querySelector("#hero").innerHTML=`
     <div class="hero-card hero-leader hero-daily">
-      <div class="hero-label">League leader</div><div class="hero-value">${esc(lead?.manager_name)}</div>
-      <div class="hero-sub">${esc(lead?.team_name)} · ${fmt(lead?.total_points)} points · 1st of ${fmt(managerCount)} managers</div>
+      <div class="hero-label">League leader</div><div class="hero-value">${esc(leaderNames)}</div>
+      <div class="hero-sub">${esc(leaderSub)}</div>
     </div>
     <div class="hero-card hero-gameweek hero-daily">
       <div class="hero-label">Gameweek ${fmt(displayGw)}</div>
@@ -446,8 +458,7 @@ function renderDays(){
   const mostLeaders=all.filter(x=>(x.days||0)===most&&most>0);
   const longest=Math.max(0,...all.map(x=>x.longest||0));
   const streakLeaders=all.filter(x=>(x.longest||0)===longest&&longest>0);
-  const first=n=>String(n||"").trim().split(/\s+/)[0]||"—";
-  const names=xs=>[...new Set(xs.map(x=>first(x.name)))].join(" & ");
+  const names=xs=>[...new Set(xs.map(x=>firstName(x.name)))].join(" & ");
   const summary=`<div class="brag-summary">
     <div class="brag-stat"><div class="record-label">Most Days at No. 1</div><div class="record-holder">${mostLeaders.length?esc(names(mostLeaders)):"No record yet"}</div><div class="record-stat">${most?`${fmt(most)} days`:"—"}</div><div class="record-context">Total days leading</div></div>
     <div class="brag-stat"><div class="record-label">Longest No. 1 Streak</div><div class="record-holder">${streakLeaders.length?esc(names(streakLeaders)):"No record yet"}</div><div class="record-stat">${longest?`${fmt(longest)} days`:"—"}</div><div class="record-context">Longest streak</div></div>
