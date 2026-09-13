@@ -77,12 +77,12 @@ const captainContribution=r=>{const p=captainPlayer(r);if(!p)return null;const m
 const captainName=r=>captainPlayer(r)?.player||r?.captain||"—";
 const captainRecordContext=rec=>{
   if(!rec?.rows?.length)return"No completed GW yet";
-  if(rec.rows.length>1){
-    const details=[...new Set(rec.rows.map(r=>`GW${r.gameweek} · ${captainName(r)}`))];
-    return details.length===1?details[0]:"Joint record";
-  }
-  const r=rec.rows[0];
-  return`GW${r.gameweek} · ${captainName(r)}`;
+  const gws=[...new Set(rec.rows.map(r=>+r.gameweek).filter(Boolean))];
+  const captains=[...new Set(rec.rows.map(r=>captainName(r)).filter(x=>x&&x!=="—"))];
+  if(gws.length===1&&captains.length===1)return`GW${gws[0]} · ${captains[0]}`;
+  if(gws.length===1&&captains.length>1)return`GW${gws[0]} · ${captains.length} captains tied`;
+  if(gws.length>1&&captains.length===1)return`${gws.map(g=>`GW${g}`).join(" & ")} · ${captains[0]}`;
+  return"Joint record";
 };
 
 function best(rows,get,mode="max"){
@@ -105,7 +105,12 @@ const firstName=n=>{
   if(!parts.length)return"—";
   return parts.length===1?parts[0]:`${parts[0]} ${parts[parts.length-1][0]}.`;
 };
-const tiedNames=rows=>[...new Set((rows||[]).map(r=>firstName(r.manager_name)))].join(" & ");
+const compactNames=names=>{
+  const unique=[...new Set((names||[]).filter(Boolean))];
+  if(unique.length>3)return`${unique.length} managers tied`;
+  return unique.join(" & ");
+};
+const tiedNames=rows=>compactNames((rows||[]).map(r=>firstName(r.manager_name)));
 const tiedContext=(rows,label)=>{
   const gws=[...new Set((rows||[]).map(r=>+r.gameweek).filter(Boolean))];
   if(gws.length===1)return `GW${gws[0]}`;
@@ -211,13 +216,17 @@ function allRecords(){
 
   const combinedTCContext=()=>{
     if(!combinedTC)return"No completed use yet";
-    if(combinedTC.rows.length!==1)return"Joint leaders";
-    const id=String(combinedTC.rows[0].entry_id);
-    const uses=rows.filter(r=>String(r.entry_id)===id&&r.active_chip==="3xc").sort((a,b)=>a.gameweek-b.gameweek);
-    return uses.length?uses.map(r=>`GW${r.gameweek} ${captainName(r)}`).join(" · "):"Season chip total";
+    const ids=new Set(combinedTC.rows.map(r=>String(r.entry_id)));
+    const uses=rows.filter(r=>ids.has(String(r.entry_id))&&r.active_chip==="3xc");
+    const gws=[...new Set(uses.map(r=>+r.gameweek).filter(Boolean))];
+    const captains=[...new Set(uses.map(r=>captainName(r)).filter(x=>x&&x!=="—"))];
+    if(gws.length===1&&captains.length===1)return`GW${gws[0]} · ${captains[0]}`;
+    if(gws.length===1&&captains.length>1)return`GW${gws[0]} · ${captains.length} captains`;
+    if(combinedTC.rows.length===1&&uses.length)return uses.sort((a,b)=>a.gameweek-b.gameweek).map(r=>`GW${r.gameweek} · ${captainName(r)}`).join(" · ");
+    return"Season chip total";
   };
 
-  const marginHolder=gs=>[...new Set(gs.flatMap(g=>g.winners.map(w=>firstName(w.manager_name))))].join(" & ");
+  const marginHolder=gs=>compactNames(gs.flatMap(g=>g.winners.map(w=>firstName(w.manager_name))));
   const marginContext=gs=>gs.length===1?`GW${gs[0].gw}`:"Joint record";
 
   return[
@@ -373,7 +382,7 @@ function hero(){
   const l=leagueData(),standings=l?.standings||[],lead=standings[0],avg=leagueAvg(),fp=fixtureProgress,managerCount=standings.length||l?.manager_count||0;
   const topPoints=lead?.total_points;
   const leaders=topPoints==null?[]:standings.filter(m=>+m.total_points===+topPoints);
-  const leaderNames=leaders.length?leaders.map(m=>firstName(m.manager_name)).join(" & "):"—";
+  const leaderNames=leaders.length?compactNames(leaders.map(m=>firstName(m.manager_name))):"—";
   const leaderSub=!lead
     ? "Awaiting snapshot"
     : leaders.length>1
@@ -458,7 +467,7 @@ function renderDays(){
   const mostLeaders=all.filter(x=>(x.days||0)===most&&most>0);
   const longest=Math.max(0,...all.map(x=>x.longest||0));
   const streakLeaders=all.filter(x=>(x.longest||0)===longest&&longest>0);
-  const names=xs=>[...new Set(xs.map(x=>firstName(x.name)))].join(" & ");
+  const names=xs=>compactNames(xs.map(x=>firstName(x.name)));
   const summary=`<div class="brag-summary">
     <div class="brag-stat"><div class="record-label">Most Days at No. 1</div><div class="record-holder">${mostLeaders.length?esc(names(mostLeaders)):"No record yet"}</div><div class="record-stat">${most?`${fmt(most)} days`:"—"}</div><div class="record-context">Total days leading</div></div>
     <div class="brag-stat"><div class="record-label">Longest No. 1 Streak</div><div class="record-holder">${streakLeaders.length?esc(names(streakLeaders)):"No record yet"}</div><div class="record-stat">${longest?`${fmt(longest)} days`:"—"}</div><div class="record-context">Longest streak</div></div>
