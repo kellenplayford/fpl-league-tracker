@@ -1019,6 +1019,48 @@
           ]
         }
       }
+    },
+    {
+      "date": "2026-09-13",
+      "source": "automatic-overnight-snapshot",
+      "leagues": {
+        "37546": {
+          "league_name": "Sexy Pickford",
+          "leader_entry_id": 710691,
+          "leader_manager": "Tim Part",
+          "leader_team": "Partizan Idiot",
+          "leader_points": 339,
+          "leader_overall_rank": 10295,
+          "leader_count": 1,
+          "leaders": [
+            {
+              "entry_id": 710691,
+              "manager": "Tim Part",
+              "team": "Partizan Idiot",
+              "points": 339,
+              "overall_rank": 10295
+            }
+          ]
+        },
+        "118082": {
+          "league_name": "The Battle Continues...",
+          "leader_entry_id": 597770,
+          "leader_manager": "Daniel Richmond",
+          "leader_team": "Sound of the Tzolis",
+          "leader_points": 318,
+          "leader_overall_rank": 133633,
+          "leader_count": 1,
+          "leaders": [
+            {
+              "entry_id": 597770,
+              "manager": "Daniel Richmond",
+              "team": "Sound of the Tzolis",
+              "points": 318,
+              "overall_rank": 133633
+            }
+          ]
+        }
+      }
     }
   ],
   "days_top": {
@@ -1036,8 +1078,8 @@
         "longest_streak": 7
       },
       "710691": {
-        "days_top": 9,
-        "longest_streak": 8
+        "days_top": 10,
+        "longest_streak": 9
       },
       "182007": {
         "days_top": 2,
@@ -1050,8 +1092,8 @@
         "longest_streak": 6
       },
       "597770": {
-        "days_top": 20,
-        "longest_streak": 14
+        "days_top": 21,
+        "longest_streak": 15
       },
       "2969751": {
         "days_top": 2,
