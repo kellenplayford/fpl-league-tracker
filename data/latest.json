@@ -1,7 +1,7 @@
 {
   "status": "ok",
   "mode": "official",
-  "generated_at": "2026-09-14T03:15:43.303982+01:00",
+  "generated_at": "2026-09-14T10:32:13.890112+01:00",
   "snapshot_date": "2026-09-13",
   "gameweek": 4,
   "leagues": [
@@ -4572,5 +4572,7 @@
         }
       ]
     }
-  ]
+  ],
+  "finalised_at": "2026-09-14T10:32:13.890112+01:00",
+  "finalisation": "post-10:30 official FPL refresh"
 }
