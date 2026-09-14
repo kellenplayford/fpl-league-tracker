@@ -77,12 +77,11 @@ const captainContribution=r=>{const p=captainPlayer(r);if(!p)return null;const m
 const captainName=r=>captainPlayer(r)?.player||r?.captain||"—";
 const captainRecordContext=rec=>{
   if(!rec?.rows?.length)return"No completed GW yet";
-  const gws=[...new Set(rec.rows.map(r=>+r.gameweek).filter(Boolean))];
+  const gws=[...new Set(rec.rows.map(r=>+r.gameweek).filter(Boolean))].sort((a,b)=>a-b);
   const captains=[...new Set(rec.rows.map(r=>captainName(r)).filter(x=>x&&x!=="—"))];
-  if(gws.length===1&&captains.length===1)return`GW${gws[0]} · ${captains[0]}`;
-  if(gws.length===1&&captains.length>1)return`GW${gws[0]} · ${captains.length} captains tied`;
-  if(gws.length>1&&captains.length===1)return`${gws.map(g=>`GW${g}`).join(" & ")} · ${captains[0]}`;
-  return"Joint record";
+  const gwText=gws.length===1?`GW${gws[0]}`:gws.length?gws.map(g=>`GW${g}`).join(" / "):"";
+  const capText=captains.length===1?captains[0]:captains.length?`${captains.length} different captains`:"";
+  return[gwText,capText].filter(Boolean).join(" · ")||"Joint record";
 };
 
 function best(rows,get,mode="max"){
@@ -218,12 +217,11 @@ function allRecords(){
     if(!combinedTC)return"No completed use yet";
     const ids=new Set(combinedTC.rows.map(r=>String(r.entry_id)));
     const uses=rows.filter(r=>ids.has(String(r.entry_id))&&r.active_chip==="3xc");
-    const gws=[...new Set(uses.map(r=>+r.gameweek).filter(Boolean))];
+    const gws=[...new Set(uses.map(r=>+r.gameweek).filter(Boolean))].sort((a,b)=>a-b);
     const captains=[...new Set(uses.map(r=>captainName(r)).filter(x=>x&&x!=="—"))];
-    if(gws.length===1&&captains.length===1)return`GW${gws[0]} · ${captains[0]}`;
-    if(gws.length===1&&captains.length>1)return`GW${gws[0]} · ${captains.length} captains`;
-    if(combinedTC.rows.length===1&&uses.length)return uses.sort((a,b)=>a.gameweek-b.gameweek).map(r=>`GW${r.gameweek} · ${captainName(r)}`).join(" · ");
-    return"Season chip total";
+    const gwText=gws.length===1?`GW${gws[0]}`:gws.length?gws.map(g=>`GW${g}`).join(" / "):"";
+    const capText=captains.length===1?captains[0]:captains.length?`${captains.length} different captains`:"";
+    return[gwText,capText].filter(Boolean).join(" · ")||"Season chip total";
   };
 
   const marginHolder=gs=>compactNames(gs.flatMap(g=>g.winners.map(w=>firstName(w.manager_name))));
@@ -378,6 +376,97 @@ function tabs(){
   el.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{active=b.dataset.id;render()});
 }
 
+
+function latestCompletedGw(){
+  const gws=gameweeks();
+  return gws.length?Math.max(...gws.map(g=>g.gw)):null;
+}
+
+function recapData(){
+  const gw=latestCompletedGw();
+  if(!gw)return null;
+  const rows=completedRows().filter(r=>+r.gameweek===+gw);
+  if(!rows.length)return null;
+
+  const climber=tiedBest(rows,r=>movement(r).delta>0?movement(r).delta:null);
+  const captain=tiedBest(rows,captainContribution);
+  const bench=tiedBest(rows.filter(r=>r.active_chip!=="bboost"),r=>+r.points_on_bench||0);
+
+  const allGws=[...new Set(completedRows().map(r=>+r.gameweek).filter(Boolean))].sort((a,b)=>a-b);
+  const formGws=allGws.slice(-3);
+  const formTotals=new Map();
+  for(const r of completedRows().filter(r=>formGws.includes(+r.gameweek))){
+    const id=String(r.entry_id);
+    const old=formTotals.get(id)||{value:0,row:r};
+    old.value+=(+r.gameweek_points||0)-(+r.transfer_cost||0);
+    old.row=r;
+    formTotals.set(id,old);
+  }
+  const form=tiedMapLeader(formTotals);
+
+  return{gw,rows,climber,captain,bench,form,formGws};
+}
+
+function renderRecap(){
+  const root=document.querySelector("#gwRecap");
+  const section=document.querySelector("#gwRecapSection");
+  if(!root||!section)return;
+  const d=recapData();
+  if(!d){section.style.display="none";return}
+  section.style.display="block";
+
+  const holder=rec=>rec?tiedNames(rec.rows):"No record yet";
+  const climberContext=()=>{
+    if(!d.climber)return"No upward movement";
+    const r=d.climber.rows[0],from=+r.previous_league_position,to=+r.league_position;
+    return from&&to?`From ${from}${ordinal(from)} to ${to}${ordinal(to)}`:`GW${d.gw}`;
+  };
+  const capContext=d.captain?captainRecordContext(d.captain):"No captain data";
+  const formLabel=d.formGws.length?`GW${d.formGws[0]}–GW${d.formGws[d.formGws.length-1]}`:"Recent GWs";
+
+  root.innerHTML=`
+    <div class="recap-head">
+      <div><div class="eyebrow">Last completed gameweek</div><h2>GW${d.gw} recap</h2></div>
+      <div class="recap-note">Four quick stories from the week</div>
+    </div>
+    <div class="recap-grid">
+      <div class="recap-card">
+        <div class="recap-icon">↗</div>
+        <div class="record-label">Biggest climber</div>
+        <div class="recap-holder">${esc(holder(d.climber))}</div>
+        <div class="recap-stat">${d.climber?`▲ ${fmt(d.climber.value)} place${d.climber.value===1?"":"s"}`:"—"}</div>
+        <div class="record-context">${esc(climberContext())}</div>
+      </div>
+      <div class="recap-card">
+        <div class="recap-icon">◎</div>
+        <div class="record-label">Best captain call</div>
+        <div class="recap-holder">${esc(holder(d.captain))}</div>
+        <div class="recap-stat">${d.captain?`${fmt(d.captain.value)} captain pts`:"—"}</div>
+        <div class="record-context">${esc(capContext)}</div>
+      </div>
+      <div class="recap-card">
+        <div class="recap-icon">▱</div>
+        <div class="record-label">Bench regret</div>
+        <div class="recap-holder">${esc(holder(d.bench))}</div>
+        <div class="recap-stat">${d.bench?`${fmt(d.bench.value)} pts left on bench`:"—"}</div>
+        <div class="record-context">Excludes Bench Boost</div>
+      </div>
+      <div class="recap-card">
+        <div class="recap-icon">▥</div>
+        <div class="record-label">Form manager</div>
+        <div class="recap-holder">${esc(d.form?tiedNames(d.form.rows):"No record yet")}</div>
+        <div class="recap-stat">${d.form?`${fmt(d.form.value)} pts`:"—"}</div>
+        <div class="record-context">${esc(`Last ${d.formGws.length} GW${d.formGws.length===1?"":"s"} · ${formLabel}`)}</div>
+      </div>
+    </div>`;
+}
+
+function ordinal(n){
+  const v=n%100;
+  if(v>=11&&v<=13)return"th";
+  return{1:"st",2:"nd",3:"rd"}[n%10]||"th";
+}
+
 function hero(){
   const l=leagueData(),standings=l?.standings||[],lead=standings[0],avg=leagueAvg(),fp=fixtureProgress,managerCount=standings.length||l?.manager_count||0;
   const topPoints=lead?.total_points;
@@ -386,36 +475,58 @@ function hero(){
   const leaderSub=!lead
     ? "Awaiting snapshot"
     : leaders.length>1
-      ? `${fmt(topPoints)} points · Joint 1st of ${fmt(managerCount)} managers`
-      : `${lead.team_name} · ${fmt(topPoints)} points · 1st of ${fmt(managerCount)} managers`;
+      ? `${fmt(topPoints)} pts · Joint 1st of ${fmt(managerCount)}`
+      : `${fmt(topPoints)} pts · 1st of ${fmt(managerCount)}`;
+
   const displayGw=fp?.gameweek||latest.gameweek;
-  const gwValue=fp?`${fp.ended} / ${fp.total}`:"— / —";
-  const gwSub=fp
-    ? fp.status==="Complete"
-      ? "Complete · FPL has finalised all matches"
-      : fp.status==="Finalising"
-        ? `Finalising · ${fp.finalised} of ${fp.total} finalised`
-        : fp.status==="Not started"
-          ? "Not started"
-          : `${fp.status}${fp.live?` · ${fp.live} live`:""}${fp.remaining?` · ${fp.remaining} to play`:""}`
-    : "Fixture progress unavailable";
+  const status=fp?.status||"Current";
+  const statusClass=status==="Live"?"live":status==="Finalising"?"finalising":status==="Complete"?"complete":"waiting";
+  const matches=fp?`${fp.ended} / ${fp.total} matches played`:"Fixture progress loading";
+  const statusDetail=fp
+    ? status==="Complete"
+      ? "Gameweek complete"
+      : status==="Finalising"
+        ? `${fp.finalised} of ${fp.total} matches finalised`
+        : status==="Not started"
+          ? "Fixtures not started"
+          : `${fp.remaining} match${fp.remaining===1?"":"es"} remaining${fp.live?` · ${fp.live} live`:""}`
+    : "Latest standings snapshot below";
+
+  const gwHigh=standings.length?Math.max(...standings.map(m=>+m.gameweek_points||0)):null;
+  const gwHighRows=gwHigh==null?[]:standings.filter(m=>(+m.gameweek_points||0)===gwHigh);
+  const gwHighNames=gwHighRows.length?compactNames(gwHighRows.map(m=>firstName(m.manager_name))):"—";
+
   document.querySelector("#hero").innerHTML=`
-    <div class="hero-card hero-leader hero-daily">
-      <div class="hero-label">League leader</div><div class="hero-value">${esc(leaderNames)}</div>
-      <div class="hero-sub">${esc(leaderSub)}</div>
-    </div>
-    <div class="hero-card hero-gameweek hero-daily">
-      <div class="hero-label">Gameweek ${fmt(displayGw)}</div>
-      <div class="hero-value">${gwValue}</div>
-      <div class="hero-sub">${gwSub}</div>
+    <div class="hero-current ${statusClass}">
+      <div class="hero-current-top">
+        <div>
+          <div class="hero-current-kicker">Gameweek ${fmt(displayGw)}</div>
+          <div class="hero-current-status">${esc(status)}</div>
+        </div>
+        <div class="hero-current-dot" aria-hidden="true"></div>
+      </div>
+      <div class="hero-current-matches">${esc(matches)}</div>
+      <div class="hero-current-sub">${esc(statusDetail)}</div>
       ${fp?`<div class="progress"><span style="width:${fp.total?fp.ended/fp.total*100:0}%"></span></div>`:""}
     </div>
-    <div class="hero-card hero-daily">
-      <div class="hero-label">League GW average</div><div class="hero-value">${avg==null?"—":Math.round(avg)}</div>
-      <div class="hero-sub">Latest overnight snapshot</div>
+    <div class="hero-mini-grid">
+      <div class="hero-mini">
+        <div class="hero-label">League leader</div>
+        <div class="hero-mini-value">${esc(leaderNames)}</div>
+        <div class="hero-mini-stat">${esc(leaderSub)}</div>
+      </div>
+      <div class="hero-mini">
+        <div class="hero-label">League GW average</div>
+        <div class="hero-mini-value">${avg==null?"—":Math.round(avg)} pts</div>
+        <div class="hero-sub">Latest snapshot</div>
+      </div>
+      <div class="hero-mini">
+        <div class="hero-label">GW high score</div>
+        <div class="hero-mini-value">${esc(gwHighNames)}</div>
+        <div class="hero-mini-stat">${gwHigh==null?"—":`${fmt(gwHigh)} pts`}</div>
+      </div>
     </div>`;
 }
-
 function renderRecords(){
   const r=allRecords();
   const card=x=>{
@@ -596,6 +707,7 @@ async function fixture(){
       fixtureProgress=next;
       liveFixtures=nextFixtures;
       hero();
+      renderRecap();
       standings();
       return;
     }
@@ -607,6 +719,7 @@ async function fixture(){
   fixtureProgress=summariseFixtures(currentFixtures,snapshotGw);
   liveFixtures=currentFixtures;
   hero();
+  renderRecap();
   standings();
 
   if(fixtureProgress.status==="Complete"){
@@ -617,7 +730,7 @@ async function fixture(){
 }
 
 function render(){
-  tabs();hero();renderRecords();renderGW();renderDays();standings();
+  tabs();hero();renderRecap();renderRecords();renderGW();renderDays();standings();
   document.querySelector("#updated").textContent=latest.generated_at
     ?`Updated ${new Date(latest.generated_at).toLocaleString("en-GB",{dateStyle:"medium",timeStyle:"short"})}`
     :"Awaiting snapshot";
