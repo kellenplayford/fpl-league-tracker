@@ -1,7 +1,7 @@
 {
   "status": "ok",
   "mode": "official",
-  "generated_at": "2026-09-16T03:15:43.543589+01:00",
+  "generated_at": "2026-09-16T10:30:51.614198+01:00",
   "snapshot_date": "2026-09-15",
   "gameweek": 4,
   "leagues": [
@@ -639,163 +639,6 @@
           ]
         },
         {
-          "entry_id": 7054850,
-          "manager_name": "Tim Key",
-          "team_name": "Flying Canary",
-          "league_position": 5,
-          "previous_league_position": 6,
-          "gameweek_points": 85,
-          "total_points": 321,
-          "overall_rank": 155494,
-          "gameweek_rank": 1552346,
-          "points_on_bench": 5,
-          "transfers": 1,
-          "transfer_cost": 0,
-          "team_value": 100.5,
-          "bank": 0.0,
-          "active_chip": null,
-          "captain": "Palmer",
-          "vice_captain": "Jo\u00e3o Pedro",
-          "automatic_subs": [],
-          "squad": [
-            {
-              "element_id": 1,
-              "player": "Raya",
-              "position": 1,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 14
-            },
-            {
-              "element_id": 112,
-              "player": "Van Hecke",
-              "position": 2,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 8
-            },
-            {
-              "element_id": 8,
-              "player": "Calafiori",
-              "position": 3,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 6
-            },
-            {
-              "element_id": 142,
-              "player": "James",
-              "position": 4,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 1
-            },
-            {
-              "element_id": 426,
-              "player": "B.Fernandes",
-              "position": 5,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 2
-            },
-            {
-              "element_id": 368,
-              "player": "Szoboszlai",
-              "position": 6,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 3
-            },
-            {
-              "element_id": 154,
-              "player": "Palmer",
-              "position": 7,
-              "multiplier": 2,
-              "is_captain": true,
-              "is_vice_captain": false,
-              "live_points": 5
-            },
-            {
-              "element_id": 124,
-              "player": "Gro\u00df",
-              "position": 8,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 17
-            },
-            {
-              "element_id": 165,
-              "player": "Jo\u00e3o Pedro",
-              "position": 9,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": true,
-              "live_points": 12
-            },
-            {
-              "element_id": 379,
-              "player": "Isak",
-              "position": 10,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 2
-            },
-            {
-              "element_id": 346,
-              "player": "Calvert-Lewin",
-              "position": 11,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 10
-            },
-            {
-              "element_id": 564,
-              "player": "Scherpen",
-              "position": 12,
-              "multiplier": 0,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 1
-            },
-            {
-              "element_id": 427,
-              "player": "Mbeumo",
-              "position": 13,
-              "multiplier": 0,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 2
-            },
-            {
-              "element_id": 418,
-              "player": "Maguire",
-              "position": 14,
-              "multiplier": 0,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 1
-            },
-            {
-              "element_id": 304,
-              "player": "O'Shea",
-              "position": 15,
-              "multiplier": 0,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 1
-            }
-          ]
-        },
-        {
           "entry_id": 361353,
           "manager_name": "Kellen Playford",
           "team_name": "Jogo Bonito",
@@ -949,6 +792,163 @@
               "is_captain": false,
               "is_vice_captain": false,
               "live_points": 0
+            }
+          ]
+        },
+        {
+          "entry_id": 7054850,
+          "manager_name": "Tim Key",
+          "team_name": "Flying Canary",
+          "league_position": 5,
+          "previous_league_position": 6,
+          "gameweek_points": 85,
+          "total_points": 321,
+          "overall_rank": 155494,
+          "gameweek_rank": 1552346,
+          "points_on_bench": 5,
+          "transfers": 1,
+          "transfer_cost": 0,
+          "team_value": 100.5,
+          "bank": 0.0,
+          "active_chip": null,
+          "captain": "Palmer",
+          "vice_captain": "Jo\u00e3o Pedro",
+          "automatic_subs": [],
+          "squad": [
+            {
+              "element_id": 1,
+              "player": "Raya",
+              "position": 1,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 14
+            },
+            {
+              "element_id": 112,
+              "player": "Van Hecke",
+              "position": 2,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 8
+            },
+            {
+              "element_id": 8,
+              "player": "Calafiori",
+              "position": 3,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 6
+            },
+            {
+              "element_id": 142,
+              "player": "James",
+              "position": 4,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 1
+            },
+            {
+              "element_id": 426,
+              "player": "B.Fernandes",
+              "position": 5,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 2
+            },
+            {
+              "element_id": 368,
+              "player": "Szoboszlai",
+              "position": 6,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 3
+            },
+            {
+              "element_id": 154,
+              "player": "Palmer",
+              "position": 7,
+              "multiplier": 2,
+              "is_captain": true,
+              "is_vice_captain": false,
+              "live_points": 5
+            },
+            {
+              "element_id": 124,
+              "player": "Gro\u00df",
+              "position": 8,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 17
+            },
+            {
+              "element_id": 165,
+              "player": "Jo\u00e3o Pedro",
+              "position": 9,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": true,
+              "live_points": 12
+            },
+            {
+              "element_id": 379,
+              "player": "Isak",
+              "position": 10,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 2
+            },
+            {
+              "element_id": 346,
+              "player": "Calvert-Lewin",
+              "position": 11,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 10
+            },
+            {
+              "element_id": 564,
+              "player": "Scherpen",
+              "position": 12,
+              "multiplier": 0,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 1
+            },
+            {
+              "element_id": 427,
+              "player": "Mbeumo",
+              "position": 13,
+              "multiplier": 0,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 2
+            },
+            {
+              "element_id": 418,
+              "player": "Maguire",
+              "position": 14,
+              "multiplier": 0,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 1
+            },
+            {
+              "element_id": 304,
+              "player": "O'Shea",
+              "position": 15,
+              "multiplier": 0,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 1
             }
           ]
         },
@@ -4593,5 +4593,7 @@
         }
       ]
     }
-  ]
+  ],
+  "finalised_at": "2026-09-16T10:30:51.614198+01:00",
+  "finalisation": "post-10:30 official FPL refresh"
 }
