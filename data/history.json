@@ -1187,6 +1187,48 @@
           ]
         }
       }
+    },
+    {
+      "date": "2026-09-17",
+      "source": "automatic-overnight-snapshot",
+      "leagues": {
+        "37546": {
+          "league_name": "Sexy Pickford",
+          "leader_entry_id": 710691,
+          "leader_manager": "Tim Part",
+          "leader_team": "Partizan Idiot",
+          "leader_points": 349,
+          "leader_overall_rank": 4801,
+          "leader_count": 1,
+          "leaders": [
+            {
+              "entry_id": 710691,
+              "manager": "Tim Part",
+              "team": "Partizan Idiot",
+              "points": 349,
+              "overall_rank": 4801
+            }
+          ]
+        },
+        "118082": {
+          "league_name": "The Battle Continues...",
+          "leader_entry_id": 361353,
+          "leader_manager": "Kellen Playford",
+          "leader_team": "Jogo Bonito",
+          "leader_points": 321,
+          "leader_overall_rank": 155494,
+          "leader_count": 1,
+          "leaders": [
+            {
+              "entry_id": 361353,
+              "manager": "Kellen Playford",
+              "team": "Jogo Bonito",
+              "points": 321,
+              "overall_rank": 155494
+            }
+          ]
+        }
+      }
     }
   ],
   "days_top": {
@@ -1204,8 +1246,8 @@
         "longest_streak": 7
       },
       "710691": {
-        "days_top": 13,
-        "longest_streak": 12
+        "days_top": 14,
+        "longest_streak": 13
       },
       "182007": {
         "days_top": 2,
@@ -1214,7 +1256,7 @@
     },
     "118082": {
       "361353": {
-        "days_top": 10,
+        "days_top": 11,
         "longest_streak": 6
       },
       "597770": {
