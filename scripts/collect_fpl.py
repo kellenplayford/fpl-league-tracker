@@ -37,10 +37,11 @@ def league_rows(lid):
         if not st.get("has_next"): return meta,rows
         page+=1
 
-def build_manager(row,gw,players,live):
+def build_manager(row,gw,players,live,use_live_scoring=False):
     eid=int(row["entry"])
     hist=get_json(f"{BASE}/entry/{eid}/history/").get("current",[])
     gw_hist=next((x for x in hist if int(x.get("event",-1))==gw),{})
+    prev_hist=next((x for x in hist if int(x.get("event",-1))==gw-1),{})
     try: picks=get_json(f"{BASE}/entry/{eid}/event/{gw}/picks/")
     except Exception: picks={}
     merged={**gw_hist, **(picks.get("entry_history",{}) or {})}
@@ -54,9 +55,23 @@ def build_manager(row,gw,players,live):
         if item["is_captain"]: captain=name
         if item["is_vice_captain"]: vice=name
     value,bank=merged.get("value"),merged.get("bank")
+
+    # Classic league standings can lag during an active gameweek. For the
+    # overnight snapshot, calculate the provisional GW score from official live
+    # player points and the manager's current multipliers.
+    live_gw_points=None; live_total=None
+    if use_live_scoring and squad:
+        live_gw_points=sum((live.get(int(p["element_id"])) or 0)*(p.get("multiplier") or 0) for p in squad)
+        live_gw_points-=int(merged.get("event_transfers_cost") or 0)
+        prev_total=prev_hist.get("total_points")
+        if isinstance(prev_total,(int,float)):
+            live_total=int(prev_total)+int(live_gw_points)
+
     return {"entry_id":eid,"manager_name":row.get("player_name"),"team_name":row.get("entry_name"),
-      "league_position":row.get("rank"),"previous_league_position":row.get("last_rank"),
-      "gameweek_points":row.get("event_total"),"total_points":row.get("total"),
+      "league_position":None if use_live_scoring else row.get("rank"),
+      "previous_league_position":row.get("rank") if use_live_scoring else row.get("last_rank"),
+      "gameweek_points":live_gw_points if live_gw_points is not None else row.get("event_total"),
+      "total_points":live_total if live_total is not None else row.get("total"),
       "overall_rank":merged.get("overall_rank"),"gameweek_rank":merged.get("rank"),
       "points_on_bench":merged.get("points_on_bench"),"transfers":merged.get("event_transfers"),
       "transfer_cost":merged.get("event_transfers_cost"),
@@ -103,6 +118,7 @@ def days_top(history):
 def collect(mode, snapshot_date):
     now=datetime.now(TZ)
     b=get_json(f"{BASE}/bootstrap-static/"); gw=current_gw(b)
+    use_live_scoring=mode in ("scheduled","backfill")
     players={int(p["id"]):p for p in b.get("elements",[])}
     livep=get_json(f"{BASE}/event/{gw}/live/")
     live={int(x["id"]):(x.get("stats") or {}).get("total_points") for x in livep.get("elements",[])}
@@ -110,8 +126,17 @@ def collect(mode, snapshot_date):
     for league in LEAGUES:
         meta,rows=league_rows(league["id"]); managers=[]
         for row in rows:
-            managers.append(build_manager(row,gw,players,live)); time.sleep(.05)
-        managers.sort(key=lambda x:(x.get("league_position") or 999999,-(x.get("total_points") or 0)))
+            managers.append(build_manager(row,gw,players,live,use_live_scoring)); time.sleep(.05)
+        if use_live_scoring:
+            managers.sort(key=lambda x:(-(x.get("total_points") or 0), x.get("manager_name") or ""))
+            last_points=None; last_rank=0
+            for i,m in enumerate(managers,1):
+                pts=m.get("total_points") or 0
+                if pts!=last_points: last_rank=i
+                m["league_position"]=last_rank
+                last_points=pts
+        else:
+            managers.sort(key=lambda x:(x.get("league_position") or 999999,-(x.get("total_points") or 0)))
         snap["leagues"].append({"league_id":league["id"],"league_name":meta.get("name") or league["name"],"manager_count":len(managers),"standings":managers})
     return now,snap
 
