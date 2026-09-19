@@ -1229,6 +1229,48 @@
           ]
         }
       }
+    },
+    {
+      "date": "2026-09-18",
+      "source": "automatic-overnight-snapshot",
+      "leagues": {
+        "37546": {
+          "league_name": "Sexy Pickford",
+          "leader_entry_id": 182007,
+          "leader_manager": "David Saunders",
+          "leader_team": "Reece\u2019s Set Pieces",
+          "leader_points": 352,
+          "leader_overall_rank": 6069,
+          "leader_count": 1,
+          "leaders": [
+            {
+              "entry_id": 182007,
+              "manager": "David Saunders",
+              "team": "Reece\u2019s Set Pieces",
+              "points": 352,
+              "overall_rank": 6069
+            }
+          ]
+        },
+        "118082": {
+          "league_name": "The Battle Continues...",
+          "leader_entry_id": 361353,
+          "leader_manager": "Kellen Playford",
+          "leader_team": "Jogo Bonito",
+          "leader_points": 323,
+          "leader_overall_rank": 186754,
+          "leader_count": 1,
+          "leaders": [
+            {
+              "entry_id": 361353,
+              "manager": "Kellen Playford",
+              "team": "Jogo Bonito",
+              "points": 323,
+              "overall_rank": 186754
+            }
+          ]
+        }
+      }
     }
   ],
   "days_top": {
@@ -1250,13 +1292,13 @@
         "longest_streak": 13
       },
       "182007": {
-        "days_top": 2,
+        "days_top": 3,
         "longest_streak": 2
       }
     },
     "118082": {
       "361353": {
-        "days_top": 11,
+        "days_top": 12,
         "longest_streak": 6
       },
       "597770": {
