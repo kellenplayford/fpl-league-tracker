@@ -1,1 +1,46 @@
-<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>The Battle Continues · FPL League Tracker</title><script>location.replace("../?league=118082")</script><p>Opening The Battle Continues…</p>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090716">
+<title>The Battle Continues · FPL League Tracker</title>
+<base href="../">
+<link rel="stylesheet" href="styles.css?v=3.5.0">
+<style>
+.hero{display:block!important}
+.league-tabs{display:none!important}
+.hero-current{border:1px solid rgba(37,208,216,.45);border-radius:24px;padding:24px;background:linear-gradient(135deg,rgba(13,54,65,.9),rgba(18,16,37,.96));box-shadow:var(--shadow);margin-bottom:10px}
+.hero-current-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.hero-current-kicker{font-size:12px;font-weight:950;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.hero-current-status{font-size:clamp(42px,7vw,72px);font-weight:950;letter-spacing:-.055em;line-height:.95;margin-top:7px;text-transform:uppercase;color:var(--cyan)}
+.hero-current.complete .hero-current-status{color:var(--green)}.hero-current.finalising .hero-current-status{color:#ffd166}.hero-current.waiting .hero-current-status{color:var(--text)}
+.hero-current-dot{width:16px;height:16px;border-radius:50%;background:var(--cyan);margin-top:28px;box-shadow:0 0 0 8px rgba(37,208,216,.12)}
+.hero-current.complete .hero-current-dot{background:var(--green)}.hero-current.finalising .hero-current-dot{background:#ffd166}
+.hero-current-matches{font-size:22px;font-weight:900;margin-top:22px}.hero-current-sub{font-size:13px;color:var(--muted);margin-top:4px}
+.hero-mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.hero-mini{border:1px solid var(--line);border-radius:18px;padding:17px;background:linear-gradient(180deg,rgba(24,21,47,.92),rgba(18,16,37,.96));box-shadow:var(--shadow);min-height:116px}
+.hero-mini-value{font-size:23px;font-weight:950;margin-top:8px}.hero-mini-stat{font-size:14px;font-weight:900;color:var(--cyan);margin-top:6px}
+.recap-section{margin-top:26px}.recap-shell{border:1px solid rgba(37,208,216,.42);border-radius:22px;padding:18px;background:linear-gradient(135deg,rgba(10,48,59,.56),rgba(18,16,37,.96));box-shadow:var(--shadow)}
+.recap-head{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin-bottom:12px}.recap-note{font-size:12px;color:var(--muted)}.recap-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.recap-card{border:1px solid var(--line);border-radius:16px;padding:15px;background:rgba(18,16,37,.82)}.recap-icon{font-size:18px;color:var(--cyan);margin-bottom:8px}.recap-holder{font-size:20px;font-weight:950;margin-top:7px}.recap-stat{font-size:14px;font-weight:900;color:var(--cyan);margin-top:5px}
+.standings-snapshot{font-size:12px;color:var(--muted);margin-top:5px}.progress-chart{border:1px solid var(--line);border-radius:18px;padding:14px;background:rgba(18,16,37,.72);overflow:hidden}.progress-chart svg{width:100%;height:auto;display:block}
+.chart-grid{stroke:rgba(255,255,255,.08);stroke-width:1}.chart-axis{fill:var(--muted);font-size:11px}.chart-legend{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:10px;font-size:12px;color:var(--muted)}.chart-legend span{display:flex;align-items:center;gap:6px}.chart-legend i{width:9px;height:9px;border-radius:50%;display:inline-block}
+@media(max-width:980px){.recap-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:680px){.hero-current{padding:18px}.hero-current-status{font-size:48px}.hero-mini-grid{grid-template-columns:repeat(2,1fr);gap:7px}.hero-mini:first-child{grid-column:1/-1}.recap-grid{grid-template-columns:repeat(2,1fr);gap:7px}}
+</style>
+</head>
+<body data-league="118082">
+<main class="shell">
+<header class="site-header"><div><div class="eyebrow">2026/27 season</div><h1>The Battle Continues</h1><p class="intro">League records, weekly winners, bragging rights, and increasingly unnecessary statistics.</p></div><div class="status" id="updated">Loading latest snapshot…</div></header>
+<nav id="tabs" class="league-tabs" aria-label="Choose league"></nav>
+<section class="hero" id="hero"></section>
+<section class="recap-section" id="gwRecapSection"><div class="recap-shell" id="gwRecap"></div></section>
+<section class="section"><div class="section-head"><div><div class="eyebrow">Hall of fame</div><h2>League record book</h2></div><div class="section-note">Completed gameweeks only</div></div><div id="headlineRecords" class="headline-records"></div><div id="otherRecords" class="other-records"></div></section>
+<section class="section lower-stats"><div><div class="section-head"><div><div class="eyebrow">Week by week</div><h2>Gameweek winners</h2></div></div><div id="gwWinners"></div></div><div><div class="section-head"><div><div class="eyebrow">Bragging rights</div><h2>Calendar days at No. 1</h2></div></div><div id="daysTop"></div></div></section>
+<section class="section standings-section"><div class="section-head"><div><div class="eyebrow">Reference</div><h2>Current standings</h2></div><div class="section-note">Select a manager for squad, chips, and season stats</div></div><div id="standings"></div></section>
+<footer>The Battle Continues · FPL League Tracker</footer>
+</main>
+<script>window.FPL_FIXED_LEAGUE="118082";</script>
+<script src="app.js?v=3.6.1"></script>
+<script src="standalone-league-patch.js?v=3.6.1"></script>
+<script src="launch-updates.js?v=3.6.1"></script>
+</body></html>
