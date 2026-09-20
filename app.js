@@ -3,7 +3,7 @@ const STANDALONE_LEAGUE=window.FPL_FIXED_LEAGUE||(
   location.pathname.includes("/sexy-pickford/")?"37546":
   location.pathname.includes("/the-battle-continues/")?"118082":null
 );
-let active=STANDALONE_LEAGUE||"37546",latest={},history={days:[]},snapshots=[],fixtureProgress=null,liveFixtures=[],playerTeams=new Map();
+let active=STANDALONE_LEAGUE||"37546",latest={},history={days:[]},snapshots=[],fixtureProgress=null,liveFixtures=[],playerTeams=new Map(),livePlayerPoints=new Map(),liveDisplay=false;
 
 const fmt=n=>(n===null||n===undefined||n==="")?"—":Number(n).toLocaleString("en-GB");
 const esc=s=>String(s??"—").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
@@ -289,8 +289,38 @@ function allRecords(){
   ];
 }
 
+function displayLeague(){
+  const base=leagueData();
+  if(!base||!liveDisplay||!livePlayerPoints.size)return base;
+  const standings=(base.standings||[]).map(m=>{
+    const squad=(m.squad||[]).map(p=>({...p,live_points:livePlayerPoints.has(String(p.element_id))?livePlayerPoints.get(String(p.element_id)):p.live_points}));
+    const liveGw=squad.reduce((sum,p)=>sum+(+p.live_points||0)*(+p.multiplier||0),0)-(+m.transfer_cost||0);
+    const snapshotGw=+m.gameweek_points||0;
+    return{...m,squad,gameweek_points:liveGw,total_points:(+m.total_points||0)-snapshotGw+liveGw,_live:true};
+  }).sort((a,b)=>(+b.total_points||0)-(+a.total_points||0)||(+b.gameweek_points||0)-(+a.gameweek_points||0));
+  let lastScore=null,lastRank=0;
+  standings.forEach((m,i)=>{if(lastScore===null||+m.total_points!==lastScore){lastRank=i+1;lastScore=+m.total_points}m.league_position=lastRank});
+  return{...base,standings};
+}
+function displayManager(m){
+  if(!m||!liveDisplay||!livePlayerPoints.size)return m;
+  return displayLeague()?.standings?.find(x=>String(x.entry_id)===String(m.entry_id))||m;
+}
+async function fetchLivePoints(gw){
+  if(!gw)return false;
+  try{
+    const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),3500);
+    const r=await fetch(`https://fantasy.premierleague.com/api/event/${gw}/live/`,{signal:controller.signal});clearTimeout(timer);
+    if(!r.ok)return false;
+    const data=await r.json();
+    if(!Array.isArray(data?.elements)||!data.elements.length)return false;
+    livePlayerPoints=new Map(data.elements.map(x=>[String(x.id),+x.stats?.total_points||0]));
+    return true;
+  }catch(e){return false}
+}
+
 function leagueAvg(){
-  const r=leagueData()?.standings||[];
+  const r=(liveDisplay?displayLeague():leagueData())?.standings||[];
   return r.length?r.reduce((a,x)=>a+(+x.gameweek_points||0),0)/r.length:null;
 }
 
@@ -351,6 +381,7 @@ function remainingLabel(m){
 }
 
 function squadHTML(m){
+  m=displayManager(m);
   const p=(m.squad||[]).slice().sort((a,b)=>+a.position-+b.position);
   if(!p.length)return`<div class="empty">Squad unavailable.</div>`;
   const card=x=>{
@@ -393,7 +424,7 @@ function detail(m,mobile=false){
   <div class="detail-section"><div class="detail-title">Chips used</div><div class="chip-history">
     ${ch.length?ch.map(c=>`<span class="used-chip">${esc(chipName(c.chip))} · GW${c.gw}</span>`).join(""):`<span class="team-name">No chips recorded yet</span>`}
   </div></div>
-  <div class="detail-section"><div class="detail-title">Current squad</div>${squadHTML(m)}</div>`;
+  <div class="detail-section"><div class="detail-title">Current squad${liveDisplay?` · <span style="color:var(--cyan);font-size:10px;font-weight:850">Live FPL points · provisional</span>`:""}</div>${squadHTML(m)}</div>`;
 }
 
 function tabs(){
@@ -504,7 +535,7 @@ function ordinal(n){
 }
 
 function hero(){
-  const l=leagueData(),standings=l?.standings||[],lead=standings[0],avg=leagueAvg(),fp=fixtureProgress,managerCount=standings.length||l?.manager_count||0;
+  const l=liveDisplay?displayLeague():leagueData(),standings=l?.standings||[],lead=standings[0],avg=leagueAvg(),fp=fixtureProgress,managerCount=standings.length||l?.manager_count||0;
   const topPoints=lead?.total_points;
   const leaders=topPoints==null?[]:standings.filter(m=>+m.total_points===+topPoints);
   const leaderNames=leaders.length?compactNames(leaders.map(m=>firstName(m.manager_name))):"—";
@@ -627,7 +658,7 @@ function renderDays(){
 }
 
 function standings(){
-  const rows=leagueData()?.standings||[];
+  const rows=(liveDisplay?displayLeague():leagueData())?.standings||[];
   const badge=m=>m.active_chip?`<span class="chip-badge">${esc(chipName(m.active_chip))}</span>`:"";
 
   const desk=`<div class="desktop-table"><table><thead><tr><th>Pos</th><th>Manager</th><th>GW</th><th>Total</th><th>Move</th><th>Overall</th></tr></thead><tbody>${rows.map((m,i)=>{
@@ -652,7 +683,7 @@ function standings(){
     </article>`;
   }).join("")}</div>`;
 
-  document.querySelector("#standings").innerHTML=desk+mob;
+  document.querySelector("#standings").innerHTML=(liveDisplay?`<div style="color:var(--muted);font-size:11px;margin:0 0 10px">Live FPL standings · provisional. Records and Hall of Fame update after finalisation.</div>`:"")+desk+mob;
 
   document.querySelectorAll("[data-d]").forEach(r=>r.onclick=()=>{
     const id=r.dataset.d,row=document.querySelector(`#d-${id}`),box=row.querySelector("[data-detail]");
@@ -742,6 +773,7 @@ async function fixture(){
     if(next.started>0||next.ended>0){
       fixtureProgress=next;
       liveFixtures=nextFixtures;
+      liveDisplay=false;
       hero();
       renderRecap();
       standings();
@@ -754,6 +786,7 @@ async function fixture(){
 
   fixtureProgress=summariseFixtures(currentFixtures,snapshotGw);
   liveFixtures=currentFixtures;
+  liveDisplay=fixtureProgress.status!=="Complete"&&fixtureProgress.started>0&&await fetchLivePoints(snapshotGw);
   hero();
   renderRecap();
   standings();
