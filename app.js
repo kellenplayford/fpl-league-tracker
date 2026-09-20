@@ -786,7 +786,7 @@ async function fixture(){
 
   fixtureProgress=summariseFixtures(currentFixtures,snapshotGw);
   liveFixtures=currentFixtures;
-  liveDisplay=fixtureProgress.status!=="Complete"&&fixtureProgress.started>0&&await fetchLivePoints(snapshotGw);
+  liveDisplay=fixtureProgress.started>0&&await fetchLivePoints(snapshotGw);
   hero();
   renderRecap();
   standings();
