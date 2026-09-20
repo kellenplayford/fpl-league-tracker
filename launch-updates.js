@@ -1,6 +1,6 @@
-(()=>{const P={"37546":"sexy-pickford","118082":"battle-continues"},root=location.pathname.match(/\/(sexy-pickford|battle-continues)\//)?"../":"";
+(()=>{const P={"37546":"sexy-pickford","118082":"the-battle-continues"},root=location.pathname.match(/\/(sexy-pickford|the-battle-continues)\//)?"../":"";
 const j=async p=>{let r=await fetch(p+(p.includes("?")?"&":"?")+"v="+Date.now());if(!r.ok)throw Error(p);return r.json()};
-const wanted=()=>new URLSearchParams(location.search).get("league")||(location.pathname.includes("battle-continues")?"118082":location.pathname.includes("sexy-pickford")?"37546":null);
+const wanted=()=>new URLSearchParams(location.search).get("league")||(location.pathname.includes("the-battle-continues")?"118082":location.pathname.includes("sexy-pickford")?"37546":null);
 const active=()=>document.querySelector(".tab.active")?.dataset.id||wanted()||"37546";
 async function stamp(){try{let d=await j(root+"data/latest.json"),h=document.querySelector(".standings-section .section-head");if(!h)return;let e=document.querySelector("#standingsSnapshotNote");if(!e){e=document.createElement("div");e.id="standingsSnapshotNote";e.className="standings-snapshot";h.appendChild(e)}e.textContent="Standings snapshot: "+new Date(d.generated_at).toLocaleString("en-GB",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})+" · Updates daily"}catch(e){}}
 async function chart(){let host=document.querySelector("#seasonProgressChart");if(!host)return;try{let m=await j(root+"data/manifest.json"),ss=(await Promise.all((m.official_snapshots||[]).map(p=>j(root+p).catch(()=>null)))).filter(Boolean),lid=active(),g=new Map;
