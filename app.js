@@ -1,5 +1,9 @@
 const LEAGUES=[{id:"37546",name:"Sexy Pickford"},{id:"118082",name:"The Battle Continues"}];
-let active="37546",latest={},history={days:[]},snapshots=[],fixtureProgress=null,liveFixtures=[],playerTeams=new Map();
+const STANDALONE_LEAGUE=window.FPL_FIXED_LEAGUE||(
+  location.pathname.includes("/sexy-pickford/")?"37546":
+  location.pathname.includes("/the-battle-continues/")?"118082":null
+);
+let active=STANDALONE_LEAGUE||"37546",latest={},history={days:[]},snapshots=[],fixtureProgress=null,liveFixtures=[],playerTeams=new Map();
 
 const fmt=n=>(n===null||n===undefined||n==="")?"—":Number(n).toLocaleString("en-GB");
 const esc=s=>String(s??"—").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
@@ -372,6 +376,16 @@ function detail(m,mobile=false){
 
 function tabs(){
   const el=document.querySelector("#tabs");
+  if(!el)return;
+  if(STANDALONE_LEAGUE){
+    active=STANDALONE_LEAGUE;
+    el.innerHTML="";
+    el.style.display="none";
+    el.setAttribute("hidden","");
+    return;
+  }
+  el.removeAttribute("hidden");
+  el.style.display="";
   el.innerHTML=LEAGUES.map(l=>`<button class="tab ${l.id===active?"active":""}" data-id="${l.id}">${esc(l.name)}</button>`).join("");
   el.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{active=b.dataset.id;render()});
 }
