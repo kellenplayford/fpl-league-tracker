@@ -115,6 +115,10 @@ def days_top(history):
         out.setdefault(lid,{})[e]={"days_top":n,"longest_streak":streaks[(lid,e)]["longest"]}
     return out
 
+def gameweek_fixtures_finished(gw):
+    fixtures=get_json(f"{BASE}/fixtures/?event={gw}")
+    return bool(fixtures) and all(f.get("finished") is True for f in fixtures)
+
 def collect(mode, snapshot_date):
     now=datetime.now(TZ)
     b=get_json(f"{BASE}/bootstrap-static/"); gw=current_gw(b)
@@ -178,6 +182,12 @@ def main():
     args=ap.parse_args(); now=datetime.now(TZ)
     snapshot_date=now.date()-timedelta(days=1) if args.mode in ("scheduled","backfill","finalise") else now.date()
     target_path=SNAPSHOTS/f"{snapshot_date.isoformat()}.json"
+    if args.mode=="finalise":
+        b=get_json(f"{BASE}/bootstrap-static/")
+        gw=current_gw(b)
+        if not gameweek_fixtures_finished(gw):
+            print(f"GW{gw} is still in progress; 10:30 finalisation skipped.")
+            return 0
     if args.mode=="scheduled" and target_path.exists():
         print(f"Snapshot already exists for {snapshot_date.isoformat()}; backup run not needed."); return 0
     now,snap=collect(args.mode,snapshot_date)
