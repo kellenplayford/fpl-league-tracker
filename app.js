@@ -164,6 +164,7 @@ function allRecords(){
 
   const tcTotals=new Map(),bbTotals=new Map(),fhTotals=new Map(),captainTotals=new Map();
   const benchTotals=new Map(),transferTotals=new Map(),hitTotals=new Map();
+  const chipUses={"3xc":new Map(),bboost:new Map(),freehit:new Map()};
 
   for(const r of rows){
     const id=String(r.entry_id);
@@ -179,6 +180,7 @@ function allRecords(){
       if(v!=null){
         const old=tcTotals.get(id)||{value:0,row:r};
         old.value+=v;old.row=r;tcTotals.set(id,old);
+        const uses=chipUses["3xc"].get(id)||[];uses.push({value:v,row:r});chipUses["3xc"].set(id,uses);
       }
     }
 
@@ -186,12 +188,14 @@ function allRecords(){
       const v=benchRaw(r);
       const old=bbTotals.get(id)||{value:0,row:r};
       old.value+=v;old.row=r;bbTotals.set(id,old);
+      const uses=chipUses.bboost.get(id)||[];uses.push({value:v,row:r});chipUses.bboost.set(id,uses);
     }
 
     if(r.active_chip==="freehit"){
       const v=(+r.gameweek_points||0)-(+r.transfer_cost||0);
       const old=fhTotals.get(id)||{value:0,row:r};
       old.value+=v;old.row=r;fhTotals.set(id,old);
+      const uses=chipUses.freehit.get(id)||[];uses.push({value:v,row:r});chipUses.freehit.set(id,uses);
     }
 
     if(r.active_chip!=="bboost"){
@@ -209,23 +213,41 @@ function allRecords(){
     oldHit.value+=hit;oldHit.row=r;hitTotals.set(id,oldHit);
   }
 
-  const combinedTC=tiedMapLeader(tcTotals);
-  const combinedBB=tiedMapLeader(bbTotals);
-  const combinedFH=tiedMapLeader(fhTotals);
+  const combinedEligible=chip=>{
+    const m=new Map();
+    for(const [id,uses] of chipUses[chip])if(uses.length>=2){
+      const firstTwo=uses.slice(0,2),value=firstTwo.reduce((a,x)=>a+x.value,0);
+      m.set(id,{value,row:firstTwo[firstTwo.length-1].row,uses:firstTwo});
+    }
+    return m;
+  };
+  const combinedTC=tiedMapLeader(combinedEligible("3xc"));
+  const combinedBB=tiedMapLeader(combinedEligible("bboost"));
+  const combinedFH=tiedMapLeader(combinedEligible("freehit"));
   const captainBest=tiedMapLeader(captainTotals);
   const seasonBench=tiedMapLeader(benchTotals);
   const transferBest=tiedMapLeader(transferTotals);
   const hitBest=tiedMapLeader(hitTotals);
 
-  const combinedTCContext=()=>{
-    if(!combinedTC)return"No completed use yet";
-    const ids=new Set(combinedTC.rows.map(r=>String(r.entry_id)));
-    const uses=rows.filter(r=>ids.has(String(r.entry_id))&&r.active_chip==="3xc");
-    const gws=[...new Set(uses.map(r=>+r.gameweek).filter(Boolean))].sort((a,b)=>a-b);
-    const captains=[...new Set(uses.map(r=>captainName(r)).filter(x=>x&&x!=="—"))];
-    const gwText=gws.length===1?`GW${gws[0]}`:gws.length?gws.map(g=>`GW${g}`).join(" / "):"";
-    const capText=captains.length===1?captains[0]:captains.length?`${captains.length} different captains`:"";
-    return[gwText,capText].filter(Boolean).join(" · ")||"Season chip total";
+  const managerIds=new Set((leagueData()?.standings||[]).map(r=>String(r.entry_id)));
+  const remainingFirst=chip=>[...managerIds].filter(id=>(chipUses[chip].get(id)||[]).length===0).length;
+  const remainingBoth=chip=>[...managerIds].filter(id=>(chipUses[chip].get(id)||[]).length<2).length;
+  const singleChipContext=(rec,chip,label)=>{
+    const base=rec?(chip==="3xc"?captainRecordContext(rec):tiedContext(rec.rows)):"No completed use yet";
+    const n=remainingFirst(chip);
+    return `${base} · ${n?`${n} manager${n===1?"":"s"} still to play ${label}`:`All managers have played ${label}`}`;
+  };
+  const combinedChipStat=(rec,chip,unit)=>{
+    if(!rec)return"—";
+    const ids=[...new Set(rec.rows.map(r=>String(r.entry_id)))];
+    const breakdowns=ids.map(id=>(chipUses[chip].get(id)||[]).slice(0,2).map(x=>x.value));
+    const same=breakdowns.length&&breakdowns.every(a=>a.length===2&&a.join("+")===breakdowns[0].join("+"));
+    return same?`${breakdowns[0].map(fmt).join(" + ")} = ${fmt(rec.value)} ${unit}`:`${fmt(rec.value)} ${unit}`;
+  };
+  const combinedChipContext=(rec,chip,label)=>{
+    const n=remainingBoth(chip);
+    const status=n?`${n} manager${n===1?"":"s"} yet to complete both ${label}`:`All managers have completed both ${label}`;
+    return rec?status:`No manager has used both ${label} · ${status}`;
   };
 
   const marginHolder=gs=>compactNames(gs.flatMap(g=>g.winners.map(w=>firstName(w.manager_name))));
@@ -241,14 +263,14 @@ function allRecords(){
     {label:"Biggest GW margin",holder:bigGws.length?marginHolder(bigGws):null,stat:bigGws.length?`${fmt(bigMargin)} pts`:"—",context:bigGws.length?marginContext(bigGws):"No completed GW yet"},
     {label:"Smallest GW margin",holder:smallGws.length?marginHolder(smallGws):null,stat:smallGws.length?`${fmt(smallMargin)} pt${smallMargin===1?"":"s"}`:"—",context:smallGws.length?marginContext(smallGws):"No completed GW yet"},
 
-    {label:"Best Single Triple Captain",holder:singleTC?tiedNames(singleTC.rows):null,stat:singleTC?`${fmt(singleTC.value)} captain pts`:"—",context:singleTC?captainRecordContext(singleTC):"No completed use yet"},
-    {label:"Best Combined TC Score",holder:combinedTC?tiedNames(combinedTC.rows):null,stat:combinedTC?`${fmt(combinedTC.value)} captain pts`:"—",context:combinedTCContext()},
+    {label:"Best Single Triple Captain",holder:singleTC?tiedNames(singleTC.rows):null,stat:singleTC?`${fmt(singleTC.value)} captain pts`:"—",context:singleChipContext(singleTC,"3xc","TC")},
+    {label:"Best Combined TC Score",holder:combinedTC?tiedNames(combinedTC.rows):null,stat:combinedChipStat(combinedTC,"3xc","captain pts"),context:combinedChipContext(combinedTC,"3xc","TCs")},
 
-    {label:"Best Single Bench Boost",holder:singleBB?tiedNames(singleBB.rows):null,stat:singleBB?`${fmt(singleBB.value)} bench pts`:"—",context:singleBB?tiedContext(singleBB.rows):"No completed use yet"},
-    {label:"Best Combined Bench Boost",holder:combinedBB?tiedNames(combinedBB.rows):null,stat:combinedBB?`${fmt(combinedBB.value)} bench pts`:"—",context:combinedBB&&combinedBB.rows.length>1?"Joint leaders":combinedBB?"Season chip total":"No completed use yet"},
+    {label:"Best Single Bench Boost",holder:singleBB?tiedNames(singleBB.rows):null,stat:singleBB?`${fmt(singleBB.value)} bench pts`:"—",context:singleChipContext(singleBB,"bboost","Bench Boost")},
+    {label:"Best Combined Bench Boost",holder:combinedBB?tiedNames(combinedBB.rows):null,stat:combinedChipStat(combinedBB,"bboost","bench pts"),context:combinedChipContext(combinedBB,"bboost","Bench Boosts")},
 
-    {label:"Best Single Free Hit",holder:singleFH?tiedNames(singleFH.rows):null,stat:singleFH?`${fmt(singleFH.value)} pts`:"—",context:singleFH?tiedContext(singleFH.rows):"No completed use yet"},
-    {label:"Best Combined Free Hit Score",holder:combinedFH?tiedNames(combinedFH.rows):null,stat:combinedFH?`${fmt(combinedFH.value)} pts`:"—",context:combinedFH&&combinedFH.rows.length>1?"Joint leaders":combinedFH?"Season chip total":"No completed use yet"},
+    {label:"Best Single Free Hit",holder:singleFH?tiedNames(singleFH.rows):null,stat:singleFH?`${fmt(singleFH.value)} pts`:"—",context:singleChipContext(singleFH,"freehit","Free Hit")},
+    {label:"Best Combined Free Hit Score",holder:combinedFH?tiedNames(combinedFH.rows):null,stat:combinedChipStat(combinedFH,"freehit","pts"),context:combinedChipContext(combinedFH,"freehit","Free Hits")},
 
     {label:"Best Single Captain Score",holder:singleCaptain?tiedNames(singleCaptain.rows):null,stat:singleCaptain?`${fmt(singleCaptain.value)} pts`:"—",context:singleCaptain?captainRecordContext(singleCaptain):"No completed GW yet"},
     {label:"Most Combined Captain Points",holder:captainBest?tiedNames(captainBest.rows):null,stat:captainBest?`${fmt(captainBest.value)} pts`:"—",context:captainBest&&captainBest.rows.length>1?"Joint leaders":captainBest?"Season total":"No completed GW yet"},
