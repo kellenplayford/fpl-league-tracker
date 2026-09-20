@@ -310,7 +310,7 @@ async function fetchLivePoints(gw){
   if(!gw)return false;
   try{
     const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),3500);
-    const r=await fetch(`https://fantasy.premierleague.com/api/event/${gw}/live/`,{signal:controller.signal});clearTimeout(timer);
+    const r=await fetch(`https://fpl-scheduler.kellenplayford.workers.dev/live?event=${gw}`,{signal:controller.signal});clearTimeout(timer);
     if(!r.ok)return false;
     const data=await r.json();
     if(!Array.isArray(data?.elements)||!data.elements.length)return false;
