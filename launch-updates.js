@@ -106,19 +106,35 @@ async function managerPositionData(entryId){
   }
   return{pts,leagueSize:Math.max(leagueSize,...pts.map(x=>x.pos),1)};
 }
+function ordinalPos(n){
+  n=+n;let v=n%100,s=(v>=11&&v<=13)?"th":({1:"st",2:"nd",3:"rd"}[n%10]||"th");return `${n}${s}`;
+}
 function positionChartSvg(data){
-  let {pts,leagueSize}=data,W=1000,H=150,L=38,R=18,T=18,B=30,orange="#f6a85f",grid="rgba(255,255,255,.08)",muted="#aaa5bd",X=gw=>L+(gw-1)/37*(W-L-R),Y=pos=>T+(pos-1)/Math.max(1,leagueSize-1)*(H-T-B);
-  let svg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="League position from gameweek 1 to gameweek 38" style="width:100%;height:auto;display:block">`;
-  let yTicks=[1,Math.max(1,Math.round((leagueSize+1)/2)),leagueSize].filter((v,i,a)=>a.indexOf(v)===i);
+  let {pts,leagueSize}=data,mobile=window.matchMedia("(max-width:680px)").matches,W=1000,H=mobile?190:150,L=mobile?42:38,R=18,T=mobile?24:18,B=30,orange="#f6a85f",grid="rgba(255,255,255,.08)",muted="#aaa5bd",X=gw=>L+(gw-1)/37*(W-L-R),Y=pos=>T+(pos-1)/Math.max(1,leagueSize-1)*(H-T-B);
+  let svg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="League position from gameweek 1 to gameweek 38" style="width:100%;height:auto;display:block;overflow:visible">`;
+  let yTicks=(mobile?[0,.25,.5,.75,1].map(f=>1+Math.round((leagueSize-1)*f)):[1,Math.max(1,Math.round((leagueSize+1)/2)),leagueSize]).filter((v,i,a)=>a.indexOf(v)===i);
   for(let y of yTicks)svg+=`<line x1="${L}" y1="${Y(y)}" x2="${W-R}" y2="${Y(y)}" stroke="${grid}" stroke-width="1"/><text x="${L-9}" y="${Y(y)+4}" text-anchor="end" fill="${muted}" font-size="10">${y}</text>`;
   for(let gw=1;gw<=38;gw++)svg+=`<line x1="${X(gw)}" y1="${T}" x2="${X(gw)}" y2="${H-B}" stroke="rgba(255,255,255,${gw%5===0||gw===1||gw===38?'.055':'.025'})" stroke-width="1"/>`;
   let labels=[1,5,10,15,20,25,30,35,38];for(let gw of labels)svg+=`<text x="${X(gw)}" y="${H-10}" text-anchor="middle" fill="${muted}" font-size="10">${gw}</text>`;
   if(pts.length){
     svg+=`<polyline points="${pts.map(p=>`${X(p.gw)},${Y(p.pos)}`).join(" ")}" fill="none" stroke="${orange}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
-    for(let p of pts)svg+=`<circle cx="${X(p.gw)}" cy="${Y(p.pos)}" r="3.5" fill="${orange}"/>`;
-    let p=pts.at(-1);svg+=`<circle cx="${X(p.gw)}" cy="${Y(p.pos)}" r="6" fill="none" stroke="${orange}" stroke-width="2"/><text x="${Math.min(W-R-2,X(p.gw)+10)}" y="${Math.max(12,Y(p.pos)-9)}" fill="${orange}" font-size="10" font-weight="900">GW${p.gw} · ${p.pos}${p.pos===1?'st':p.pos===2?'nd':p.pos===3?'rd':'th'}</text>`;
+    for(let p of pts)svg+=`<g class="manager-pos-point" data-gw="${p.gw}" data-pos="${p.pos}" tabindex="0" role="button" aria-label="Gameweek ${p.gw}, position ${ordinalPos(p.pos)}"><circle class="manager-pos-dot" cx="${X(p.gw)}" cy="${Y(p.pos)}" r="3.8" fill="${orange}"/><circle cx="${X(p.gw)}" cy="${Y(p.pos)}" r="16" fill="transparent" style="cursor:pointer;pointer-events:all"/></g>`;
+    let p=pts.at(-1);svg+=`<circle cx="${X(p.gw)}" cy="${Y(p.pos)}" r="6.5" fill="none" stroke="${orange}" stroke-width="2" pointer-events="none"/><text x="${Math.min(W-R-2,X(p.gw)+10)}" y="${Math.max(12,Y(p.pos)-9)}" fill="${orange}" font-size="10" font-weight="900" pointer-events="none">GW${p.gw} · ${ordinalPos(p.pos)}</text>`;
   }
   return svg+"</svg>";
+}
+function bindPositionChart(host){
+  if(!host||host.dataset.positionInteractive)return;host.dataset.positionInteractive="1";host.style.position="relative";
+  let tip=document.createElement("div");tip.className="manager-position-tooltip";tip.style.cssText="position:absolute;z-index:5;display:none;pointer-events:none;background:#242039;border:1px solid rgba(246,168,95,.7);color:#fff;border-radius:8px;padding:6px 8px;font-size:10px;font-weight:850;white-space:nowrap;box-shadow:0 5px 16px rgba(0,0,0,.28)";host.appendChild(tip);
+  let locked=null;
+  const hide=()=>{if(!locked)tip.style.display="none"};
+  const show=(g,lock=false)=>{let dot=g.querySelector(".manager-pos-dot");if(!dot)return;if(lock)locked=g;let dr=dot.getBoundingClientRect(),hr=host.getBoundingClientRect(),x=dr.left+dr.width/2-hr.left,y=dr.top+dr.height/2-hr.top,below=y<34;tip.textContent=`GW${g.dataset.gw} · ${ordinalPos(g.dataset.pos)}`;tip.style.display="block";let pad=42;tip.style.left=`${Math.max(pad,Math.min(hr.width-pad,x))}px`;tip.style.top=`${below?y+10:y-10}px`;tip.style.transform=below?"translate(-50%,0)":"translate(-50%,-100%)";};
+  host.querySelectorAll(".manager-pos-point").forEach(g=>{
+    g.addEventListener("mouseenter",()=>show(g));g.addEventListener("mouseleave",hide);
+    g.addEventListener("focus",()=>show(g));g.addEventListener("blur",()=>{if(locked!==g)hide()});
+    g.addEventListener("click",e=>{e.preventDefault();e.stopPropagation();if(locked===g){locked=null;tip.style.display="none"}else show(g,true)});
+  });
+  host.addEventListener("click",e=>{if(!e.target.closest(".manager-pos-point")){locked=null;tip.style.display="none"}});
 }
 async function addManagerCharts(){
   let boxes=[...document.querySelectorAll("[data-detail],[data-mobile-detail]")].filter(b=>b.innerHTML.trim());
@@ -126,9 +142,9 @@ async function addManagerCharts(){
     if(box.querySelector(".manager-season-position"))continue;
     let id=box.dataset.detail||box.dataset.mobileDetail;if(!id)continue;
     let wrap=document.createElement("div");wrap.className="manager-season-position";wrap.style.cssText="margin-top:18px;border:1px solid var(--line);border-radius:14px;padding:12px 12px 6px;background:rgba(18,16,37,.58);overflow:hidden";
-    wrap.innerHTML='<div style="display:flex;justify-content:space-between;gap:12px;align-items:baseline;margin-bottom:4px"><div><div style="color:#f6a85f;font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase">Season position</div><div style="color:var(--muted);font-size:11px;margin-top:2px">League position after each completed gameweek</div></div><div style="color:var(--muted);font-size:10px">GW1–GW38</div></div><div class="manager-season-position-svg" style="min-height:92px"></div>';
+    wrap.innerHTML='<div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline;margin-bottom:4px"><div><div style="color:#f6a85f;font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase">Season position</div><div style="color:var(--muted);font-size:11px;margin-top:2px">League position after each completed gameweek</div></div><div style="color:var(--muted);font-size:10px;white-space:nowrap;flex:0 0 auto">GW1–GW38</div></div><div class="manager-season-position-svg" style="min-height:92px"></div>';
     box.appendChild(wrap);
-    try{let data=await managerPositionData(id);wrap.querySelector(".manager-season-position-svg").innerHTML=data.pts.length?positionChartSvg(data):'<div class="empty" style="padding:12px">No completed gameweek history yet.</div>'}catch(e){wrap.remove()}
+    try{let data=await managerPositionData(id),host=wrap.querySelector(".manager-season-position-svg");host.innerHTML=data.pts.length?positionChartSvg(data):'<div class="empty" style="padding:12px">No completed gameweek history yet.</div>';if(data.pts.length)bindPositionChart(host)}catch(e){wrap.remove()}
   }
 }
 function decorateDetails(){updatePointsLabels();addManagerCharts()}
