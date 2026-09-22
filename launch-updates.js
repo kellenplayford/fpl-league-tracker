@@ -11,5 +11,38 @@ let top=[...ms.values()].sort((a,b)=>(a.pts.at(-1)?.pos||999)-(b.pts.at(-1)?.pos
 for(let gw of gs)svg+=`<text x="${X(gw)}" y="${H-16}" text-anchor="middle" class="chart-axis">GW${gw}</text>`;for(let p=1;p<=max;p++)svg+=`<line x1="${L}" y1="${Y(p)}" x2="${W-R}" y2="${Y(p)}" class="chart-grid"/><text x="${L-12}" y="${Y(p)+4}" text-anchor="end" class="chart-axis">${p}</text>`;
 let endGroups=new Map;top.forEach((x,i)=>{let p=x.pts.at(-1),k=p?.pos;if(k==null)return;(endGroups.get(k)||endGroups.set(k,[]).get(k)).push(i)});let labelOffset=new Map;for(let ids of endGroups.values())ids.forEach((id,j)=>labelOffset.set(id,(j-(ids.length-1)/2)*11));
 top.forEach((x,i)=>{svg+=`<polyline points="${x.pts.map(p=>X(p.gw)+","+Y(p.pos)).join(" ")}" fill="none" stroke="${c[i]}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;x.pts.forEach(p=>svg+=`<circle cx="${X(p.gw)}" cy="${Y(p.pos)}" r="4" fill="${c[i]}"/>`);let p=x.pts.at(-1);if(p)svg+=`<text x="${X(p.gw)+9}" y="${Y(p.pos)+4+(labelOffset.get(i)||0)}" fill="${c[i]}" font-size="10" font-weight="900" paint-order="stroke" stroke="#121025" stroke-width="3" stroke-linejoin="round">${initials(x.name)}</text>`});svg+="</svg>";host.innerHTML=svg+`<div class="chart-legend">${top.map((x,i)=>`<span><i style="background:${c[i]}"></i>${x.name}</span>`).join("")}</div>`}catch(e){host.innerHTML='<div class="empty">Unable to load season progress.</div>'}}
+
+const ukDate=v=>{let ps=new Intl.DateTimeFormat("en-GB",{timeZone:"Europe/London",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date(v)),o={};ps.forEach(x=>o[x.type]=x.value);return `${o.year}-${o.month}-${o.day}`};
+const moveCache=new Map;
+async function matchdayMoves(){
+  let lid=active(),latest=await j(root+"data/latest.json"),gw=+latest.gameweek,key=`${lid}:${latest.snapshot_date}:${gw}`;
+  if(moveCache.has(key))return moveCache.get(key);
+  let work=(async()=>{
+    let [m,fixtures]=await Promise.all([
+      j(root+"data/manifest.json"),
+      j(`https://fpl-scheduler.kellenplayford.workers.dev/fixtures?event=${gw}`).catch(()=>null)
+    ]);
+    if(!Array.isArray(fixtures)||!fixtures.length)return null;
+    let fixtureDates=[...new Set(fixtures.map(f=>f.kickoff_time?ukDate(f.kickoff_time):null).filter(Boolean))].sort(),cut=latest.snapshot_date;
+    let targetDate=fixtureDates.filter(d=>d<=cut).at(-1);if(!targetDate)return null;
+    let paths=(m.official_snapshots||[]).map(p=>({p,d:(String(p).match(/(\d{4}-\d{2}-\d{2})\.json$/)||[])[1]})).filter(x=>x.d);
+    let target=paths.filter(x=>x.d===targetDate).at(-1),prior=paths.filter(x=>x.d<targetDate).sort((a,b)=>a.d.localeCompare(b.d)).at(-1);
+    if(!target||!prior)return null;
+    let [a,b]=await Promise.all([j(root+target.p),j(root+prior.p)]),la=a.leagues?.find(x=>String(x.league_id)===lid),lb=b.leagues?.find(x=>String(x.league_id)===lid);
+    if(!la||!lb)return null;
+    let before=new Map((lb.standings||[]).map(x=>[String(x.entry_id),+x.league_position])),moves=new Map;
+    for(let x of la.standings||[]){let id=String(x.entry_id),p=before.get(id),c=+x.league_position;if(p&&c)moves.set(id,p-c)}
+    return{moves,date:targetDate};
+  })();moveCache.set(key,work);return work;
+}
+async function dailyMove(){
+  let data;try{data=await matchdayMoves()}catch(e){return}if(!data)return;
+  let head=document.querySelector(".desktop-table thead th:nth-child(5)");if(head){head.textContent="Daily move";head.title="Movement from the most recent matchday; held until the next matchday snapshot."}
+  const paint=(el,d)=>{if(!el)return;el.textContent=d>0?`▲ ${d}`:d<0?`▼ ${Math.abs(d)}`:"—";el.classList.remove("up","down","same");el.classList.add(d>0?"up":d<0?"down":"same")};
+  document.querySelectorAll("tr.manager-row[data-d]").forEach(r=>paint(r.querySelector("td:nth-child(5)"),data.moves.get(String(r.dataset.d))||0));
+  document.querySelectorAll("article.manager-card[data-m]").forEach(c=>paint(c.querySelector(".manager-summary>div:nth-child(2)>.team-name span"),data.moves.get(String(c.dataset.m))||0));
+}
+function watchDailyMove(){let host=document.querySelector("#standings");if(!host||host.dataset.dailyMoveWatch)return;host.dataset.dailyMoveWatch="1";let t;new MutationObserver(()=>{clearTimeout(t);t=setTimeout(dailyMove,30)}).observe(host,{childList:true});}
+
 function section(){if(document.querySelector("#seasonProgressSection"))return;let s=document.querySelector(".standings-section");if(!s)return;let n=document.createElement("section");n.className="section";n.id="seasonProgressSection";n.innerHTML='<div class="section-head"><div><div class="eyebrow">Season so far</div><h2>League position progress</h2></div><div class="section-note">Top 8 current managers</div></div><div id="seasonProgressChart" class="progress-chart"></div>';s.before(n)}
-addEventListener("load",()=>setTimeout(()=>{let w=wanted();if(w){let b=document.querySelector(`.tab[data-id="${w}"]`);if(b&&!b.classList.contains("active"))b.click()}document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>setTimeout(chart,50)));section();stamp();chart()},300))})();
+addEventListener("load",()=>setTimeout(()=>{let w=wanted();if(w){let b=document.querySelector(`.tab[data-id="${w}"]`);if(b&&!b.classList.contains("active"))b.click()}document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>setTimeout(()=>{chart();dailyMove()},50)));section();stamp();chart();watchDailyMove();dailyMove()},300))})();
