@@ -46,20 +46,38 @@ function longestReign(){
 }
 
 function completedRows(){
-  const cur=+(fixtureProgress?.gameweek||latest.gameweek)||999,m=new Map();
-  const includeCurrent=fixtureProgress?.status==="Complete";
+  // A GW becomes eligible for records only after we have seen at least one
+  // 10:30 finalisation marker. Once eligible, use the newest archived snapshot
+  // for that GW so later FPL autosub/league processing can improve the record.
+  const currentGw=+latest.gameweek||999,byGw=new Map(),chosenByGw=new Map();
   for(const s of snapshots){
-    const l=leagueData(s),gw=+s.gameweek;
-    if(!l||!gw)continue;
-    if(gw>cur)continue;
-    if(gw===cur&&!includeCurrent)continue;
-    const stamp=new Date(s.generated_at||s.snapshot_date||0).getTime();
-    for(const r of l.standings||[]){
-      const k=`${gw}:${r.entry_id}`,old=m.get(k);
-      if(!old||stamp>=old.stamp)m.set(k,{...r,gameweek:gw,stamp});
+    const gw=+s.gameweek,l=leagueData(s);
+    if(!gw||!l)continue;
+    (byGw.get(gw)||byGw.set(gw,[]).get(gw)).push(s);
+  }
+
+  for(const [gw,candidates] of byGw){
+    const hasFinalisation=candidates.some(s=>s.finalised_at||s.finalisation);
+    // Historical GWs from before finalisation markers were introduced can
+    // still use their latest archived snapshot. The current GW cannot.
+    if(gw===currentGw&&!hasFinalisation)continue;
+    const chosen=candidates.slice().sort((a,b)=>
+      new Date(b.generated_at||b.snapshot_date||0)-new Date(a.generated_at||a.snapshot_date||0)
+    )[0];
+    chosenByGw.set(gw,chosen);
+  }
+
+  const rows=[];
+  for(const [gw,chosen] of chosenByGw){
+    const l=leagueData(chosen),stamp=new Date(chosen.generated_at||chosen.snapshot_date||0).getTime();
+    const previous=chosenByGw.get(gw-1);
+    const previousRows=previous?new Map((leagueData(previous)?.standings||[]).map(r=>[String(r.entry_id),r])):null;
+    for(const r of l?.standings||[]){
+      const prev=previousRows?.get(String(r.entry_id));
+      rows.push({...r,gameweek:gw,stamp,previous_league_position:prev?.league_position??r.previous_league_position});
     }
   }
-  return [...m.values()];
+  return rows;
 }
 
 function gameweeks(){
@@ -551,9 +569,9 @@ function hero(){
   const matches=fp?`${fp.ended} / ${fp.total} matches played`:"Fixture progress loading";
   const statusDetail=fp
     ? status==="Complete"
-      ? "Gameweek complete"
+      ? "Gameweek complete · scores final"
       : status==="Finalising"
-        ? `${fp.finalised} of ${fp.total} matches finalised`
+        ? "All matches played · scores provisional"
         : status==="Not started"
           ? "Fixtures not started"
           : `${fp.remaining} match${fp.remaining===1?"":"es"} remaining${fp.live?` · ${fp.live} live`:""}`
