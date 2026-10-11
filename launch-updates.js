@@ -147,7 +147,222 @@ async function addManagerCharts(){
     try{let data=await managerPositionData(id),host=wrap.querySelector(".manager-season-position-svg");host.innerHTML=data.pts.length?positionChartSvg(data):'<div class="empty" style="padding:12px">No completed gameweek history yet.</div>';if(data.pts.length)bindPositionChart(host)}catch(e){wrap.remove()}
   }
 }
+
+
+// v3.8.0 — deadline-aware live gameweek squads.
+// Historical records still come from archived snapshots. The current display switches
+// only after FPL's official deadline and never decorates an old squad with new-GW fixtures.
+const deadlineLive={activeGw:null,snapshotGw:null,afterDeadline:false,picksReady:false,pending:false,picks:new Map(),players:new Map(),retry:null};
+window.FPL_DEADLINE_LIVE=deadlineLive;
+
+const originalDisplayLeague=displayLeague;
+const originalRemainingLabel=remainingLabel;
+const originalSquadHTML=squadHTML;
+
+function deadlineActiveEvent(events){
+  const now=Date.now(),valid=(events||[]).filter(e=>e?.id&&e?.deadline_time&&!Number.isNaN(new Date(e.deadline_time).getTime()));
+  const passed=valid.filter(e=>new Date(e.deadline_time).getTime()<=now).sort((a,b)=>+a.id-+b.id);
+  return passed.at(-1)||valid.find(e=>e.is_current)||null;
+}
+
+async function fetchDeadlineBootstrap(){
+  const r=await fetch('https://fpl-scheduler.kellenplayford.workers.dev/bootstrap',{cache:'no-store'});
+  if(!r.ok)throw Error('bootstrap');
+  const data=await r.json();
+  if(!Array.isArray(data?.events)||!Array.isArray(data?.elements))throw Error('bootstrap-shape');
+  deadlineLive.players=new Map(data.elements.map(x=>[String(x.id),{name:x.web_name||x.second_name||x.first_name||`Player ${x.id}`,team:+x.team}]));
+  return data;
+}
+
+async function fetchDeadlinePicks(gw,entryIds){
+  if(!gw||!entryIds.length)return null;
+  const entries=entryIds.join(',');
+  const urls=[
+    `https://fpl-scheduler.kellenplayford.workers.dev/picks?event=${encodeURIComponent(gw)}&entries=${encodeURIComponent(entries)}`
+  ];
+  for(const url of urls){
+    try{
+      const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),9000);
+      const r=await fetch(url,{signal:controller.signal,cache:'no-store'});clearTimeout(timer);
+      if(!r.ok)continue;
+      const data=await r.json(),raw=data?.picks||data?.entries||data;
+      const map=new Map();
+      for(const id of entryIds){
+        const d=raw?.[id]||raw?.[String(id)];
+        if(d&&Array.isArray(d.picks)&&d.picks.length===15)map.set(String(id),d);
+      }
+      if(map.size===entryIds.length)return map;
+    }catch(e){}
+  }
+  return null;
+}
+
+function currentSquadFromPicks(m,pickData){
+  const eh=pickData?.entry_history||{},squad=(pickData?.picks||[]).map(p=>{
+    const meta=deadlineLive.players.get(String(p.element))||{};
+    return{
+      element_id:+p.element,
+      player:meta.name||`Player ${p.element}`,
+      position:+p.position,
+      multiplier:+p.multiplier||0,
+      is_captain:!!p.is_captain,
+      is_vice_captain:!!p.is_vice_captain,
+      live_points:livePlayerPoints.has(String(p.element))?livePlayerPoints.get(String(p.element)):0
+    };
+  });
+  const cap=squad.find(p=>p.is_captain),vice=squad.find(p=>p.is_vice_captain);
+  const hit=+eh.event_transfers_cost||0;
+  const liveGw=squad.reduce((sum,p)=>sum+(+p.live_points||0)*(+p.multiplier||0),0)-hit;
+  const snapshotGw=+deadlineLive.snapshotGw||+latest.gameweek||0;
+  const priorTotal=(+deadlineLive.activeGw===snapshotGw)?((+m.total_points||0)-(+m.gameweek_points||0)):(+m.total_points||0);
+  return{
+    ...m,
+    squad,
+    gameweek_points:liveGw,
+    total_points:priorTotal+liveGw,
+    gameweek_rank:+eh.rank||null,
+    overall_rank:+eh.overall_rank||m.overall_rank,
+    points_on_bench:+eh.points_on_bench||0,
+    transfers:+eh.event_transfers||0,
+    transfer_cost:hit,
+    team_value:eh.value!=null?(+eh.value/10):m.team_value,
+    bank:eh.bank!=null?(+eh.bank/10):m.bank,
+    active_chip:pickData.active_chip||null,
+    captain:cap?.player||'—',
+    vice_captain:vice?.player||'—',
+    automatic_subs:Array.isArray(pickData.automatic_subs)?pickData.automatic_subs:[],
+    _live:true,
+    _display_gameweek:+deadlineLive.activeGw
+  };
+}
+
+// Replace the app's live overlay only when we have a complete set of locked picks.
+displayLeague=function(){
+  if(!deadlineLive.picksReady||!deadlineLive.activeGw||!deadlineLive.picks.size)return originalDisplayLeague();
+  const base=leagueData();if(!base)return base;
+  const standings=(base.standings||[]).map(m=>{
+    const pd=deadlineLive.picks.get(String(m.entry_id));
+    return pd?currentSquadFromPicks(m,pd):m;
+  }).sort((a,b)=>(+b.total_points||0)-(+a.total_points||0)||(+b.gameweek_points||0)-(+a.gameweek_points||0));
+  let lastScore=null,lastRank=0;
+  standings.forEach((m,i)=>{if(lastScore===null||+m.total_points!==lastScore){lastRank=i+1;lastScore=+m.total_points}m.league_position=lastRank});
+  return{...base,gameweek:+deadlineLive.activeGw,standings};
+};
+
+remainingLabel=function(m){
+  if(deadlineLive.pending&&+deadlineLive.activeGw>+deadlineLive.snapshotGw)return'';
+  return originalRemainingLabel(m);
+};
+
+squadHTML=function(m){
+  if(deadlineLive.pending&&+deadlineLive.activeGw>+deadlineLive.snapshotGw){
+    return `<div class="empty" style="padding:16px 0">GW${deadlineLive.activeGw} squad pending. Waiting for FPL to publish the locked picks.</div>`;
+  }
+  return originalSquadHTML(m);
+};
+
+function deadlineDisplayLabel(){
+  if(deadlineLive.pending&&+deadlineLive.activeGw>+deadlineLive.snapshotGw)return{txt:`GW${deadlineLive.activeGw} · squad pending`,color:'#ffd166'};
+  if(deadlineLive.picksReady&&+deadlineLive.activeGw>=+deadlineLive.snapshotGw){
+    if(fixtureProgress?.status==='Not started')return{txt:`GW${deadlineLive.activeGw} squad · locked`,color:'#f6a85f'};
+    if(fixtureProgress?.status==='Complete')return{txt:`GW${deadlineLive.activeGw} points · provisional`,color:'var(--cyan)'};
+    return{txt:`GW${deadlineLive.activeGw} · live FPL points · provisional`,color:'var(--cyan)'};
+  }
+  return null;
+}
+
+// v3.8.0 owns the current-squad status wording. Confirmed means the displayed GW,
+// not merely the latest archived snapshot, has a finalisation marker.
+updatePointsLabels=async function(){
+  let display=deadlineDisplayLabel(),confirmed=false;
+  if(!display){
+    try{
+      let d=await j(root+'data/latest.json'),ss=await archives(),gw=+d.gameweek;
+      confirmed=ss.some(s=>+s.gameweek===gw&&(s.finalised_at||s.finalisation));
+    }catch(e){}
+  }
+  let note=document.querySelector("#standings>div[style*='font-size:11px']");
+  if(deadlineLive.pending&&+deadlineLive.activeGw>+deadlineLive.snapshotGw){
+    if(!note){note=document.createElement('div');note.style.cssText='color:var(--muted);font-size:11px;margin:0 0 10px';document.querySelector('#standings')?.prepend(note)}
+    if(note)note.textContent=`GW${deadlineLive.activeGw} squads pending · showing last confirmed league totals. No current-GW player status is shown until squads load.`;
+  }else if(note&&deadlineLive.picksReady){
+    note.textContent=`GW${deadlineLive.activeGw} live FPL standings · provisional. Records and Hall of Fame update after finalisation.`;
+  }else if(note&&/Live FPL standings/i.test(note.textContent||'')){
+    note.textContent=confirmed?'FPL standings · confirmed. Records and Hall of Fame updated after finalisation.':'Live FPL standings · provisional. Records and Hall of Fame update after finalisation.';
+  }
+  const stampEl=document.querySelector('#standingsSnapshotNote');
+  if(stampEl){
+    if(deadlineLive.pending&&+deadlineLive.activeGw>+deadlineLive.snapshotGw)stampEl.textContent=`GW${deadlineLive.activeGw} live · squads pending · last confirmed standings retained`;
+    else if(deadlineLive.picksReady)stampEl.textContent=`GW${deadlineLive.activeGw} live FPL standings · provisional`;
+    else if(liveDisplay&&fixtureProgress?.gameweek)stampEl.textContent=(confirmed&&fixtureProgress.status==='Complete')?`GW${fixtureProgress.gameweek} confirmed standings · FPL finalised`:`GW${fixtureProgress.gameweek} live FPL standings · provisional`;
+  }
+  document.querySelectorAll('.detail-title').forEach(t=>{
+    if(!/^Current squad/i.test(t.textContent||''))return;
+    let span=t.querySelector('span');
+    const state=display||(confirmed?{txt:'FPL points · confirmed',color:'#55d98b'}:null);
+    if(!state)return;
+    if(!span){span=document.createElement('span');t.append(' · ',span)}
+    span.textContent=state.txt;span.style.cssText=`color:${state.color};font-size:10px;font-weight:850`;
+  });
+};
+
+function decoratePendingHero(){
+  if(!(deadlineLive.pending&&+deadlineLive.activeGw>+deadlineLive.snapshotGw))return;
+  const status=document.querySelector('#hero .hero-current-status'),sub=document.querySelector('#hero .hero-current-sub');
+  if(status)status.textContent=fixtureProgress?.started>0?'LIVE':'LOCKED';
+  if(sub)sub.textContent=`GW${deadlineLive.activeGw} squads pending from FPL · last confirmed league totals shown below`;
+  const cards=[...document.querySelectorAll('#hero .hero-mini')];
+  if(cards[0]){let l=cards[0].querySelector('.hero-label');if(l)l.textContent='Last confirmed leader'}
+  if(cards[1]){let l=cards[1].querySelector('.hero-label'),v=cards[1].querySelector('.hero-mini-value'),x=cards[1].querySelector('.hero-sub');if(l)l.textContent=`GW${deadlineLive.activeGw} league average`;if(v)v.textContent='—';if(x)x.textContent='Squads pending'}
+  if(cards[2]){let l=cards[2].querySelector('.hero-label'),v=cards[2].querySelector('.hero-mini-value'),x=cards[2].querySelector('.hero-mini-stat');if(l)l.textContent=`GW${deadlineLive.activeGw} high score`;if(v)v.textContent='—';if(x)x.textContent='Squads pending'}
+}
+
+function updateStandingsStamp(){
+  const e=document.querySelector('#standingsSnapshotNote');if(!e)return;
+  if(deadlineLive.pending&&+deadlineLive.activeGw>+deadlineLive.snapshotGw){
+    e.textContent=`GW${deadlineLive.activeGw} live · squads pending · last confirmed standings retained`;
+  }else if(deadlineLive.picksReady&&fixtureProgress?.gameweek){
+    e.textContent=`GW${fixtureProgress.gameweek} live FPL standings · provisional`;
+  }
+}
+
+function renderDeadlineState(){
+  hero();decoratePendingHero();renderRecap();standings();updateStandingsStamp();
+  setTimeout(()=>{dailyMove();decorateDetails();updateStandingsStamp();decoratePendingHero()},30);
+}
+
+async function deadlineGameweekFix(){
+  clearTimeout(deadlineLive.retry);
+  try{
+    const boot=await fetchDeadlineBootstrap(),event=deadlineActiveEvent(boot.events);
+    if(!event)return;
+    deadlineLive.activeGw=+event.id;deadlineLive.snapshotGw=+latest.gameweek||0;deadlineLive.afterDeadline=new Date(event.deadline_time).getTime()<=Date.now();
+    // Before the next deadline, keep the last confirmed snapshot exactly as before.
+    // If the snapshot has already caught up to the active GW, the app's normal live
+    // overlay is safe; only clarify that the standings are live/provisional.
+    if(!deadlineLive.afterDeadline||deadlineLive.activeGw<=deadlineLive.snapshotGw){updateStandingsStamp();return}
+    const fixtures=await fetchFixtures(deadlineLive.activeGw);
+    if(fixtures?.length){fixtureProgress=summariseFixtures(fixtures,deadlineLive.activeGw);liveFixtures=fixtures}
+    deadlineLive.pending=true;deadlineLive.picksReady=false;liveDisplay=false;livePlayerPoints=new Map();
+    renderDeadlineState();
+    const base=leagueData(),ids=(base?.standings||[]).map(m=>String(m.entry_id));
+    const picks=await fetchDeadlinePicks(deadlineLive.activeGw,ids);
+    if(!picks){
+      renderDeadlineState();
+      deadlineLive.retry=setTimeout(deadlineGameweekFix,60000);
+      return;
+    }
+    deadlineLive.picks=picks;deadlineLive.pending=false;deadlineLive.picksReady=true;
+    await fetchLivePoints(deadlineLive.activeGw);
+    liveDisplay=true;
+    renderDeadlineState();
+  }catch(e){
+    if(+deadlineLive.activeGw>+deadlineLive.snapshotGw){deadlineLive.pending=true;liveDisplay=false;renderDeadlineState()}
+    deadlineLive.retry=setTimeout(deadlineGameweekFix,60000);
+  }
+}
+
 function decorateDetails(){updatePointsLabels();addManagerCharts()}
 
 function section(){if(document.querySelector("#seasonProgressSection"))return;let s=document.querySelector(".standings-section");if(!s)return;let n=document.createElement("section");n.className="section";n.id="seasonProgressSection";n.innerHTML='<div class="section-head"><div><div class="eyebrow">Season so far</div><h2>League position progress</h2></div><div class="section-note">Top 8 current managers</div></div><div id="seasonProgressChart" class="progress-chart"></div>';s.before(n)}
-addEventListener("load",()=>setTimeout(()=>{let w=wanted();if(w){let b=document.querySelector(`.tab[data-id="${w}"]`);if(b&&!b.classList.contains("active"))b.click()}document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>setTimeout(()=>{chart();dailyMove()},50)));section();stamp();chart();watchDailyMove();dailyMove();decorateDetails()},300))})();
+addEventListener("load",()=>setTimeout(()=>{let w=wanted();if(w){let b=document.querySelector(`.tab[data-id="${w}"]`);if(b&&!b.classList.contains("active"))b.click()}document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>setTimeout(()=>{chart();dailyMove();deadlineGameweekFix()},50)));section();stamp();chart();watchDailyMove();dailyMove();decorateDetails();deadlineGameweekFix();setTimeout(deadlineGameweekFix,4500);setTimeout(deadlineGameweekFix,7500)},300))})();
