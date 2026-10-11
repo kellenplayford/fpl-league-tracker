@@ -2153,6 +2153,48 @@
           ]
         }
       }
+    },
+    {
+      "date": "2026-10-10",
+      "source": "automatic-overnight-snapshot",
+      "leagues": {
+        "37546": {
+          "league_name": "Sexy Pickford",
+          "leader_entry_id": 3331670,
+          "leader_manager": "Brogan O-Grady",
+          "leader_team": "sch\u00e4rloydbysch\u00e4rloyd",
+          "leader_points": 448,
+          "leader_overall_rank": 30683,
+          "leader_count": 1,
+          "leaders": [
+            {
+              "entry_id": 3331670,
+              "manager": "Brogan O-Grady",
+              "team": "sch\u00e4rloydbysch\u00e4rloyd",
+              "points": 448,
+              "overall_rank": 30683
+            }
+          ]
+        },
+        "118082": {
+          "league_name": "The Battle Continues...",
+          "leader_entry_id": 361353,
+          "leader_manager": "Kellen Playford",
+          "leader_team": "Jogo Bonito",
+          "leader_points": 444,
+          "leader_overall_rank": 47737,
+          "leader_count": 1,
+          "leaders": [
+            {
+              "entry_id": 361353,
+              "manager": "Kellen Playford",
+              "team": "Jogo Bonito",
+              "points": 444,
+              "overall_rank": 47737
+            }
+          ]
+        }
+      }
     }
   ],
   "days_top": {
@@ -2162,7 +2204,7 @@
         "longest_streak": 1
       },
       "3331670": {
-        "days_top": 1,
+        "days_top": 2,
         "longest_streak": 1
       },
       "40951": {
@@ -2180,8 +2222,8 @@
     },
     "118082": {
       "361353": {
-        "days_top": 33,
-        "longest_streak": 26
+        "days_top": 34,
+        "longest_streak": 27
       },
       "597770": {
         "days_top": 21,
