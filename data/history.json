@@ -2195,17 +2195,66 @@
           ]
         }
       }
+    },
+    {
+      "date": "2026-10-11",
+      "source": "automatic-overnight-snapshot",
+      "leagues": {
+        "37546": {
+          "league_name": "Sexy Pickford",
+          "leader_entry_id": 3331670,
+          "leader_manager": "Brogan O-Grady",
+          "leader_team": "sch\u00e4rloydbysch\u00e4rloyd",
+          "leader_points": 454,
+          "leader_overall_rank": 57711,
+          "leader_count": 2,
+          "leaders": [
+            {
+              "entry_id": 3331670,
+              "manager": "Brogan O-Grady",
+              "team": "sch\u00e4rloydbysch\u00e4rloyd",
+              "points": 454,
+              "overall_rank": 57711
+            },
+            {
+              "entry_id": 361353,
+              "manager": "Kellen Playford",
+              "team": "Jogo Bonito",
+              "points": 454,
+              "overall_rank": 61251
+            }
+          ]
+        },
+        "118082": {
+          "league_name": "The Battle Continues...",
+          "leader_entry_id": 361353,
+          "leader_manager": "Kellen Playford",
+          "leader_team": "Jogo Bonito",
+          "leader_points": 454,
+          "leader_overall_rank": 61251,
+          "leader_count": 1,
+          "leaders": [
+            {
+              "entry_id": 361353,
+              "manager": "Kellen Playford",
+              "team": "Jogo Bonito",
+              "points": 454,
+              "overall_rank": 61251
+            }
+          ]
+        }
+      }
     }
   ],
   "days_top": {
     "37546": {
       "361353": {
-        "days_top": 1,
+        "days_top": 2,
         "longest_streak": 1
       },
       "3331670": {
-        "days_top": 2,
-        "longest_streak": 1
+        "days_top": 3,
+        "longest_streak": 2
       },
       "40951": {
         "days_top": 11,
@@ -2222,8 +2271,8 @@
     },
     "118082": {
       "361353": {
-        "days_top": 34,
-        "longest_streak": 27
+        "days_top": 35,
+        "longest_streak": 28
       },
       "597770": {
         "days_top": 21,
