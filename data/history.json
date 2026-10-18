@@ -2454,6 +2454,55 @@
           ]
         }
       }
+    },
+    {
+      "date": "2026-10-17",
+      "source": "automatic-overnight-snapshot",
+      "leagues": {
+        "37546": {
+          "league_name": "Sexy Pickford",
+          "leader_entry_id": 3331670,
+          "leader_manager": "Brogan O-Grady",
+          "leader_team": "sch\u00e4rloydbysch\u00e4rloyd",
+          "leader_points": 488,
+          "leader_overall_rank": 81923,
+          "leader_count": 2,
+          "leaders": [
+            {
+              "entry_id": 3331670,
+              "manager": "Brogan O-Grady",
+              "team": "sch\u00e4rloydbysch\u00e4rloyd",
+              "points": 488,
+              "overall_rank": 81923
+            },
+            {
+              "entry_id": 710691,
+              "manager": "Tim Part",
+              "team": "Partizan Idiot",
+              "points": 488,
+              "overall_rank": 81923
+            }
+          ]
+        },
+        "118082": {
+          "league_name": "The Battle Continues...",
+          "leader_entry_id": 361353,
+          "leader_manager": "Kellen Playford",
+          "leader_team": "Jogo Bonito",
+          "leader_points": 484,
+          "leader_overall_rank": 118644,
+          "leader_count": 1,
+          "leaders": [
+            {
+              "entry_id": 361353,
+              "manager": "Kellen Playford",
+              "team": "Jogo Bonito",
+              "points": 484,
+              "overall_rank": 118644
+            }
+          ]
+        }
+      }
     }
   ],
   "days_top": {
@@ -2463,15 +2512,15 @@
         "longest_streak": 1
       },
       "3331670": {
-        "days_top": 8,
-        "longest_streak": 7
+        "days_top": 9,
+        "longest_streak": 8
       },
       "40951": {
         "days_top": 11,
         "longest_streak": 7
       },
       "710691": {
-        "days_top": 34,
+        "days_top": 35,
         "longest_streak": 20
       },
       "182007": {
@@ -2481,8 +2530,8 @@
     },
     "118082": {
       "361353": {
-        "days_top": 40,
-        "longest_streak": 33
+        "days_top": 41,
+        "longest_streak": 34
       },
       "597770": {
         "days_top": 21,
