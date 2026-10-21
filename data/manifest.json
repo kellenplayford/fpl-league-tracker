@@ -56,8 +56,9 @@
     "data/snapshots/2026-10-16.json",
     "data/snapshots/2026-10-17.json",
     "data/snapshots/2026-10-18.json",
-    "data/snapshots/2026-10-19.json"
+    "data/snapshots/2026-10-19.json",
+    "data/snapshots/2026-10-20.json"
   ],
   "latest": "data/latest.json",
-  "updated_at": "2026-10-20T10:30:35.483253+01:00"
+  "updated_at": "2026-10-21T03:15:56.928487+01:00"
 }
