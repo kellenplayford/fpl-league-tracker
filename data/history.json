@@ -2632,7 +2632,7 @@
     },
     {
       "date": "2026-10-21",
-      "source": "automatic-overnight-snapshot",
+      "source": "automatic-morning-finalisation",
       "leagues": {
         "37546": {
           "league_name": "Sexy Pickford",
