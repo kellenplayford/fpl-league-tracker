@@ -1,8 +1,8 @@
 {
   "status": "ok",
   "mode": "official",
-  "generated_at": "2026-10-26T10:31:05.087423+00:00",
-  "snapshot_date": "2026-10-25",
+  "generated_at": "2026-10-27T02:16:02.163951+00:00",
+  "snapshot_date": "2026-10-26",
   "gameweek": 8,
   "leagues": [
     {
@@ -16,11 +16,11 @@
           "team_name": "sch\u00e4rloydbysch\u00e4rloyd",
           "league_position": 1,
           "previous_league_position": 1,
-          "gameweek_points": 47,
-          "total_points": 580,
-          "overall_rank": 38193,
-          "gameweek_rank": 2529939,
-          "points_on_bench": 9,
+          "gameweek_points": 49,
+          "total_points": 582,
+          "overall_rank": 41288,
+          "gameweek_rank": 3939668,
+          "points_on_bench": 10,
           "transfers": 0,
           "transfer_cost": 0,
           "team_value": 103.3,
@@ -28,7 +28,14 @@
           "active_chip": null,
           "captain": "Haaland",
           "vice_captain": "Jo\u00e3o Pedro",
-          "automatic_subs": [],
+          "automatic_subs": [
+            {
+              "entry": 3331670,
+              "element_in": 346,
+              "element_out": 165,
+              "event": 8
+            }
+          ],
           "squad": [
             {
               "element_id": 109,
@@ -40,13 +47,13 @@
               "live_points": 2
             },
             {
-              "element_id": 8,
-              "player": "Calafiori",
+              "element_id": 334,
+              "player": "Muharemovi\u0107",
               "position": 2,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 1
+              "live_points": 9
             },
             {
               "element_id": 31,
@@ -58,18 +65,9 @@
               "live_points": 14
             },
             {
-              "element_id": 334,
-              "player": "Muharemovi\u0107",
+              "element_id": 8,
+              "player": "Calafiori",
               "position": 4,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 9
-            },
-            {
-              "element_id": 40,
-              "player": "Rogers",
-              "position": 5,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
@@ -78,16 +76,34 @@
             {
               "element_id": 154,
               "player": "Palmer",
-              "position": 6,
+              "position": 5,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
               "live_points": -1
             },
             {
+              "element_id": 15,
+              "player": "\u00d8degaard",
+              "position": 6,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 3
+            },
+            {
+              "element_id": 40,
+              "player": "Rogers",
+              "position": 7,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 1
+            },
+            {
               "element_id": 427,
               "player": "Mbeumo",
-              "position": 7,
+              "position": 8,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
@@ -96,20 +112,11 @@
             {
               "element_id": 124,
               "player": "Gro\u00df",
-              "position": 8,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
-            },
-            {
-              "element_id": 15,
-              "player": "\u00d8degaard",
               "position": 9,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 3
+              "live_points": 0
             },
             {
               "element_id": 411,
@@ -121,13 +128,13 @@
               "live_points": 8
             },
             {
-              "element_id": 165,
-              "player": "Jo\u00e3o Pedro",
+              "element_id": 346,
+              "player": "Calvert-Lewin",
               "position": 11,
               "multiplier": 1,
               "is_captain": false,
-              "is_vice_captain": true,
-              "live_points": 0
+              "is_vice_captain": false,
+              "live_points": 2
             },
             {
               "element_id": 496,
@@ -139,13 +146,13 @@
               "live_points": 9
             },
             {
-              "element_id": 346,
-              "player": "Calvert-Lewin",
+              "element_id": 165,
+              "player": "Jo\u00e3o Pedro",
               "position": 13,
               "multiplier": 0,
               "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 2
+              "is_vice_captain": true,
+              "live_points": 0
             },
             {
               "element_id": 115,
@@ -175,9 +182,9 @@
           "previous_league_position": 2,
           "gameweek_points": 43,
           "total_points": 564,
-          "overall_rank": 111435,
-          "gameweek_rank": 3281363,
-          "points_on_bench": 7,
+          "overall_rank": 156478,
+          "gameweek_rank": 6407132,
+          "points_on_bench": 8,
           "transfers": 1,
           "transfer_cost": 0,
           "team_value": 101.8,
@@ -185,7 +192,14 @@
           "active_chip": null,
           "captain": "Haaland",
           "vice_captain": "Palmer",
-          "automatic_subs": [],
+          "automatic_subs": [
+            {
+              "entry": 710691,
+              "element_in": 124,
+              "element_out": 165,
+              "event": 8
+            }
+          ],
           "squad": [
             {
               "element_id": 1,
@@ -197,22 +211,22 @@
               "live_points": 7
             },
             {
-              "element_id": 650,
-              "player": "Affengruber",
+              "element_id": 8,
+              "player": "Calafiori",
               "position": 2,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 6
+              "live_points": 1
             },
             {
-              "element_id": 8,
-              "player": "Calafiori",
+              "element_id": 650,
+              "player": "Affengruber",
               "position": 3,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 1
+              "live_points": 6
             },
             {
               "element_id": 173,
@@ -233,13 +247,13 @@
               "live_points": -1
             },
             {
-              "element_id": 40,
-              "player": "Rogers",
+              "element_id": 94,
+              "player": "Schade",
               "position": 6,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 1
+              "live_points": 2
             },
             {
               "element_id": 453,
@@ -251,31 +265,31 @@
               "live_points": 8
             },
             {
-              "element_id": 94,
-              "player": "Schade",
+              "element_id": 40,
+              "player": "Rogers",
               "position": 8,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 2
+              "live_points": 1
             },
             {
-              "element_id": 411,
-              "player": "Haaland",
+              "element_id": 124,
+              "player": "Gro\u00df",
               "position": 9,
-              "multiplier": 2,
-              "is_captain": true,
-              "is_vice_captain": false,
-              "live_points": 8
-            },
-            {
-              "element_id": 165,
-              "player": "Jo\u00e3o Pedro",
-              "position": 10,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
               "live_points": 0
+            },
+            {
+              "element_id": 411,
+              "player": "Haaland",
+              "position": 10,
+              "multiplier": 2,
+              "is_captain": true,
+              "is_vice_captain": false,
+              "live_points": 8
             },
             {
               "element_id": 569,
@@ -296,8 +310,8 @@
               "live_points": 0
             },
             {
-              "element_id": 124,
-              "player": "Gro\u00df",
+              "element_id": 165,
+              "player": "Jo\u00e3o Pedro",
               "position": 13,
               "multiplier": 0,
               "is_captain": false,
@@ -329,11 +343,11 @@
           "manager_name": "Chris Saunders",
           "team_name": "Haven\u2019t Got A Kalou",
           "league_position": 3,
-          "previous_league_position": 6,
+          "previous_league_position": 3,
           "gameweek_points": 54,
           "total_points": 562,
-          "overall_rank": 258578,
-          "gameweek_rank": 3355520,
+          "overall_rank": 184962,
+          "gameweek_rank": 2630209,
           "points_on_bench": 11,
           "transfers": 2,
           "transfer_cost": 0,
@@ -342,7 +356,14 @@
           "active_chip": null,
           "captain": "Haaland",
           "vice_captain": "Jo\u00e3o Pedro",
-          "automatic_subs": [],
+          "automatic_subs": [
+            {
+              "entry": 40951,
+              "element_in": 124,
+              "element_out": 165,
+              "event": 8
+            }
+          ],
           "squad": [
             {
               "element_id": 109,
@@ -363,22 +384,22 @@
               "live_points": 1
             },
             {
-              "element_id": 31,
-              "player": "Konsa",
+              "element_id": 391,
+              "player": "Gvardiol",
               "position": 3,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 14
+              "live_points": 1
             },
             {
-              "element_id": 391,
-              "player": "Gvardiol",
+              "element_id": 31,
+              "player": "Konsa",
               "position": 4,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 1
+              "live_points": 14
             },
             {
               "element_id": 154,
@@ -399,40 +420,40 @@
               "live_points": 10
             },
             {
+              "element_id": 453,
+              "player": "Barnes",
+              "position": 7,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 8
+            },
+            {
               "element_id": 40,
               "player": "Rogers",
-              "position": 7,
+              "position": 8,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
               "live_points": 1
             },
             {
-              "element_id": 453,
-              "player": "Barnes",
-              "position": 8,
+              "element_id": 124,
+              "player": "Gro\u00df",
+              "position": 9,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 8
+              "live_points": 0
             },
             {
               "element_id": 411,
               "player": "Haaland",
-              "position": 9,
+              "position": 10,
               "multiplier": 2,
               "is_captain": true,
               "is_vice_captain": false,
               "live_points": 8
-            },
-            {
-              "element_id": 165,
-              "player": "Jo\u00e3o Pedro",
-              "position": 10,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": true,
-              "live_points": 0
             },
             {
               "element_id": 346,
@@ -453,12 +474,12 @@
               "live_points": 9
             },
             {
-              "element_id": 124,
-              "player": "Gro\u00df",
+              "element_id": 165,
+              "player": "Jo\u00e3o Pedro",
               "position": 13,
               "multiplier": 0,
               "is_captain": false,
-              "is_vice_captain": false,
+              "is_vice_captain": true,
               "live_points": 0
             },
             {
@@ -482,173 +503,16 @@
           ]
         },
         {
-          "entry_id": 2387947,
-          "manager_name": "Libby Masters",
-          "team_name": "MoreCherkiMrChandler",
-          "league_position": 4,
-          "previous_league_position": 4,
-          "gameweek_points": 45,
-          "total_points": 558,
-          "overall_rank": 175126,
-          "gameweek_rank": 2794316,
-          "points_on_bench": 11,
-          "transfers": 0,
-          "transfer_cost": 0,
-          "team_value": 103.5,
-          "bank": 0.2,
-          "active_chip": null,
-          "captain": "Haaland",
-          "vice_captain": "Palmer",
-          "automatic_subs": [],
-          "squad": [
-            {
-              "element_id": 109,
-              "player": "Verbruggen",
-              "position": 1,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 2
-            },
-            {
-              "element_id": 8,
-              "player": "Calafiori",
-              "position": 2,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 1
-            },
-            {
-              "element_id": 31,
-              "player": "Konsa",
-              "position": 3,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 14
-            },
-            {
-              "element_id": 334,
-              "player": "Muharemovi\u0107",
-              "position": 4,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 9
-            },
-            {
-              "element_id": 115,
-              "player": "De Cuyper",
-              "position": 5,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 1
-            },
-            {
-              "element_id": 154,
-              "player": "Palmer",
-              "position": 6,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": true,
-              "live_points": -1
-            },
-            {
-              "element_id": 399,
-              "player": "Cherki",
-              "position": 7,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
-            },
-            {
-              "element_id": 40,
-              "player": "Rogers",
-              "position": 8,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 1
-            },
-            {
-              "element_id": 480,
-              "player": "Gibbs-White",
-              "position": 9,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 2
-            },
-            {
-              "element_id": 411,
-              "player": "Haaland",
-              "position": 10,
-              "multiplier": 2,
-              "is_captain": true,
-              "is_vice_captain": false,
-              "live_points": 8
-            },
-            {
-              "element_id": 165,
-              "player": "Jo\u00e3o Pedro",
-              "position": 11,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
-            },
-            {
-              "element_id": 496,
-              "player": "Kinsky",
-              "position": 12,
-              "multiplier": 0,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 9
-            },
-            {
-              "element_id": 124,
-              "player": "Gro\u00df",
-              "position": 13,
-              "multiplier": 0,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
-            },
-            {
-              "element_id": 277,
-              "player": "Egan",
-              "position": 14,
-              "multiplier": 0,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 4
-            },
-            {
-              "element_id": 249,
-              "player": "Barry",
-              "position": 15,
-              "multiplier": 0,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 2
-            }
-          ]
-        },
-        {
           "entry_id": 182007,
           "manager_name": "David Saunders",
           "team_name": "Reece\u2019s Set Pieces",
-          "league_position": 5,
-          "previous_league_position": 5,
-          "gameweek_points": 49,
-          "total_points": 558,
-          "overall_rank": 187829,
-          "gameweek_rank": 2224334,
-          "points_on_bench": 9,
+          "league_position": 4,
+          "previous_league_position": 4,
+          "gameweek_points": 51,
+          "total_points": 560,
+          "overall_rank": 202700,
+          "gameweek_rank": 3480698,
+          "points_on_bench": 7,
           "transfers": 1,
           "transfer_cost": 0,
           "team_value": 101.5,
@@ -656,7 +520,14 @@
           "active_chip": null,
           "captain": "Palmer",
           "vice_captain": "Haaland",
-          "automatic_subs": [],
+          "automatic_subs": [
+            {
+              "entry": 182007,
+              "element_in": 305,
+              "element_out": 165,
+              "event": 8
+            }
+          ],
           "squad": [
             {
               "element_id": 1,
@@ -668,18 +539,9 @@
               "live_points": 7
             },
             {
-              "element_id": 334,
-              "player": "Muharemovi\u0107",
-              "position": 2,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 9
-            },
-            {
               "element_id": 31,
               "player": "Konsa",
-              "position": 3,
+              "position": 2,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
@@ -688,15 +550,24 @@
             {
               "element_id": 469,
               "player": "N.Williams",
-              "position": 4,
+              "position": 3,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
               "live_points": 8
             },
             {
-              "element_id": 427,
-              "player": "Mbeumo",
+              "element_id": 334,
+              "player": "Muharemovi\u0107",
+              "position": 4,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 9
+            },
+            {
+              "element_id": 305,
+              "player": "Davis",
               "position": 5,
               "multiplier": 1,
               "is_captain": false,
@@ -704,9 +575,27 @@
               "live_points": 2
             },
             {
+              "element_id": 427,
+              "player": "Mbeumo",
+              "position": 6,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 2
+            },
+            {
+              "element_id": 124,
+              "player": "Gro\u00df",
+              "position": 7,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 0
+            },
+            {
               "element_id": 154,
               "player": "Palmer",
-              "position": 6,
+              "position": 8,
               "multiplier": 2,
               "is_captain": true,
               "is_vice_captain": false,
@@ -715,47 +604,29 @@
             {
               "element_id": 40,
               "player": "Rogers",
-              "position": 7,
+              "position": 9,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
               "live_points": 1
             },
             {
-              "element_id": 124,
-              "player": "Gro\u00df",
-              "position": 8,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
-            },
-            {
-              "element_id": 411,
-              "player": "Haaland",
-              "position": 9,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": true,
-              "live_points": 8
-            },
-            {
-              "element_id": 165,
-              "player": "Jo\u00e3o Pedro",
+              "element_id": 346,
+              "player": "Calvert-Lewin",
               "position": 10,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 0
+              "live_points": 2
             },
             {
-              "element_id": 346,
-              "player": "Calvert-Lewin",
+              "element_id": 411,
+              "player": "Haaland",
               "position": 11,
               "multiplier": 1,
               "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 2
+              "is_vice_captain": true,
+              "live_points": 8
             },
             {
               "element_id": 251,
@@ -767,13 +638,13 @@
               "live_points": 0
             },
             {
-              "element_id": 305,
-              "player": "Davis",
+              "element_id": 165,
+              "player": "Jo\u00e3o Pedro",
               "position": 13,
               "multiplier": 0,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 2
+              "live_points": 0
             },
             {
               "element_id": 112,
@@ -799,12 +670,12 @@
           "entry_id": 597770,
           "manager_name": "Daniel Richmond",
           "team_name": "Sound of the Tzolis",
-          "league_position": 6,
-          "previous_league_position": 7,
-          "gameweek_points": 54,
-          "total_points": 557,
-          "overall_rank": 153635,
-          "gameweek_rank": 524964,
+          "league_position": 5,
+          "previous_league_position": 5,
+          "gameweek_points": 55,
+          "total_points": 558,
+          "overall_rank": 225500,
+          "gameweek_rank": 2157362,
           "points_on_bench": 2,
           "transfers": 0,
           "transfer_cost": 0,
@@ -813,7 +684,14 @@
           "active_chip": null,
           "captain": "Haaland",
           "vice_captain": "Jo\u00e3o Pedro",
-          "automatic_subs": [],
+          "automatic_subs": [
+            {
+              "entry": 597770,
+              "element_in": 113,
+              "element_out": 165,
+              "event": 8
+            }
+          ],
           "squad": [
             {
               "element_id": 496,
@@ -825,9 +703,18 @@
               "live_points": 9
             },
             {
+              "element_id": 334,
+              "player": "Muharemovi\u0107",
+              "position": 2,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 9
+            },
+            {
               "element_id": 8,
               "player": "Calafiori",
-              "position": 2,
+              "position": 3,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
@@ -836,29 +723,20 @@
             {
               "element_id": 31,
               "player": "Konsa",
-              "position": 3,
+              "position": 4,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
               "live_points": 14
             },
             {
-              "element_id": 334,
-              "player": "Muharemovi\u0107",
-              "position": 4,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 9
-            },
-            {
-              "element_id": 124,
-              "player": "Gro\u00df",
+              "element_id": 113,
+              "player": "F.Kad\u0131o\u011flu",
               "position": 5,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 0
+              "live_points": 1
             },
             {
               "element_id": 154,
@@ -870,13 +748,13 @@
               "live_points": -1
             },
             {
-              "element_id": 15,
-              "player": "\u00d8degaard",
+              "element_id": 124,
+              "player": "Gro\u00df",
               "position": 7,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 3
+              "live_points": 0
             },
             {
               "element_id": 40,
@@ -888,13 +766,13 @@
               "live_points": 1
             },
             {
-              "element_id": 165,
-              "player": "Jo\u00e3o Pedro",
+              "element_id": 15,
+              "player": "\u00d8degaard",
               "position": 9,
               "multiplier": 1,
               "is_captain": false,
-              "is_vice_captain": true,
-              "live_points": 0
+              "is_vice_captain": false,
+              "live_points": 3
             },
             {
               "element_id": 569,
@@ -924,13 +802,13 @@
               "live_points": 0
             },
             {
-              "element_id": 113,
-              "player": "F.Kad\u0131o\u011flu",
+              "element_id": 165,
+              "player": "Jo\u00e3o Pedro",
               "position": 13,
               "multiplier": 0,
               "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 1
+              "is_vice_captain": true,
+              "live_points": 0
             },
             {
               "element_id": 236,
@@ -953,24 +831,31 @@
           ]
         },
         {
-          "entry_id": 361353,
-          "manager_name": "Kellen Playford",
-          "team_name": "Jogo Bonito",
-          "league_position": 7,
-          "previous_league_position": 3,
-          "gameweek_points": 19,
-          "total_points": 540,
-          "overall_rank": 352239,
-          "gameweek_rank": 9592266,
-          "points_on_bench": 4,
+          "entry_id": 2387947,
+          "manager_name": "Libby Masters",
+          "team_name": "MoreCherkiMrChandler",
+          "league_position": 5,
+          "previous_league_position": 6,
+          "gameweek_points": 45,
+          "total_points": 558,
+          "overall_rank": 226485,
+          "gameweek_rank": 5402601,
+          "points_on_bench": 15,
           "transfers": 0,
           "transfer_cost": 0,
-          "team_value": 102.3,
+          "team_value": 103.5,
           "bank": 0.2,
           "active_chip": null,
-          "captain": "Jo\u00e3o Pedro",
-          "vice_captain": "Cherki",
-          "automatic_subs": [],
+          "captain": "Haaland",
+          "vice_captain": "Palmer",
+          "automatic_subs": [
+            {
+              "entry": 2387947,
+              "element_in": 124,
+              "element_out": 165,
+              "event": 8
+            }
+          ],
           "squad": [
             {
               "element_id": 109,
@@ -991,9 +876,164 @@
               "live_points": 1
             },
             {
-              "element_id": 173,
-              "player": "Thomas",
+              "element_id": 8,
+              "player": "Calafiori",
               "position": 3,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 1
+            },
+            {
+              "element_id": 31,
+              "player": "Konsa",
+              "position": 4,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 14
+            },
+            {
+              "element_id": 334,
+              "player": "Muharemovi\u0107",
+              "position": 5,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 9
+            },
+            {
+              "element_id": 154,
+              "player": "Palmer",
+              "position": 6,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": true,
+              "live_points": -1
+            },
+            {
+              "element_id": 480,
+              "player": "Gibbs-White",
+              "position": 7,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 2
+            },
+            {
+              "element_id": 40,
+              "player": "Rogers",
+              "position": 8,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 1
+            },
+            {
+              "element_id": 399,
+              "player": "Cherki",
+              "position": 9,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 0
+            },
+            {
+              "element_id": 124,
+              "player": "Gro\u00df",
+              "position": 10,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 0
+            },
+            {
+              "element_id": 411,
+              "player": "Haaland",
+              "position": 11,
+              "multiplier": 2,
+              "is_captain": true,
+              "is_vice_captain": false,
+              "live_points": 8
+            },
+            {
+              "element_id": 496,
+              "player": "Kinsky",
+              "position": 12,
+              "multiplier": 0,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 9
+            },
+            {
+              "element_id": 165,
+              "player": "Jo\u00e3o Pedro",
+              "position": 13,
+              "multiplier": 0,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 0
+            },
+            {
+              "element_id": 277,
+              "player": "Egan",
+              "position": 14,
+              "multiplier": 0,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 4
+            },
+            {
+              "element_id": 249,
+              "player": "Barry",
+              "position": 15,
+              "multiplier": 0,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 2
+            }
+          ]
+        },
+        {
+          "entry_id": 361353,
+          "manager_name": "Kellen Playford",
+          "team_name": "Jogo Bonito",
+          "league_position": 7,
+          "previous_league_position": 7,
+          "gameweek_points": 21,
+          "total_points": 542,
+          "overall_rank": 534824,
+          "gameweek_rank": 10942455,
+          "points_on_bench": 4,
+          "transfers": 0,
+          "transfer_cost": 0,
+          "team_value": 102.3,
+          "bank": 0.2,
+          "active_chip": null,
+          "captain": "Jo\u00e3o Pedro",
+          "vice_captain": "Cherki",
+          "automatic_subs": [
+            {
+              "entry": 361353,
+              "element_in": 427,
+              "element_out": 165,
+              "event": 8
+            }
+          ],
+          "squad": [
+            {
+              "element_id": 109,
+              "player": "Verbruggen",
+              "position": 1,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 2
+            },
+            {
+              "element_id": 115,
+              "player": "De Cuyper",
+              "position": 2,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
@@ -1002,6 +1042,15 @@
             {
               "element_id": 8,
               "player": "Calafiori",
+              "position": 3,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 1
+            },
+            {
+              "element_id": 173,
+              "player": "Thomas",
               "position": 4,
               "multiplier": 1,
               "is_captain": false,
@@ -1009,9 +1058,18 @@
               "live_points": 1
             },
             {
+              "element_id": 399,
+              "player": "Cherki",
+              "position": 5,
+              "multiplier": 2,
+              "is_captain": false,
+              "is_vice_captain": true,
+              "live_points": 0
+            },
+            {
               "element_id": 40,
               "player": "Rogers",
-              "position": 5,
+              "position": 6,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
@@ -1020,7 +1078,7 @@
             {
               "element_id": 15,
               "player": "\u00d8degaard",
-              "position": 6,
+              "position": 7,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
@@ -1029,29 +1087,20 @@
             {
               "element_id": 124,
               "player": "Gro\u00df",
-              "position": 7,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
-            },
-            {
-              "element_id": 399,
-              "player": "Cherki",
               "position": 8,
               "multiplier": 1,
               "is_captain": false,
-              "is_vice_captain": true,
+              "is_vice_captain": false,
               "live_points": 0
             },
             {
-              "element_id": 165,
-              "player": "Jo\u00e3o Pedro",
+              "element_id": 427,
+              "player": "Mbeumo",
               "position": 9,
-              "multiplier": 2,
-              "is_captain": true,
+              "multiplier": 1,
+              "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 0
+              "live_points": 2
             },
             {
               "element_id": 411,
@@ -1081,13 +1130,13 @@
               "live_points": 1
             },
             {
-              "element_id": 427,
-              "player": "Mbeumo",
+              "element_id": 165,
+              "player": "Jo\u00e3o Pedro",
               "position": 13,
               "multiplier": 0,
-              "is_captain": false,
+              "is_captain": true,
               "is_vice_captain": false,
-              "live_points": 2
+              "live_points": 0
             },
             {
               "element_id": 259,
@@ -1115,11 +1164,11 @@
           "team_name": "Bacuna Mateta",
           "league_position": 8,
           "previous_league_position": 8,
-          "gameweek_points": 38,
-          "total_points": 536,
-          "overall_rank": 854180,
-          "gameweek_rank": 9211870,
-          "points_on_bench": 6,
+          "gameweek_points": 39,
+          "total_points": 537,
+          "overall_rank": 658170,
+          "gameweek_rank": 7949718,
+          "points_on_bench": 14,
           "transfers": 2,
           "transfer_cost": 0,
           "team_value": 102.5,
@@ -1127,7 +1176,14 @@
           "active_chip": null,
           "captain": "Jo\u00e3o Pedro",
           "vice_captain": "Rogers",
-          "automatic_subs": [],
+          "automatic_subs": [
+            {
+              "entry": 1905253,
+              "element_in": 124,
+              "element_out": 165,
+              "event": 8
+            }
+          ],
           "squad": [
             {
               "element_id": 1,
@@ -1166,9 +1222,18 @@
               "live_points": 1
             },
             {
+              "element_id": 68,
+              "player": "Tavernier",
+              "position": 5,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 10
+            },
+            {
               "element_id": 154,
               "player": "Palmer",
-              "position": 5,
+              "position": 6,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
@@ -1177,20 +1242,11 @@
             {
               "element_id": 40,
               "player": "Rogers",
-              "position": 6,
-              "multiplier": 1,
+              "position": 7,
+              "multiplier": 2,
               "is_captain": false,
               "is_vice_captain": true,
               "live_points": 1
-            },
-            {
-              "element_id": 68,
-              "player": "Tavernier",
-              "position": 7,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 10
             },
             {
               "element_id": 453,
@@ -1202,22 +1258,22 @@
               "live_points": 8
             },
             {
-              "element_id": 411,
-              "player": "Haaland",
+              "element_id": 124,
+              "player": "Gro\u00df",
               "position": 9,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 8
+              "live_points": 0
             },
             {
-              "element_id": 165,
-              "player": "Jo\u00e3o Pedro",
+              "element_id": 411,
+              "player": "Haaland",
               "position": 10,
-              "multiplier": 2,
-              "is_captain": true,
+              "multiplier": 1,
+              "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 0
+              "live_points": 8
             },
             {
               "element_id": 346,
@@ -1238,11 +1294,11 @@
               "live_points": 0
             },
             {
-              "element_id": 124,
-              "player": "Gro\u00df",
+              "element_id": 165,
+              "player": "Jo\u00e3o Pedro",
               "position": 13,
               "multiplier": 0,
-              "is_captain": false,
+              "is_captain": true,
               "is_vice_captain": false,
               "live_points": 0
             },
@@ -1271,12 +1327,12 @@
           "manager_name": "Rob Grand",
           "team_name": "On me head Son",
           "league_position": 9,
-          "previous_league_position": 11,
-          "gameweek_points": 58,
-          "total_points": 534,
-          "overall_rank": 964169,
-          "gameweek_rank": 2301146,
-          "points_on_bench": 18,
+          "previous_league_position": 9,
+          "gameweek_points": 60,
+          "total_points": 536,
+          "overall_rank": 692558,
+          "gameweek_rank": 1156437,
+          "points_on_bench": 17,
           "transfers": 0,
           "transfer_cost": 0,
           "team_value": 101.1,
@@ -1284,7 +1340,14 @@
           "active_chip": "wildcard",
           "captain": "Haaland",
           "vice_captain": "Jo\u00e3o Pedro",
-          "automatic_subs": [],
+          "automatic_subs": [
+            {
+              "entry": 2336591,
+              "element_in": 183,
+              "element_out": 165,
+              "event": 8
+            }
+          ],
           "squad": [
             {
               "element_id": 109,
@@ -1305,8 +1368,8 @@
               "live_points": 14
             },
             {
-              "element_id": 8,
-              "player": "Calafiori",
+              "element_id": 173,
+              "player": "Thomas",
               "position": 3,
               "multiplier": 1,
               "is_captain": false,
@@ -1314,8 +1377,8 @@
               "live_points": 1
             },
             {
-              "element_id": 173,
-              "player": "Thomas",
+              "element_id": 8,
+              "player": "Calafiori",
               "position": 4,
               "multiplier": 1,
               "is_captain": false,
@@ -1323,22 +1386,22 @@
               "live_points": 1
             },
             {
-              "element_id": 68,
-              "player": "Tavernier",
+              "element_id": 40,
+              "player": "Rogers",
               "position": 5,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 10
+              "live_points": 1
             },
             {
-              "element_id": 40,
-              "player": "Rogers",
+              "element_id": 427,
+              "player": "Mbeumo",
               "position": 6,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 1
+              "live_points": 2
             },
             {
               "element_id": 400,
@@ -1350,40 +1413,40 @@
               "live_points": 2
             },
             {
-              "element_id": 427,
-              "player": "Mbeumo",
+              "element_id": 68,
+              "player": "Tavernier",
               "position": 8,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 10
+            },
+            {
+              "element_id": 183,
+              "player": "Rudoni",
+              "position": 9,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
               "live_points": 2
             },
             {
-              "element_id": 411,
-              "player": "Haaland",
-              "position": 9,
-              "multiplier": 2,
-              "is_captain": true,
-              "is_vice_captain": false,
-              "live_points": 8
-            },
-            {
-              "element_id": 165,
-              "player": "Jo\u00e3o Pedro",
-              "position": 10,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": true,
-              "live_points": 0
-            },
-            {
               "element_id": 379,
               "player": "Isak",
-              "position": 11,
+              "position": 10,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
               "live_points": 9
+            },
+            {
+              "element_id": 411,
+              "player": "Haaland",
+              "position": 11,
+              "multiplier": 2,
+              "is_captain": true,
+              "is_vice_captain": false,
+              "live_points": 8
             },
             {
               "element_id": 496,
@@ -1395,13 +1458,13 @@
               "live_points": 9
             },
             {
-              "element_id": 183,
-              "player": "Rudoni",
+              "element_id": 165,
+              "player": "Jo\u00e3o Pedro",
               "position": 13,
               "multiplier": 0,
               "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 2
+              "is_vice_captain": true,
+              "live_points": 0
             },
             {
               "element_id": 504,
@@ -1428,11 +1491,11 @@
           "manager_name": "Tom Patterson",
           "team_name": "full metal jacquet",
           "league_position": 10,
-          "previous_league_position": 11,
-          "gameweek_points": 45,
-          "total_points": 521,
-          "overall_rank": 1008332,
-          "gameweek_rank": 2684897,
+          "previous_league_position": 10,
+          "gameweek_points": 47,
+          "total_points": 523,
+          "overall_rank": 1156779,
+          "gameweek_rank": 4882631,
           "points_on_bench": 1,
           "transfers": 1,
           "transfer_cost": 0,
@@ -1441,7 +1504,14 @@
           "active_chip": null,
           "captain": "Haaland",
           "vice_captain": "Jo\u00e3o Pedro",
-          "automatic_subs": [],
+          "automatic_subs": [
+            {
+              "entry": 3514357,
+              "element_in": 127,
+              "element_out": 165,
+              "event": 8
+            }
+          ],
           "squad": [
             {
               "element_id": 1,
@@ -1453,9 +1523,18 @@
               "live_points": 7
             },
             {
+              "element_id": 229,
+              "player": "Tarkowski",
+              "position": 2,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 2
+            },
+            {
               "element_id": 469,
               "player": "N.Williams",
-              "position": 2,
+              "position": 3,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
@@ -1464,25 +1543,25 @@
             {
               "element_id": 8,
               "player": "Calafiori",
-              "position": 3,
+              "position": 4,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
               "live_points": 1
             },
             {
-              "element_id": 229,
-              "player": "Tarkowski",
-              "position": 4,
+              "element_id": 124,
+              "player": "Gro\u00df",
+              "position": 5,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 2
+              "live_points": 0
             },
             {
               "element_id": 40,
               "player": "Rogers",
-              "position": 5,
+              "position": 6,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
@@ -1491,20 +1570,11 @@
             {
               "element_id": 94,
               "player": "Schade",
-              "position": 6,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 2
-            },
-            {
-              "element_id": 124,
-              "player": "Gro\u00df",
               "position": 7,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 0
+              "live_points": 2
             },
             {
               "element_id": 366,
@@ -1516,13 +1586,13 @@
               "live_points": 6
             },
             {
-              "element_id": 165,
-              "player": "Jo\u00e3o Pedro",
+              "element_id": 127,
+              "player": "Gomez",
               "position": 9,
               "multiplier": 1,
               "is_captain": false,
-              "is_vice_captain": true,
-              "live_points": 0
+              "is_vice_captain": false,
+              "live_points": 2
             },
             {
               "element_id": 411,
@@ -1552,13 +1622,13 @@
               "live_points": 0
             },
             {
-              "element_id": 127,
-              "player": "Gomez",
+              "element_id": 165,
+              "player": "Jo\u00e3o Pedro",
               "position": 13,
               "multiplier": 0,
               "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 2
+              "is_vice_captain": true,
+              "live_points": 0
             },
             {
               "element_id": 259,
@@ -1585,12 +1655,12 @@
           "manager_name": "Alex Giddings",
           "team_name": "Serious Konsaquences",
           "league_position": 11,
-          "previous_league_position": 9,
-          "gameweek_points": 25,
-          "total_points": 516,
-          "overall_rank": 928644,
-          "gameweek_rank": 7417461,
-          "points_on_bench": 6,
+          "previous_league_position": 11,
+          "gameweek_points": 31,
+          "total_points": 522,
+          "overall_rank": 1189500,
+          "gameweek_rank": 10045703,
+          "points_on_bench": 7,
           "transfers": 1,
           "transfer_cost": 0,
           "team_value": 101.8,
@@ -1598,7 +1668,14 @@
           "active_chip": null,
           "captain": "Rogers",
           "vice_captain": "Haaland",
-          "automatic_subs": [],
+          "automatic_subs": [
+            {
+              "entry": 794604,
+              "element_in": 268,
+              "element_out": 165,
+              "event": 8
+            }
+          ],
           "squad": [
             {
               "element_id": 1,
@@ -1619,8 +1696,8 @@
               "live_points": 1
             },
             {
-              "element_id": 173,
-              "player": "Thomas",
+              "element_id": 115,
+              "player": "De Cuyper",
               "position": 3,
               "multiplier": 1,
               "is_captain": false,
@@ -1628,8 +1705,8 @@
               "live_points": 1
             },
             {
-              "element_id": 115,
-              "player": "De Cuyper",
+              "element_id": 173,
+              "player": "Thomas",
               "position": 4,
               "multiplier": 1,
               "is_captain": false,
@@ -1637,17 +1714,17 @@
               "live_points": 1
             },
             {
-              "element_id": 124,
-              "player": "Gro\u00df",
+              "element_id": 40,
+              "player": "Rogers",
               "position": 5,
-              "multiplier": 1,
-              "is_captain": false,
+              "multiplier": 2,
+              "is_captain": true,
               "is_vice_captain": false,
-              "live_points": 0
+              "live_points": 1
             },
             {
-              "element_id": 399,
-              "player": "Cherki",
+              "element_id": 124,
+              "player": "Gro\u00df",
               "position": 6,
               "multiplier": 1,
               "is_captain": false,
@@ -1655,31 +1732,31 @@
               "live_points": 0
             },
             {
-              "element_id": 40,
-              "player": "Rogers",
-              "position": 7,
-              "multiplier": 2,
-              "is_captain": true,
-              "is_vice_captain": false,
-              "live_points": 1
-            },
-            {
               "element_id": 15,
               "player": "\u00d8degaard",
-              "position": 8,
+              "position": 7,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
               "live_points": 3
             },
             {
-              "element_id": 138,
-              "player": "Kostoulas",
+              "element_id": 399,
+              "player": "Cherki",
+              "position": 8,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 0
+            },
+            {
+              "element_id": 268,
+              "player": "King",
               "position": 9,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 2
+              "live_points": 6
             },
             {
               "element_id": 411,
@@ -1691,13 +1768,13 @@
               "live_points": 8
             },
             {
-              "element_id": 165,
-              "player": "Jo\u00e3o Pedro",
+              "element_id": 138,
+              "player": "Kostoulas",
               "position": 11,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 0
+              "live_points": 2
             },
             {
               "element_id": 572,
@@ -1709,13 +1786,13 @@
               "live_points": 3
             },
             {
-              "element_id": 268,
-              "player": "King",
+              "element_id": 165,
+              "player": "Jo\u00e3o Pedro",
               "position": 13,
               "multiplier": 0,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 6
+              "live_points": 0
             },
             {
               "element_id": 279,
@@ -1738,15 +1815,179 @@
           ]
         },
         {
+          "entry_id": 2037798,
+          "manager_name": "Stuart F",
+          "team_name": "Ran out of time",
+          "league_position": 12,
+          "previous_league_position": 12,
+          "gameweek_points": 51,
+          "total_points": 517,
+          "overall_rank": 1405680,
+          "gameweek_rank": 3480698,
+          "points_on_bench": 13,
+          "transfers": 1,
+          "transfer_cost": 0,
+          "team_value": 102.8,
+          "bank": 3.7,
+          "active_chip": null,
+          "captain": "Haaland",
+          "vice_captain": "Jo\u00e3o Pedro",
+          "automatic_subs": [
+            {
+              "entry": 2037798,
+              "element_in": 268,
+              "element_out": 165,
+              "event": 8
+            }
+          ],
+          "squad": [
+            {
+              "element_id": 250,
+              "player": "Leno",
+              "position": 1,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 8
+            },
+            {
+              "element_id": 8,
+              "player": "Calafiori",
+              "position": 2,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 1
+            },
+            {
+              "element_id": 115,
+              "player": "De Cuyper",
+              "position": 3,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 1
+            },
+            {
+              "element_id": 391,
+              "player": "Gvardiol",
+              "position": 4,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 1
+            },
+            {
+              "element_id": 449,
+              "player": "Hall",
+              "position": 5,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 5
+            },
+            {
+              "element_id": 94,
+              "player": "Schade",
+              "position": 6,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 2
+            },
+            {
+              "element_id": 124,
+              "player": "Gro\u00df",
+              "position": 7,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 0
+            },
+            {
+              "element_id": 68,
+              "player": "Tavernier",
+              "position": 8,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 10
+            },
+            {
+              "element_id": 40,
+              "player": "Rogers",
+              "position": 9,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 1
+            },
+            {
+              "element_id": 268,
+              "player": "King",
+              "position": 10,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 6
+            },
+            {
+              "element_id": 411,
+              "player": "Haaland",
+              "position": 11,
+              "multiplier": 2,
+              "is_captain": true,
+              "is_vice_captain": false,
+              "live_points": 8
+            },
+            {
+              "element_id": 496,
+              "player": "Kinsky",
+              "position": 12,
+              "multiplier": 0,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 9
+            },
+            {
+              "element_id": 165,
+              "player": "Jo\u00e3o Pedro",
+              "position": 13,
+              "multiplier": 0,
+              "is_captain": false,
+              "is_vice_captain": true,
+              "live_points": 0
+            },
+            {
+              "element_id": 229,
+              "player": "Tarkowski",
+              "position": 14,
+              "multiplier": 0,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 2
+            },
+            {
+              "element_id": 249,
+              "player": "Barry",
+              "position": 15,
+              "multiplier": 0,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 2
+            }
+          ]
+        },
+        {
           "entry_id": 7054850,
           "manager_name": "Tim Key",
           "team_name": "Flying Canary",
-          "league_position": 12,
-          "previous_league_position": 10,
+          "league_position": 13,
+          "previous_league_position": 13,
           "gameweek_points": 25,
           "total_points": 514,
-          "overall_rank": 1154377,
-          "gameweek_rank": 8825409,
+          "overall_rank": 1544182,
+          "gameweek_rank": 10766271,
           "points_on_bench": 17,
           "transfers": 1,
           "transfer_cost": 0,
@@ -1895,173 +2136,16 @@
           ]
         },
         {
-          "entry_id": 2037798,
-          "manager_name": "Stuart F",
-          "team_name": "Ran out of time",
-          "league_position": 13,
-          "previous_league_position": 15,
-          "gameweek_points": 45,
-          "total_points": 511,
-          "overall_rank": 1783396,
-          "gameweek_rank": 5361751,
-          "points_on_bench": 19,
-          "transfers": 1,
-          "transfer_cost": 0,
-          "team_value": 102.8,
-          "bank": 3.7,
-          "active_chip": null,
-          "captain": "Haaland",
-          "vice_captain": "Jo\u00e3o Pedro",
-          "automatic_subs": [],
-          "squad": [
-            {
-              "element_id": 250,
-              "player": "Leno",
-              "position": 1,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 8
-            },
-            {
-              "element_id": 8,
-              "player": "Calafiori",
-              "position": 2,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 1
-            },
-            {
-              "element_id": 115,
-              "player": "De Cuyper",
-              "position": 3,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 1
-            },
-            {
-              "element_id": 449,
-              "player": "Hall",
-              "position": 4,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 5
-            },
-            {
-              "element_id": 391,
-              "player": "Gvardiol",
-              "position": 5,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 1
-            },
-            {
-              "element_id": 94,
-              "player": "Schade",
-              "position": 6,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 2
-            },
-            {
-              "element_id": 68,
-              "player": "Tavernier",
-              "position": 7,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 10
-            },
-            {
-              "element_id": 40,
-              "player": "Rogers",
-              "position": 8,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 1
-            },
-            {
-              "element_id": 124,
-              "player": "Gro\u00df",
-              "position": 9,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
-            },
-            {
-              "element_id": 165,
-              "player": "Jo\u00e3o Pedro",
-              "position": 10,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": true,
-              "live_points": 0
-            },
-            {
-              "element_id": 411,
-              "player": "Haaland",
-              "position": 11,
-              "multiplier": 2,
-              "is_captain": true,
-              "is_vice_captain": false,
-              "live_points": 8
-            },
-            {
-              "element_id": 496,
-              "player": "Kinsky",
-              "position": 12,
-              "multiplier": 0,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 9
-            },
-            {
-              "element_id": 268,
-              "player": "King",
-              "position": 13,
-              "multiplier": 0,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 6
-            },
-            {
-              "element_id": 229,
-              "player": "Tarkowski",
-              "position": 14,
-              "multiplier": 0,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 2
-            },
-            {
-              "element_id": 249,
-              "player": "Barry",
-              "position": 15,
-              "multiplier": 0,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 2
-            }
-          ]
-        },
-        {
           "entry_id": 5290231,
           "manager_name": "Adam Kimberley",
           "team_name": "Goals Akimbo",
           "league_position": 14,
-          "previous_league_position": 13,
-          "gameweek_points": 38,
-          "total_points": 510,
-          "overall_rank": 1045486,
-          "gameweek_rank": 1929133,
-          "points_on_bench": 16,
+          "previous_league_position": 14,
+          "gameweek_points": 39,
+          "total_points": 511,
+          "overall_rank": 1698949,
+          "gameweek_rank": 7659273,
+          "points_on_bench": 15,
           "transfers": 0,
           "transfer_cost": 0,
           "team_value": 101.7,
@@ -2069,7 +2153,14 @@
           "active_chip": null,
           "captain": "Delap",
           "vice_captain": "Haaland",
-          "automatic_subs": [],
+          "automatic_subs": [
+            {
+              "entry": 5290231,
+              "element_in": 481,
+              "element_out": 165,
+              "event": 8
+            }
+          ],
           "squad": [
             {
               "element_id": 412,
@@ -2081,13 +2172,13 @@
               "live_points": 1
             },
             {
-              "element_id": 8,
-              "player": "Calafiori",
+              "element_id": 469,
+              "player": "N.Williams",
               "position": 2,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 1
+              "live_points": 8
             },
             {
               "element_id": 31,
@@ -2099,13 +2190,13 @@
               "live_points": 14
             },
             {
-              "element_id": 469,
-              "player": "N.Williams",
+              "element_id": 8,
+              "player": "Calafiori",
               "position": 4,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 8
+              "live_points": 1
             },
             {
               "element_id": 154,
@@ -2144,22 +2235,22 @@
               "live_points": 1
             },
             {
+              "element_id": 481,
+              "player": "Anderson",
+              "position": 9,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 1
+            },
+            {
               "element_id": 411,
               "player": "Haaland",
-              "position": 9,
+              "position": 10,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": true,
               "live_points": 8
-            },
-            {
-              "element_id": 165,
-              "player": "Jo\u00e3o Pedro",
-              "position": 10,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
             },
             {
               "element_id": 167,
@@ -2180,13 +2271,13 @@
               "live_points": 9
             },
             {
-              "element_id": 481,
-              "player": "Anderson",
+              "element_id": 165,
+              "player": "Jo\u00e3o Pedro",
               "position": 13,
               "multiplier": 0,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 1
+              "live_points": 0
             },
             {
               "element_id": 503,
@@ -2213,11 +2304,11 @@
           "manager_name": "Luke Johnson",
           "team_name": "MeMyselfNdiaye",
           "league_position": 15,
-          "previous_league_position": 20,
-          "gameweek_points": 69,
-          "total_points": 501,
-          "overall_rank": 2265048,
-          "gameweek_rank": 198773,
+          "previous_league_position": 15,
+          "gameweek_points": 77,
+          "total_points": 509,
+          "overall_rank": 1799645,
+          "gameweek_rank": 66825,
           "points_on_bench": 8,
           "transfers": 1,
           "transfer_cost": 0,
@@ -2226,7 +2317,14 @@
           "active_chip": null,
           "captain": "Haaland",
           "vice_captain": "Rogers",
-          "automatic_subs": [],
+          "automatic_subs": [
+            {
+              "entry": 2765608,
+              "element_in": 362,
+              "element_out": 165,
+              "event": 8
+            }
+          ],
           "squad": [
             {
               "element_id": 1,
@@ -2238,18 +2336,9 @@
               "live_points": 7
             },
             {
-              "element_id": 31,
-              "player": "Konsa",
-              "position": 2,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 14
-            },
-            {
               "element_id": 449,
               "player": "Hall",
-              "position": 3,
+              "position": 2,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
@@ -2258,7 +2347,25 @@
             {
               "element_id": 257,
               "player": "Bassey",
+              "position": 3,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 8
+            },
+            {
+              "element_id": 31,
+              "player": "Konsa",
               "position": 4,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 14
+            },
+            {
+              "element_id": 362,
+              "player": "Jacquet",
+              "position": 5,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
@@ -2267,20 +2374,11 @@
             {
               "element_id": 237,
               "player": "Ndiaye",
-              "position": 5,
+              "position": 6,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
               "live_points": 5
-            },
-            {
-              "element_id": 40,
-              "player": "Rogers",
-              "position": 6,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": true,
-              "live_points": 1
             },
             {
               "element_id": 68,
@@ -2301,13 +2399,13 @@
               "live_points": 2
             },
             {
-              "element_id": 165,
-              "player": "Jo\u00e3o Pedro",
+              "element_id": 40,
+              "player": "Rogers",
               "position": 9,
               "multiplier": 1,
               "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
+              "is_vice_captain": true,
+              "live_points": 1
             },
             {
               "element_id": 411,
@@ -2337,13 +2435,13 @@
               "live_points": 8
             },
             {
-              "element_id": 362,
-              "player": "Jacquet",
+              "element_id": 165,
+              "player": "Jo\u00e3o Pedro",
               "position": 13,
               "multiplier": 0,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 8
+              "live_points": 0
             },
             {
               "element_id": 586,
@@ -2370,12 +2468,12 @@
           "manager_name": "Ilya Baxter",
           "team_name": "Norti FC",
           "league_position": 16,
-          "previous_league_position": 14,
-          "gameweek_points": 31,
-          "total_points": 498,
-          "overall_rank": 1893202,
-          "gameweek_rank": 6506894,
-          "points_on_bench": 4,
+          "previous_league_position": 16,
+          "gameweek_points": 36,
+          "total_points": 503,
+          "overall_rank": 2117306,
+          "gameweek_rank": 8654568,
+          "points_on_bench": 2,
           "transfers": 0,
           "transfer_cost": 0,
           "team_value": 101.7,
@@ -2383,7 +2481,14 @@
           "active_chip": null,
           "captain": "Jo\u00e3o Pedro",
           "vice_captain": "Gakpo",
-          "automatic_subs": [],
+          "automatic_subs": [
+            {
+              "entry": 5257077,
+              "element_in": 175,
+              "element_out": 165,
+              "event": 8
+            }
+          ],
           "squad": [
             {
               "element_id": 412,
@@ -2422,8 +2527,8 @@
               "live_points": 1
             },
             {
-              "element_id": 427,
-              "player": "Mbeumo",
+              "element_id": 175,
+              "player": "van Ewijk",
               "position": 5,
               "multiplier": 1,
               "is_captain": false,
@@ -2431,9 +2536,27 @@
               "live_points": 2
             },
             {
+              "element_id": 427,
+              "player": "Mbeumo",
+              "position": 6,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 2
+            },
+            {
+              "element_id": 367,
+              "player": "Gakpo",
+              "position": 7,
+              "multiplier": 2,
+              "is_captain": false,
+              "is_vice_captain": true,
+              "live_points": 3
+            },
+            {
               "element_id": 40,
               "player": "Rogers",
-              "position": 6,
+              "position": 8,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
@@ -2442,29 +2565,11 @@
             {
               "element_id": 124,
               "player": "Gro\u00df",
-              "position": 7,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
-            },
-            {
-              "element_id": 367,
-              "player": "Gakpo",
-              "position": 8,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": true,
-              "live_points": 3
-            },
-            {
-              "element_id": 166,
-              "player": "N.Jackson",
               "position": 9,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 13
+              "live_points": 0
             },
             {
               "element_id": 411,
@@ -2476,13 +2581,13 @@
               "live_points": 8
             },
             {
-              "element_id": 165,
-              "player": "Jo\u00e3o Pedro",
+              "element_id": 166,
+              "player": "N.Jackson",
               "position": 11,
-              "multiplier": 2,
-              "is_captain": true,
+              "multiplier": 1,
+              "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 0
+              "live_points": 13
             },
             {
               "element_id": 110,
@@ -2494,13 +2599,13 @@
               "live_points": 2
             },
             {
-              "element_id": 175,
-              "player": "van Ewijk",
+              "element_id": 165,
+              "player": "Jo\u00e3o Pedro",
               "position": 13,
               "multiplier": 0,
-              "is_captain": false,
+              "is_captain": true,
               "is_vice_captain": false,
-              "live_points": 2
+              "live_points": 0
             },
             {
               "element_id": 423,
@@ -2527,12 +2632,12 @@
           "manager_name": "Jonny Billing",
           "team_name": "McGinn & Tonic",
           "league_position": 17,
-          "previous_league_position": 16,
-          "gameweek_points": 34,
-          "total_points": 488,
-          "overall_rank": 2209895,
-          "gameweek_rank": 3737137,
-          "points_on_bench": 6,
+          "previous_league_position": 17,
+          "gameweek_points": 40,
+          "total_points": 494,
+          "overall_rank": 2633636,
+          "gameweek_rank": 7297029,
+          "points_on_bench": 12,
           "transfers": 0,
           "transfer_cost": 0,
           "team_value": 101.8,
@@ -2540,7 +2645,14 @@
           "active_chip": null,
           "captain": "Haaland",
           "vice_captain": "Jo\u00e3o Pedro",
-          "automatic_subs": [],
+          "automatic_subs": [
+            {
+              "entry": 7188172,
+              "element_in": 268,
+              "element_out": 165,
+              "event": 8
+            }
+          ],
           "squad": [
             {
               "element_id": 1,
@@ -2552,18 +2664,9 @@
               "live_points": 7
             },
             {
-              "element_id": 8,
-              "player": "Calafiori",
-              "position": 2,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 1
-            },
-            {
               "element_id": 115,
               "player": "De Cuyper",
-              "position": 3,
+              "position": 2,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
@@ -2572,6 +2675,15 @@
             {
               "element_id": 391,
               "player": "Gvardiol",
+              "position": 3,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 1
+            },
+            {
+              "element_id": 8,
+              "player": "Calafiori",
               "position": 4,
               "multiplier": 1,
               "is_captain": false,
@@ -2588,18 +2700,9 @@
               "live_points": 3
             },
             {
-              "element_id": 400,
-              "player": "Doku",
-              "position": 6,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 2
-            },
-            {
               "element_id": 124,
               "player": "Gro\u00df",
-              "position": 7,
+              "position": 6,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
@@ -2608,20 +2711,29 @@
             {
               "element_id": 40,
               "player": "Rogers",
-              "position": 8,
+              "position": 7,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
               "live_points": 1
             },
             {
-              "element_id": 165,
-              "player": "Jo\u00e3o Pedro",
+              "element_id": 400,
+              "player": "Doku",
+              "position": 8,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 2
+            },
+            {
+              "element_id": 268,
+              "player": "King",
               "position": 9,
               "multiplier": 1,
               "is_captain": false,
-              "is_vice_captain": true,
-              "live_points": 0
+              "is_vice_captain": false,
+              "live_points": 6
             },
             {
               "element_id": 411,
@@ -2651,13 +2763,13 @@
               "live_points": 2
             },
             {
-              "element_id": 268,
-              "player": "King",
+              "element_id": 165,
+              "player": "Jo\u00e3o Pedro",
               "position": 13,
               "multiplier": 0,
               "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 6
+              "is_vice_captain": true,
+              "live_points": 0
             },
             {
               "element_id": 449,
@@ -2676,320 +2788,6 @@
               "is_captain": false,
               "is_vice_captain": false,
               "live_points": 5
-            }
-          ]
-        },
-        {
-          "entry_id": 7926010,
-          "manager_name": "Erica Canela",
-          "team_name": "Hotel Calafiori",
-          "league_position": 18,
-          "previous_league_position": 19,
-          "gameweek_points": 46,
-          "total_points": 480,
-          "overall_rank": 3734743,
-          "gameweek_rank": 6028815,
-          "points_on_bench": 6,
-          "transfers": 0,
-          "transfer_cost": 0,
-          "team_value": 100.8,
-          "bank": 0.2,
-          "active_chip": null,
-          "captain": "Haaland",
-          "vice_captain": "Raya",
-          "automatic_subs": [],
-          "squad": [
-            {
-              "element_id": 1,
-              "player": "Raya",
-              "position": 1,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": true,
-              "live_points": 7
-            },
-            {
-              "element_id": 8,
-              "player": "Calafiori",
-              "position": 2,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 1
-            },
-            {
-              "element_id": 362,
-              "player": "Jacquet",
-              "position": 3,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 8
-            },
-            {
-              "element_id": 508,
-              "player": "Davies",
-              "position": 4,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 1
-            },
-            {
-              "element_id": 649,
-              "player": "Maitland-Niles",
-              "position": 5,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
-            },
-            {
-              "element_id": 330,
-              "player": "Bogle",
-              "position": 6,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 5
-            },
-            {
-              "element_id": 426,
-              "player": "B.Fernandes",
-              "position": 7,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
-            },
-            {
-              "element_id": 368,
-              "player": "Szoboszlai",
-              "position": 8,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
-            },
-            {
-              "element_id": 453,
-              "player": "Barnes",
-              "position": 9,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 8
-            },
-            {
-              "element_id": 124,
-              "player": "Gro\u00df",
-              "position": 10,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
-            },
-            {
-              "element_id": 411,
-              "player": "Haaland",
-              "position": 11,
-              "multiplier": 2,
-              "is_captain": true,
-              "is_vice_captain": false,
-              "live_points": 8
-            },
-            {
-              "element_id": 597,
-              "player": "Suzuki",
-              "position": 12,
-              "multiplier": 0,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 4
-            },
-            {
-              "element_id": 165,
-              "player": "Jo\u00e3o Pedro",
-              "position": 13,
-              "multiplier": 0,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
-            },
-            {
-              "element_id": 209,
-              "player": "Johnson",
-              "position": 14,
-              "multiplier": 0,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 2
-            },
-            {
-              "element_id": 195,
-              "player": "Simms",
-              "position": 15,
-              "multiplier": 0,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
-            }
-          ]
-        },
-        {
-          "entry_id": 3336501,
-          "manager_name": "Peter Dakin",
-          "team_name": "What Have I Done..",
-          "league_position": 19,
-          "previous_league_position": 17,
-          "gameweek_points": 34,
-          "total_points": 478,
-          "overall_rank": 3675777,
-          "gameweek_rank": 9259876,
-          "points_on_bench": 12,
-          "transfers": 0,
-          "transfer_cost": 0,
-          "team_value": 103.2,
-          "bank": 0.6,
-          "active_chip": null,
-          "captain": "Jo\u00e3o Pedro",
-          "vice_captain": "Gro\u00df",
-          "automatic_subs": [],
-          "squad": [
-            {
-              "element_id": 1,
-              "player": "Raya",
-              "position": 1,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 7
-            },
-            {
-              "element_id": 115,
-              "player": "De Cuyper",
-              "position": 2,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 1
-            },
-            {
-              "element_id": 8,
-              "player": "Calafiori",
-              "position": 3,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 1
-            },
-            {
-              "element_id": 449,
-              "player": "Hall",
-              "position": 4,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 5
-            },
-            {
-              "element_id": 391,
-              "player": "Gvardiol",
-              "position": 5,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 1
-            },
-            {
-              "element_id": 124,
-              "player": "Gro\u00df",
-              "position": 6,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": true,
-              "live_points": 0
-            },
-            {
-              "element_id": 40,
-              "player": "Rogers",
-              "position": 7,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 1
-            },
-            {
-              "element_id": 68,
-              "player": "Tavernier",
-              "position": 8,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 10
-            },
-            {
-              "element_id": 268,
-              "player": "King",
-              "position": 9,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 6
-            },
-            {
-              "element_id": 138,
-              "player": "Kostoulas",
-              "position": 10,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 2
-            },
-            {
-              "element_id": 165,
-              "player": "Jo\u00e3o Pedro",
-              "position": 11,
-              "multiplier": 2,
-              "is_captain": true,
-              "is_vice_captain": false,
-              "live_points": 0
-            },
-            {
-              "element_id": 572,
-              "player": "Tzolakis",
-              "position": 12,
-              "multiplier": 0,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 3
-            },
-            {
-              "element_id": 411,
-              "player": "Haaland",
-              "position": 13,
-              "multiplier": 0,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 8
-            },
-            {
-              "element_id": 480,
-              "player": "Gibbs-White",
-              "position": 14,
-              "multiplier": 0,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 2
-            },
-            {
-              "element_id": 229,
-              "player": "Tarkowski",
-              "position": 15,
-              "multiplier": 0,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 2
             }
           ]
         },
@@ -2997,13 +2795,13 @@
           "entry_id": 6673423,
           "manager_name": "Edward Rhodes",
           "team_name": "McGinn & Tonic",
-          "league_position": 20,
-          "previous_league_position": 21,
-          "gameweek_points": 51,
-          "total_points": 478,
-          "overall_rank": 3006083,
-          "gameweek_rank": 739337,
-          "points_on_bench": 1,
+          "league_position": 18,
+          "previous_league_position": 18,
+          "gameweek_points": 62,
+          "total_points": 489,
+          "overall_rank": 2927470,
+          "gameweek_rank": 870718,
+          "points_on_bench": 0,
           "transfers": 0,
           "transfer_cost": 0,
           "team_value": 100.6,
@@ -3170,15 +2968,343 @@
           ]
         },
         {
+          "entry_id": 3336501,
+          "manager_name": "Peter Dakin",
+          "team_name": "What Have I Done..",
+          "league_position": 19,
+          "previous_league_position": 19,
+          "gameweek_points": 42,
+          "total_points": 486,
+          "overall_rank": 3108286,
+          "gameweek_rank": 6551396,
+          "points_on_bench": 7,
+          "transfers": 0,
+          "transfer_cost": 0,
+          "team_value": 103.2,
+          "bank": 0.6,
+          "active_chip": null,
+          "captain": "Jo\u00e3o Pedro",
+          "vice_captain": "Gro\u00df",
+          "automatic_subs": [
+            {
+              "entry": 3336501,
+              "element_in": 411,
+              "element_out": 165,
+              "event": 8
+            }
+          ],
+          "squad": [
+            {
+              "element_id": 1,
+              "player": "Raya",
+              "position": 1,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 7
+            },
+            {
+              "element_id": 391,
+              "player": "Gvardiol",
+              "position": 2,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 1
+            },
+            {
+              "element_id": 8,
+              "player": "Calafiori",
+              "position": 3,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 1
+            },
+            {
+              "element_id": 115,
+              "player": "De Cuyper",
+              "position": 4,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 1
+            },
+            {
+              "element_id": 449,
+              "player": "Hall",
+              "position": 5,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 5
+            },
+            {
+              "element_id": 40,
+              "player": "Rogers",
+              "position": 6,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 1
+            },
+            {
+              "element_id": 124,
+              "player": "Gro\u00df",
+              "position": 7,
+              "multiplier": 2,
+              "is_captain": false,
+              "is_vice_captain": true,
+              "live_points": 0
+            },
+            {
+              "element_id": 268,
+              "player": "King",
+              "position": 8,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 6
+            },
+            {
+              "element_id": 68,
+              "player": "Tavernier",
+              "position": 9,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 10
+            },
+            {
+              "element_id": 411,
+              "player": "Haaland",
+              "position": 10,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 8
+            },
+            {
+              "element_id": 138,
+              "player": "Kostoulas",
+              "position": 11,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 2
+            },
+            {
+              "element_id": 572,
+              "player": "Tzolakis",
+              "position": 12,
+              "multiplier": 0,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 3
+            },
+            {
+              "element_id": 165,
+              "player": "Jo\u00e3o Pedro",
+              "position": 13,
+              "multiplier": 0,
+              "is_captain": true,
+              "is_vice_captain": false,
+              "live_points": 0
+            },
+            {
+              "element_id": 480,
+              "player": "Gibbs-White",
+              "position": 14,
+              "multiplier": 0,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 2
+            },
+            {
+              "element_id": 229,
+              "player": "Tarkowski",
+              "position": 15,
+              "multiplier": 0,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 2
+            }
+          ]
+        },
+        {
+          "entry_id": 7926010,
+          "manager_name": "Erica Canela",
+          "team_name": "Hotel Calafiori",
+          "league_position": 20,
+          "previous_league_position": 20,
+          "gameweek_points": 48,
+          "total_points": 482,
+          "overall_rank": 3358300,
+          "gameweek_rank": 4290610,
+          "points_on_bench": 4,
+          "transfers": 0,
+          "transfer_cost": 0,
+          "team_value": 100.8,
+          "bank": 0.2,
+          "active_chip": null,
+          "captain": "Haaland",
+          "vice_captain": "Raya",
+          "automatic_subs": [
+            {
+              "entry": 7926010,
+              "element_in": 209,
+              "element_out": 649,
+              "event": 8
+            }
+          ],
+          "squad": [
+            {
+              "element_id": 1,
+              "player": "Raya",
+              "position": 1,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": true,
+              "live_points": 7
+            },
+            {
+              "element_id": 8,
+              "player": "Calafiori",
+              "position": 2,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 1
+            },
+            {
+              "element_id": 362,
+              "player": "Jacquet",
+              "position": 3,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 8
+            },
+            {
+              "element_id": 508,
+              "player": "Davies",
+              "position": 4,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 1
+            },
+            {
+              "element_id": 330,
+              "player": "Bogle",
+              "position": 5,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 5
+            },
+            {
+              "element_id": 209,
+              "player": "Johnson",
+              "position": 6,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 2
+            },
+            {
+              "element_id": 426,
+              "player": "B.Fernandes",
+              "position": 7,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 0
+            },
+            {
+              "element_id": 124,
+              "player": "Gro\u00df",
+              "position": 8,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 0
+            },
+            {
+              "element_id": 453,
+              "player": "Barnes",
+              "position": 9,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 8
+            },
+            {
+              "element_id": 368,
+              "player": "Szoboszlai",
+              "position": 10,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 0
+            },
+            {
+              "element_id": 411,
+              "player": "Haaland",
+              "position": 11,
+              "multiplier": 2,
+              "is_captain": true,
+              "is_vice_captain": false,
+              "live_points": 8
+            },
+            {
+              "element_id": 597,
+              "player": "Suzuki",
+              "position": 12,
+              "multiplier": 0,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 4
+            },
+            {
+              "element_id": 165,
+              "player": "Jo\u00e3o Pedro",
+              "position": 13,
+              "multiplier": 0,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 0
+            },
+            {
+              "element_id": 649,
+              "player": "Maitland-Niles",
+              "position": 14,
+              "multiplier": 0,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 0
+            },
+            {
+              "element_id": 195,
+              "player": "Simms",
+              "position": 15,
+              "multiplier": 0,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 0
+            }
+          ]
+        },
+        {
           "entry_id": 7366246,
           "manager_name": "Adam Mardle",
           "team_name": "4_MANAGERS_A_SEASON",
           "league_position": 21,
-          "previous_league_position": 18,
-          "gameweek_points": 26,
-          "total_points": 464,
-          "overall_rank": 4202289,
-          "gameweek_rank": 9706359,
+          "previous_league_position": 21,
+          "gameweek_points": 32,
+          "total_points": 470,
+          "overall_rank": 4167553,
+          "gameweek_rank": 9894146,
           "points_on_bench": 2,
           "transfers": 2,
           "transfer_cost": 0,
@@ -3187,7 +3313,14 @@
           "active_chip": null,
           "captain": "Jo\u00e3o Pedro",
           "vice_captain": "Mbeumo",
-          "automatic_subs": [],
+          "automatic_subs": [
+            {
+              "entry": 7366246,
+              "element_in": 88,
+              "element_out": 165,
+              "event": 8
+            }
+          ],
           "squad": [
             {
               "element_id": 109,
@@ -3208,27 +3341,36 @@
               "live_points": 1
             },
             {
-              "element_id": 113,
-              "player": "F.Kad\u0131o\u011flu",
-              "position": 3,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 1
-            },
-            {
               "element_id": 449,
               "player": "Hall",
-              "position": 4,
+              "position": 3,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
               "live_points": 5
             },
             {
+              "element_id": 113,
+              "player": "F.Kad\u0131o\u011flu",
+              "position": 4,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 1
+            },
+            {
+              "element_id": 88,
+              "player": "Kayode",
+              "position": 5,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 4
+            },
+            {
               "element_id": 40,
               "player": "Rogers",
-              "position": 5,
+              "position": 6,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
@@ -3237,19 +3379,10 @@
             {
               "element_id": 94,
               "player": "Schade",
-              "position": 6,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 2
-            },
-            {
-              "element_id": 427,
-              "player": "Mbeumo",
               "position": 7,
               "multiplier": 1,
               "is_captain": false,
-              "is_vice_captain": true,
+              "is_vice_captain": false,
               "live_points": 2
             },
             {
@@ -3262,9 +3395,18 @@
               "live_points": 3
             },
             {
+              "element_id": 427,
+              "player": "Mbeumo",
+              "position": 9,
+              "multiplier": 2,
+              "is_captain": false,
+              "is_vice_captain": true,
+              "live_points": 2
+            },
+            {
               "element_id": 411,
               "player": "Haaland",
-              "position": 9,
+              "position": 10,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
@@ -3273,20 +3415,11 @@
             {
               "element_id": 316,
               "player": "Emersonn",
-              "position": 10,
+              "position": 11,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
               "live_points": 1
-            },
-            {
-              "element_id": 165,
-              "player": "Jo\u00e3o Pedro",
-              "position": 11,
-              "multiplier": 2,
-              "is_captain": true,
-              "is_vice_captain": false,
-              "live_points": 0
             },
             {
               "element_id": 497,
@@ -3307,13 +3440,13 @@
               "live_points": 0
             },
             {
-              "element_id": 88,
-              "player": "Kayode",
+              "element_id": 165,
+              "player": "Jo\u00e3o Pedro",
               "position": 14,
               "multiplier": 0,
-              "is_captain": false,
+              "is_captain": true,
               "is_vice_captain": false,
-              "live_points": 4
+              "live_points": 0
             },
             {
               "element_id": 175,
@@ -3338,11 +3471,11 @@
           "manager_name": "Daniel Richmond",
           "team_name": "Sound of the Tzolis",
           "league_position": 1,
-          "previous_league_position": 2,
-          "gameweek_points": 54,
-          "total_points": 557,
-          "overall_rank": 153635,
-          "gameweek_rank": 524964,
+          "previous_league_position": 1,
+          "gameweek_points": 55,
+          "total_points": 558,
+          "overall_rank": 225500,
+          "gameweek_rank": 2157362,
           "points_on_bench": 2,
           "transfers": 0,
           "transfer_cost": 0,
@@ -3351,7 +3484,14 @@
           "active_chip": null,
           "captain": "Haaland",
           "vice_captain": "Jo\u00e3o Pedro",
-          "automatic_subs": [],
+          "automatic_subs": [
+            {
+              "entry": 597770,
+              "element_in": 113,
+              "element_out": 165,
+              "event": 8
+            }
+          ],
           "squad": [
             {
               "element_id": 496,
@@ -3363,9 +3503,18 @@
               "live_points": 9
             },
             {
+              "element_id": 334,
+              "player": "Muharemovi\u0107",
+              "position": 2,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 9
+            },
+            {
               "element_id": 8,
               "player": "Calafiori",
-              "position": 2,
+              "position": 3,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
@@ -3374,29 +3523,20 @@
             {
               "element_id": 31,
               "player": "Konsa",
-              "position": 3,
+              "position": 4,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
               "live_points": 14
             },
             {
-              "element_id": 334,
-              "player": "Muharemovi\u0107",
-              "position": 4,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 9
-            },
-            {
-              "element_id": 124,
-              "player": "Gro\u00df",
+              "element_id": 113,
+              "player": "F.Kad\u0131o\u011flu",
               "position": 5,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 0
+              "live_points": 1
             },
             {
               "element_id": 154,
@@ -3408,13 +3548,13 @@
               "live_points": -1
             },
             {
-              "element_id": 15,
-              "player": "\u00d8degaard",
+              "element_id": 124,
+              "player": "Gro\u00df",
               "position": 7,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 3
+              "live_points": 0
             },
             {
               "element_id": 40,
@@ -3426,13 +3566,13 @@
               "live_points": 1
             },
             {
-              "element_id": 165,
-              "player": "Jo\u00e3o Pedro",
+              "element_id": 15,
+              "player": "\u00d8degaard",
               "position": 9,
               "multiplier": 1,
               "is_captain": false,
-              "is_vice_captain": true,
-              "live_points": 0
+              "is_vice_captain": false,
+              "live_points": 3
             },
             {
               "element_id": 569,
@@ -3462,13 +3602,13 @@
               "live_points": 0
             },
             {
-              "element_id": 113,
-              "player": "F.Kad\u0131o\u011flu",
+              "element_id": 165,
+              "player": "Jo\u00e3o Pedro",
               "position": 13,
               "multiplier": 0,
               "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 1
+              "is_vice_captain": true,
+              "live_points": 0
             },
             {
               "element_id": 236,
@@ -3495,11 +3635,11 @@
           "manager_name": "Kellen Playford",
           "team_name": "Jogo Bonito",
           "league_position": 2,
-          "previous_league_position": 1,
-          "gameweek_points": 19,
-          "total_points": 540,
-          "overall_rank": 352239,
-          "gameweek_rank": 9592266,
+          "previous_league_position": 2,
+          "gameweek_points": 21,
+          "total_points": 542,
+          "overall_rank": 534824,
+          "gameweek_rank": 10942455,
           "points_on_bench": 4,
           "transfers": 0,
           "transfer_cost": 0,
@@ -3508,7 +3648,14 @@
           "active_chip": null,
           "captain": "Jo\u00e3o Pedro",
           "vice_captain": "Cherki",
-          "automatic_subs": [],
+          "automatic_subs": [
+            {
+              "entry": 361353,
+              "element_in": 427,
+              "element_out": 165,
+              "event": 8
+            }
+          ],
           "squad": [
             {
               "element_id": 109,
@@ -3529,8 +3676,8 @@
               "live_points": 1
             },
             {
-              "element_id": 173,
-              "player": "Thomas",
+              "element_id": 8,
+              "player": "Calafiori",
               "position": 3,
               "multiplier": 1,
               "is_captain": false,
@@ -3538,8 +3685,8 @@
               "live_points": 1
             },
             {
-              "element_id": 8,
-              "player": "Calafiori",
+              "element_id": 173,
+              "player": "Thomas",
               "position": 4,
               "multiplier": 1,
               "is_captain": false,
@@ -3547,9 +3694,18 @@
               "live_points": 1
             },
             {
+              "element_id": 399,
+              "player": "Cherki",
+              "position": 5,
+              "multiplier": 2,
+              "is_captain": false,
+              "is_vice_captain": true,
+              "live_points": 0
+            },
+            {
               "element_id": 40,
               "player": "Rogers",
-              "position": 5,
+              "position": 6,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
@@ -3558,7 +3714,7 @@
             {
               "element_id": 15,
               "player": "\u00d8degaard",
-              "position": 6,
+              "position": 7,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
@@ -3567,29 +3723,20 @@
             {
               "element_id": 124,
               "player": "Gro\u00df",
-              "position": 7,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
-            },
-            {
-              "element_id": 399,
-              "player": "Cherki",
               "position": 8,
               "multiplier": 1,
               "is_captain": false,
-              "is_vice_captain": true,
+              "is_vice_captain": false,
               "live_points": 0
             },
             {
-              "element_id": 165,
-              "player": "Jo\u00e3o Pedro",
+              "element_id": 427,
+              "player": "Mbeumo",
               "position": 9,
-              "multiplier": 2,
-              "is_captain": true,
+              "multiplier": 1,
+              "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 0
+              "live_points": 2
             },
             {
               "element_id": 411,
@@ -3619,13 +3766,13 @@
               "live_points": 1
             },
             {
-              "element_id": 427,
-              "player": "Mbeumo",
+              "element_id": 165,
+              "player": "Jo\u00e3o Pedro",
               "position": 13,
               "multiplier": 0,
-              "is_captain": false,
+              "is_captain": true,
               "is_vice_captain": false,
-              "live_points": 2
+              "live_points": 0
             },
             {
               "element_id": 259,
@@ -3653,10 +3800,10 @@
           "team_name": "FiorenTina Turner",
           "league_position": 3,
           "previous_league_position": 3,
-          "gameweek_points": 43,
-          "total_points": 485,
-          "overall_rank": 2674030,
-          "gameweek_rank": 2684897,
+          "gameweek_points": 47,
+          "total_points": 489,
+          "overall_rank": 2950125,
+          "gameweek_rank": 4882631,
           "points_on_bench": 2,
           "transfers": 1,
           "transfer_cost": 0,
@@ -3665,7 +3812,14 @@
           "active_chip": null,
           "captain": "Palmer",
           "vice_captain": "Jo\u00e3o Pedro",
-          "automatic_subs": [],
+          "automatic_subs": [
+            {
+              "entry": 594826,
+              "element_in": 286,
+              "element_out": 165,
+              "event": 8
+            }
+          ],
           "squad": [
             {
               "element_id": 496,
@@ -3677,63 +3831,45 @@
               "live_points": 9
             },
             {
-              "element_id": 391,
-              "player": "Gvardiol",
-              "position": 2,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 1
-            },
-            {
-              "element_id": 8,
-              "player": "Calafiori",
-              "position": 3,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 1
-            },
-            {
-              "element_id": 31,
-              "player": "Konsa",
-              "position": 4,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 14
-            },
-            {
               "element_id": 334,
               "player": "Muharemovi\u0107",
-              "position": 5,
+              "position": 2,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
               "live_points": 9
             },
             {
-              "element_id": 40,
-              "player": "Rogers",
-              "position": 6,
+              "element_id": 31,
+              "player": "Konsa",
+              "position": 3,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 14
+            },
+            {
+              "element_id": 8,
+              "player": "Calafiori",
+              "position": 4,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
               "live_points": 1
             },
             {
-              "element_id": 480,
-              "player": "Gibbs-White",
-              "position": 7,
+              "element_id": 391,
+              "player": "Gvardiol",
+              "position": 5,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 2
+              "live_points": 1
             },
             {
               "element_id": 154,
               "player": "Palmer",
-              "position": 8,
+              "position": 6,
               "multiplier": 2,
               "is_captain": true,
               "is_vice_captain": false,
@@ -3742,20 +3878,38 @@
             {
               "element_id": 124,
               "player": "Gro\u00df",
-              "position": 9,
+              "position": 7,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
               "live_points": 0
             },
             {
-              "element_id": 165,
-              "player": "Jo\u00e3o Pedro",
+              "element_id": 480,
+              "player": "Gibbs-White",
+              "position": 8,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 2
+            },
+            {
+              "element_id": 40,
+              "player": "Rogers",
+              "position": 9,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 1
+            },
+            {
+              "element_id": 286,
+              "player": "Belloumi",
               "position": 10,
               "multiplier": 1,
               "is_captain": false,
-              "is_vice_captain": true,
-              "live_points": 0
+              "is_vice_captain": false,
+              "live_points": 4
             },
             {
               "element_id": 411,
@@ -3776,13 +3930,13 @@
               "live_points": 0
             },
             {
-              "element_id": 286,
-              "player": "Belloumi",
+              "element_id": 165,
+              "player": "Jo\u00e3o Pedro",
               "position": 13,
               "multiplier": 0,
               "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 4
+              "is_vice_captain": true,
+              "live_points": 0
             },
             {
               "element_id": 175,
@@ -3810,11 +3964,11 @@
           "team_name": "Not Too Xabi",
           "league_position": 4,
           "previous_league_position": 4,
-          "gameweek_points": 37,
-          "total_points": 477,
-          "overall_rank": 3720143,
-          "gameweek_rank": 8087300,
-          "points_on_bench": 3,
+          "gameweek_points": 38,
+          "total_points": 478,
+          "overall_rank": 3665303,
+          "gameweek_rank": 8217459,
+          "points_on_bench": 2,
           "transfers": 1,
           "transfer_cost": 0,
           "team_value": 100.9,
@@ -3822,7 +3976,14 @@
           "active_chip": null,
           "captain": "Haaland",
           "vice_captain": "Jo\u00e3o Pedro",
-          "automatic_subs": [],
+          "automatic_subs": [
+            {
+              "entry": 4780591,
+              "element_in": 259,
+              "element_out": 165,
+              "event": 8
+            }
+          ],
           "squad": [
             {
               "element_id": 350,
@@ -3861,9 +4022,18 @@
               "live_points": 9
             },
             {
+              "element_id": 259,
+              "player": "Diop",
+              "position": 5,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 1
+            },
+            {
               "element_id": 154,
               "player": "Palmer",
-              "position": 5,
+              "position": 6,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
@@ -3872,7 +4042,7 @@
             {
               "element_id": 124,
               "player": "Gro\u00df",
-              "position": 6,
+              "position": 7,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
@@ -3881,7 +4051,7 @@
             {
               "element_id": 94,
               "player": "Schade",
-              "position": 7,
+              "position": 8,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
@@ -3890,20 +4060,11 @@
             {
               "element_id": 40,
               "player": "Rogers",
-              "position": 8,
+              "position": 9,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
               "live_points": 1
-            },
-            {
-              "element_id": 165,
-              "player": "Jo\u00e3o Pedro",
-              "position": 9,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": true,
-              "live_points": 0
             },
             {
               "element_id": 411,
@@ -3933,13 +4094,13 @@
               "live_points": 0
             },
             {
-              "element_id": 259,
-              "player": "Diop",
+              "element_id": 165,
+              "player": "Jo\u00e3o Pedro",
               "position": 13,
               "multiplier": 0,
               "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 1
+              "is_vice_captain": true,
+              "live_points": 0
             },
             {
               "element_id": 212,
@@ -3967,11 +4128,11 @@
           "team_name": "Calafiorinia Dreamin",
           "league_position": 5,
           "previous_league_position": 5,
-          "gameweek_points": 38,
-          "total_points": 472,
-          "overall_rank": 3619222,
-          "gameweek_rank": 5081079,
-          "points_on_bench": 0,
+          "gameweek_points": 39,
+          "total_points": 473,
+          "overall_rank": 3950546,
+          "gameweek_rank": 7659273,
+          "points_on_bench": 10,
           "transfers": 0,
           "transfer_cost": 0,
           "team_value": 100.6,
@@ -3979,7 +4140,14 @@
           "active_chip": null,
           "captain": "Jo\u00e3o Pedro",
           "vice_captain": "De Cuyper",
-          "automatic_subs": [],
+          "automatic_subs": [
+            {
+              "entry": 6077675,
+              "element_in": 41,
+              "element_out": 165,
+              "event": 8
+            }
+          ],
           "squad": [
             {
               "element_id": 1,
@@ -3994,7 +4162,7 @@
               "element_id": 115,
               "player": "De Cuyper",
               "position": 2,
-              "multiplier": 1,
+              "multiplier": 2,
               "is_captain": false,
               "is_vice_captain": true,
               "live_points": 1
@@ -4027,22 +4195,22 @@
               "live_points": 0
             },
             {
-              "element_id": 40,
-              "player": "Rogers",
+              "element_id": 453,
+              "player": "Barnes",
               "position": 6,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 1
+              "live_points": 8
             },
             {
-              "element_id": 453,
-              "player": "Barnes",
+              "element_id": 40,
+              "player": "Rogers",
               "position": 7,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 8
+              "live_points": 1
             },
             {
               "element_id": 400,
@@ -4054,22 +4222,22 @@
               "live_points": 2
             },
             {
-              "element_id": 411,
-              "player": "Haaland",
+              "element_id": 41,
+              "player": "Buend\u00eda",
               "position": 9,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 8
+              "live_points": 0
             },
             {
-              "element_id": 165,
-              "player": "Jo\u00e3o Pedro",
+              "element_id": 411,
+              "player": "Haaland",
               "position": 10,
-              "multiplier": 2,
-              "is_captain": true,
+              "multiplier": 1,
+              "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 0
+              "live_points": 8
             },
             {
               "element_id": 138,
@@ -4090,11 +4258,11 @@
               "live_points": 2
             },
             {
-              "element_id": 41,
-              "player": "Buend\u00eda",
+              "element_id": 165,
+              "player": "Jo\u00e3o Pedro",
               "position": 13,
               "multiplier": 0,
-              "is_captain": false,
+              "is_captain": true,
               "is_vice_captain": false,
               "live_points": 0
             },
@@ -4124,11 +4292,11 @@
           "team_name": "Hat-rick Haaland",
           "league_position": 6,
           "previous_league_position": 6,
-          "gameweek_points": 45,
-          "total_points": 448,
-          "overall_rank": 5099885,
-          "gameweek_rank": 2794316,
-          "points_on_bench": 1,
+          "gameweek_points": 49,
+          "total_points": 452,
+          "overall_rank": 5300969,
+          "gameweek_rank": 3939668,
+          "points_on_bench": 2,
           "transfers": 0,
           "transfer_cost": 0,
           "team_value": 99.3,
@@ -4136,7 +4304,20 @@
           "active_chip": null,
           "captain": "Haaland",
           "vice_captain": "Rice",
-          "automatic_subs": [],
+          "automatic_subs": [
+            {
+              "entry": 3413917,
+              "element_in": 202,
+              "element_out": 142,
+              "event": 8
+            },
+            {
+              "entry": 3413917,
+              "element_in": 19,
+              "element_out": 397,
+              "event": 8
+            }
+          ],
           "squad": [
             {
               "element_id": 384,
@@ -4175,22 +4356,22 @@
               "live_points": 1
             },
             {
-              "element_id": 142,
-              "player": "James",
+              "element_id": 202,
+              "player": "Richards",
               "position": 5,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 0
+              "live_points": 3
             },
             {
-              "element_id": 397,
-              "player": "Semenyo",
+              "element_id": 19,
+              "player": "Zubimendi",
               "position": 6,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 0
+              "live_points": 1
             },
             {
               "element_id": 13,
@@ -4247,22 +4428,22 @@
               "live_points": 0
             },
             {
-              "element_id": 202,
-              "player": "Richards",
+              "element_id": 142,
+              "player": "James",
               "position": 13,
               "multiplier": 0,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 3
+              "live_points": 0
             },
             {
-              "element_id": 19,
-              "player": "Zubimendi",
+              "element_id": 397,
+              "player": "Semenyo",
               "position": 14,
               "multiplier": 0,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 1
+              "live_points": 0
             },
             {
               "element_id": 552,
@@ -4281,11 +4462,11 @@
           "team_name": "RicO'Shea",
           "league_position": 7,
           "previous_league_position": 7,
-          "gameweek_points": 30,
-          "total_points": 429,
-          "overall_rank": 5811026,
-          "gameweek_rank": 5533934,
-          "points_on_bench": 0,
+          "gameweek_points": 33,
+          "total_points": 432,
+          "overall_rank": 6496175,
+          "gameweek_rank": 9484605,
+          "points_on_bench": 4,
           "transfers": 0,
           "transfer_cost": 0,
           "team_value": 101.9,
@@ -4293,7 +4474,20 @@
           "active_chip": null,
           "captain": "Palmer",
           "vice_captain": "Jo\u00e3o Pedro",
-          "automatic_subs": [],
+          "automatic_subs": [
+            {
+              "entry": 2969751,
+              "element_in": 464,
+              "element_out": 368,
+              "event": 8
+            },
+            {
+              "entry": 2969751,
+              "element_in": 87,
+              "element_out": 165,
+              "event": 8
+            }
+          ],
           "squad": [
             {
               "element_id": 384,
@@ -4332,13 +4526,13 @@
               "live_points": 14
             },
             {
-              "element_id": 15,
-              "player": "\u00d8degaard",
+              "element_id": 87,
+              "player": "Ajer",
               "position": 5,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 3
+              "live_points": 2
             },
             {
               "element_id": 565,
@@ -4350,9 +4544,18 @@
               "live_points": 4
             },
             {
+              "element_id": 15,
+              "player": "\u00d8degaard",
+              "position": 7,
+              "multiplier": 1,
+              "is_captain": false,
+              "is_vice_captain": false,
+              "live_points": 3
+            },
+            {
               "element_id": 399,
               "player": "Cherki",
-              "position": 7,
+              "position": 8,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
@@ -4361,38 +4564,29 @@
             {
               "element_id": 154,
               "player": "Palmer",
-              "position": 8,
+              "position": 9,
               "multiplier": 2,
               "is_captain": true,
               "is_vice_captain": false,
               "live_points": -1
             },
             {
-              "element_id": 368,
-              "player": "Szoboszlai",
-              "position": 9,
-              "multiplier": 1,
-              "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 0
-            },
-            {
-              "element_id": 411,
-              "player": "Haaland",
+              "element_id": 464,
+              "player": "Wissa",
               "position": 10,
               "multiplier": 1,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 8
+              "live_points": 1
             },
             {
-              "element_id": 165,
-              "player": "Jo\u00e3o Pedro",
+              "element_id": 411,
+              "player": "Haaland",
               "position": 11,
               "multiplier": 1,
               "is_captain": false,
-              "is_vice_captain": true,
-              "live_points": 0
+              "is_vice_captain": false,
+              "live_points": 8
             },
             {
               "element_id": 111,
@@ -4404,22 +4598,22 @@
               "live_points": 0
             },
             {
-              "element_id": 464,
-              "player": "Wissa",
+              "element_id": 368,
+              "player": "Szoboszlai",
               "position": 13,
               "multiplier": 0,
               "is_captain": false,
               "is_vice_captain": false,
-              "live_points": 1
+              "live_points": 0
             },
             {
-              "element_id": 87,
-              "player": "Ajer",
+              "element_id": 165,
+              "player": "Jo\u00e3o Pedro",
               "position": 14,
               "multiplier": 0,
               "is_captain": false,
-              "is_vice_captain": false,
-              "live_points": 2
+              "is_vice_captain": true,
+              "live_points": 0
             },
             {
               "element_id": 277,
@@ -4438,11 +4632,11 @@
           "team_name": "WhatEric?",
           "league_position": 8,
           "previous_league_position": 8,
-          "gameweek_points": 30,
-          "total_points": 400,
-          "overall_rank": 7399393,
-          "gameweek_rank": 6028815,
-          "points_on_bench": 2,
+          "gameweek_points": 31,
+          "total_points": 401,
+          "overall_rank": 8006651,
+          "gameweek_rank": 9924312,
+          "points_on_bench": 1,
           "transfers": 0,
           "transfer_cost": 0,
           "team_value": 100.9,
@@ -4598,7 +4792,5 @@
         }
       ]
     }
-  ],
-  "finalised_at": "2026-10-26T10:31:05.087423+00:00",
-  "finalisation": "post-10:30 official FPL refresh"
+  ]
 }
