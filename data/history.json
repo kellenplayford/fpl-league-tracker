@@ -2881,6 +2881,48 @@
           ]
         }
       }
+    },
+    {
+      "date": "2026-10-27",
+      "source": "automatic-overnight-snapshot",
+      "leagues": {
+        "37546": {
+          "league_name": "Sexy Pickford",
+          "leader_entry_id": 3331670,
+          "leader_manager": "Brogan O-Grady",
+          "leader_team": "sch\u00e4rloydbysch\u00e4rloyd",
+          "leader_points": 582,
+          "leader_overall_rank": 41288,
+          "leader_count": 1,
+          "leaders": [
+            {
+              "entry_id": 3331670,
+              "manager": "Brogan O-Grady",
+              "team": "sch\u00e4rloydbysch\u00e4rloyd",
+              "points": 582,
+              "overall_rank": 41288
+            }
+          ]
+        },
+        "118082": {
+          "league_name": "The Battle Continues...",
+          "leader_entry_id": 597770,
+          "leader_manager": "Daniel Richmond",
+          "leader_team": "Sound of the Tzolis",
+          "leader_points": 558,
+          "leader_overall_rank": 225500,
+          "leader_count": 1,
+          "leaders": [
+            {
+              "entry_id": 597770,
+              "manager": "Daniel Richmond",
+              "team": "Sound of the Tzolis",
+              "points": 558,
+              "overall_rank": 225500
+            }
+          ]
+        }
+      }
     }
   ],
   "days_top": {
@@ -2890,8 +2932,8 @@
         "longest_streak": 1
       },
       "3331670": {
-        "days_top": 18,
-        "longest_streak": 17
+        "days_top": 19,
+        "longest_streak": 18
       },
       "40951": {
         "days_top": 11,
@@ -2912,7 +2954,7 @@
         "longest_streak": 40
       },
       "597770": {
-        "days_top": 24,
+        "days_top": 25,
         "longest_streak": 15
       },
       "2969751": {
