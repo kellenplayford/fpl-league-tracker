@@ -3133,6 +3133,55 @@
           ]
         }
       }
+    },
+    {
+      "date": "2026-11-02",
+      "source": "automatic-overnight-snapshot",
+      "leagues": {
+        "37546": {
+          "league_name": "Sexy Pickford",
+          "leader_entry_id": 3331670,
+          "leader_manager": "Brogan O-Grady",
+          "leader_team": "sch\u00e4rloydbysch\u00e4rloyd",
+          "leader_points": 633,
+          "leader_overall_rank": 91059,
+          "leader_count": 2,
+          "leaders": [
+            {
+              "entry_id": 3331670,
+              "manager": "Brogan O-Grady",
+              "team": "sch\u00e4rloydbysch\u00e4rloyd",
+              "points": 633,
+              "overall_rank": 91059
+            },
+            {
+              "entry_id": 710691,
+              "manager": "Tim Part",
+              "team": "Partizan Idiot",
+              "points": 633,
+              "overall_rank": 92102
+            }
+          ]
+        },
+        "118082": {
+          "league_name": "The Battle Continues...",
+          "leader_entry_id": 597770,
+          "leader_manager": "Daniel Richmond",
+          "leader_team": "Sound of the Tzolis",
+          "leader_points": 626,
+          "leader_overall_rank": 148617,
+          "leader_count": 1,
+          "leaders": [
+            {
+              "entry_id": 597770,
+              "manager": "Daniel Richmond",
+              "team": "Sound of the Tzolis",
+              "points": 626,
+              "overall_rank": 148617
+            }
+          ]
+        }
+      }
     }
   ],
   "days_top": {
@@ -3142,15 +3191,15 @@
         "longest_streak": 1
       },
       "3331670": {
-        "days_top": 24,
-        "longest_streak": 23
+        "days_top": 25,
+        "longest_streak": 24
       },
       "40951": {
         "days_top": 11,
         "longest_streak": 7
       },
       "710691": {
-        "days_top": 35,
+        "days_top": 36,
         "longest_streak": 20
       },
       "182007": {
@@ -3164,7 +3213,7 @@
         "longest_streak": 40
       },
       "597770": {
-        "days_top": 30,
+        "days_top": 31,
         "longest_streak": 15
       },
       "2969751": {
