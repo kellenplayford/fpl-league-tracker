@@ -3329,6 +3329,48 @@
           ]
         }
       }
+    },
+    {
+      "date": "2026-11-06",
+      "source": "automatic-overnight-snapshot",
+      "leagues": {
+        "37546": {
+          "league_name": "Sexy Pickford",
+          "leader_entry_id": 2387947,
+          "leader_manager": "Libby Masters",
+          "leader_team": "MoreCherkiMrChandler",
+          "leader_points": 638,
+          "leader_overall_rank": 93799,
+          "leader_count": 1,
+          "leaders": [
+            {
+              "entry_id": 2387947,
+              "manager": "Libby Masters",
+              "team": "MoreCherkiMrChandler",
+              "points": 638,
+              "overall_rank": 93799
+            }
+          ]
+        },
+        "118082": {
+          "league_name": "The Battle Continues...",
+          "leader_entry_id": 597770,
+          "leader_manager": "Daniel Richmond",
+          "leader_team": "Sound of the Tzolis",
+          "leader_points": 635,
+          "leader_overall_rank": 111914,
+          "leader_count": 1,
+          "leaders": [
+            {
+              "entry_id": 597770,
+              "manager": "Daniel Richmond",
+              "team": "Sound of the Tzolis",
+              "points": 635,
+              "overall_rank": 111914
+            }
+          ]
+        }
+      }
     }
   ],
   "days_top": {
@@ -3352,6 +3394,10 @@
       "182007": {
         "days_top": 4,
         "longest_streak": 2
+      },
+      "2387947": {
+        "days_top": 1,
+        "longest_streak": 1
       }
     },
     "118082": {
@@ -3360,7 +3406,7 @@
         "longest_streak": 40
       },
       "597770": {
-        "days_top": 34,
+        "days_top": 35,
         "longest_streak": 15
       },
       "2969751": {
