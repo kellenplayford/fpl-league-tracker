@@ -88,8 +88,9 @@
     "data/snapshots/2026-11-17.json",
     "data/snapshots/2026-11-18.json",
     "data/snapshots/2026-11-19.json",
-    "data/snapshots/2026-11-20.json"
+    "data/snapshots/2026-11-20.json",
+    "data/snapshots/2026-11-21.json"
   ],
   "latest": "data/latest.json",
-  "updated_at": "2026-11-21T10:30:30.527678+00:00"
+  "updated_at": "2026-11-22T02:15:25.220225+00:00"
 }
